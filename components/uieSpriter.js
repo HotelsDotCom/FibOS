@@ -154,7 +154,10 @@ function uieSpriter(id,options) {
          var canContinue = (defaults.domain==='');
          if(!canContinue && img.indexOf(defaults.domain)>-1)
             canContinue = true;
-         
+
+         if(canContinue && img.substr(0,3)!=='url')
+            canContinue = false;
+
          if(canContinue){
             var posStr = $elm.css('background-position');
             var posArr = posStr.split(' ');
