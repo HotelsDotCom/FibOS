@@ -384,14 +384,3 @@ var FibOS = (function(uiMarker,uiRuler,uiSlider,uiSpacer,uiSpriter){
     return FibOS;
 
 }(UIMarkerWidget,UIRulerWidget,UISliderWidget,UISpacerWidget,UISpriterWidget));
-
-var venereID = '#themewrapper';
-var venereOptions = {
-    //uiWidget: {}, // EXAMPLE.1
-    uiMarker:  {},
-    uiRuler:   {},
-    uiSlider:  {},
-    uiSpacer:  {},
-    uiSpriter: {}
-};
-var venereFibos = new FibOS(venereID, venereOptions);
