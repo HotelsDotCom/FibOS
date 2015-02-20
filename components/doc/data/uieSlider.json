@@ -1,0 +1,69 @@
+{
+   "name": "uieSlider",
+   
+   "description": {
+      "type": "Instance Component",
+      "text": "Each uieSlider instance will behave to give the user a useful graphic interface for changing numeric value."
+   },
+   
+   "usage": {
+      "text": "<code>var mySlider = new uieSlider(id,options);</code>",
+      "list": {
+         
+         "id"      : ["String",
+                      "The <code>ID</code> attribute for each slider."],
+         
+         "options" : ["Object",
+                      "A collection of properties for customize the layout and behavior of each slider."]
+      }
+   },
+   
+   "properties": {
+      "text": "You can pass some (or all) of these properties within an object inside constructor.",
+      "list": {
+         
+         "extension"    : ["Object",
+                           "{}",
+                           "Css extension object for customizable element.",
+                           ["slider","slider_bar","slider_handler","slider_output"]],
+         
+         "callback"     : ["Function",
+                           "null",
+                           "Callback method triggered when slider's value change."],
+         
+         "minValue"     : ["Number",
+                           "0",
+                           "Minimum value accepted."],
+         
+         "maxValue"     : ["Number",
+                           "100",
+                           "Maximum value accepted."],
+         
+         "stepValue"    : ["Number",
+                           "1",
+                           "The step value during handler drag operation."],
+         
+         "initialValue" : ["Number",
+                           "0",
+                           "The initial value of the slider (should be between minValue and maxValue)."]
+      }
+   },
+   
+   "methods": {
+      "text": "",
+      "list": {
+         
+         "setValue(value)"    : ["void",
+                                 "Sets the slider instance's value."],
+         
+         "sliderValue()"      : ["Number",
+                                 "Returns the slider instance's current numeric value."],
+         
+         "sliderPercentage()" : ["Number",
+                                 "Returns the slider instance's current percentage value."]
+      }
+   },
+   
+   "example": "function myCallback(perc,value) {\n   console.log(value+\" (\"+Math.round(perc*100)+\"%)\");\n}\nvar myExtension = {\n   slider:         {margin:'5px',width:'200px'},\n   slider_handler: {background:'rgba(100,100,200,1)',width:'20px'}\n};\nvar myOptions = {\n   callback:     myCallback,\n   extension:    myExtension,\n   minValue:     180,\n   maxValue:     360,\n   initialValue: 270,\n   stepValue:    5\n};\n\nvar mySlider = new uieSlider('mySlider',myOptions);\n$('body').append(mySlider);"
+
+}
