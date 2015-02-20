@@ -1,0 +1,86 @@
+{
+   "name": "uieSpriter",
+   
+   "description": {
+      "type": "Manager Component",
+      "text": "This component analyze the current page's css and let the user visualize all images used as background with all recurrances usage as colored rectangular objects."
+   },
+   
+   "usage": {
+      "text": "<code>var mySpriter = new uieSpriter(id,options);</code>",
+      "list": {
+         
+         "id"      : ["String",
+                      "The <code>ID</code> attribute for each slider."],
+         
+         "options" : ["Object",
+                      "A collection of properties for customize the layout and behavior of each slider."]
+      }
+   },
+   
+   "properties": {
+      "text": "You can pass some (or all) of these properties within an object inside constructor.",
+      "list": {
+         
+         "extension"    : ["Object",
+                           "{}",
+                           "Css extension object for customizable element.",
+                           ["main","obscurerContainer","spriteObscurer"]],
+         
+         "reference"    : ["String",
+                           "'body'",
+                           "Selector in which will search for element with background."],
+         
+         "visible"      : ["Boolean",
+                           "true",
+                           "Default visibility before and right after sprites are loaded."],
+         
+         "opacity"      : ["String",
+                           "'0.3'",
+                           "Obscurers opacity css property (as string)."],
+         
+         "color"        : ["String",
+                           "#f00",
+                           "Obscurers color."],
+         
+         "border"       : ["String",
+                           "#0f0",
+                           "Sprites border color."],
+         
+         "image"        : ["String",
+                           "'' (empty string)",
+                           "Sprites background image pattern."],
+         
+         "domain"       : ["String",
+                           "'' (empty string)",
+                           "The accepted domain (will not load images outside this domain)"],
+         
+         "callback"     : ["Function",
+                           "null",
+                           "Callback triggered when all sprites are loaded (after analyze)."]
+         
+      }
+   },
+   
+   "methods": {
+      "text": "",
+      "list": {
+         
+         "analyze()"             : ["uieSpriter",
+                                    "Analyze the current page's CSS and returns the uieSpriter itself."],
+         
+         "css2file(css,trimExt)" : ["String",
+                                    "Extract the file name from the given css background-image property (trim extension to have the sole name)."],
+         
+         "getinfo.sprites"       : ["Object",
+                                    "Analyze the current page's CSS and returns the spritesInfo object."],
+         
+         "getinfo.spritesInfo"   : ["Object",
+                                    "Returns the spritesInfo object."]
+         
+      }
+   },
+   
+   "example": "var myOptions = {\n   reference: '#themewrapper'\n};\n\nvar myspriter = new uieSpriter('sprite_analyzer',myOptions);\n$('body').append(myspriter);\n\nmyspriter.analyzeSprites();"
+
+}
