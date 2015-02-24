@@ -50,6 +50,14 @@ module.exports = function(grunt) {
             slider: {
                 src: ['src/widgets/UIBaseWidget.js','src/widgets/UISliderWidget.js'],
                 dest: 'target/uiSlider-<%= pkg.version %>.js'
+            },
+            spacer: {
+                src: ['src/widgets/UIBaseWidget.js','src/widgets/UISpacerWidget.js'],
+                dest: 'target/uiSpacer-<%= pkg.version %>.js'
+            },
+            spriter: {
+                src: ['src/widgets/UIBaseWidget.js','src/widgets/UISpriterWidget.js'],
+                dest: 'target/uiSpriter-<%= pkg.version %>.js'
             }
         },
         uglify: {
@@ -64,10 +72,40 @@ module.exports = function(grunt) {
             },
             slider: {
                 files: {'target/uiSlider-<%= pkg.version %>.min.js': ['target/uiSlider-<%= pkg.version %>.js']}
+            },
+            spacer: {
+                files: {'target/uiSpacer-<%= pkg.version %>.min.js': ['target/uiSpacer-<%= pkg.version %>.js']}
+            },
+            spriter: {
+                files: {'target/uiSpriter-<%= pkg.version %>.min.js': ['target/uiSpriter-<%= pkg.version %>.js']}
             }
         },
         clean: {
             build: ["target"]
+        },
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        filter: 'isFile',
+                        src: ['target/fibos*'],
+                        dest: 'build/<%= pkg.version %>/'
+                    }
+                ]
+            },
+            widget: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        filter: 'isFile',
+                        src: ['target/ui*'],
+                        dest: 'build/<%= pkg.version %>/'
+                    }
+                ]
+            }
         }
     });
 
@@ -77,11 +115,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    // Default task(s).
+    // Default task
     grunt.registerTask('default', ['build']);
 
-    grunt.registerTask('build', ['clean', 'concat:fibos', 'uglify:fibos']);
-    grunt.registerTask('build-marker', ['clean', 'concat:marker', 'uglify:marker']);
-    grunt.registerTask('build-ruler', ['clean', 'concat:ruler', 'uglify:ruler']);
-    grunt.registerTask('build-slider', ['clean', 'concat:slider', 'uglify:slider']);
+    // Main task
+    grunt.registerTask('build',        ['clean', 'concat:fibos',  'uglify:fibos',  'copy:main']);
+    // Widget tasks
+    grunt.registerTask('build-marker', ['clean', 'concat:marker', 'uglify:marker', 'copy:widget']);
+    grunt.registerTask('build-ruler',  ['clean', 'concat:ruler',  'uglify:ruler',  'copy:widget']);
+    grunt.registerTask('build-slider', ['clean', 'concat:slider', 'uglify:slider', 'copy:widget']);
+    grunt.registerTask('build-spacer', ['clean', 'concat:spacer', 'uglify:spacer', 'copy:widget']);
+    grunt.registerTask('build-spriter',['clean', 'concat:spriter','uglify:spriter','copy:widget']);
+
 };
