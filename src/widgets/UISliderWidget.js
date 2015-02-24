@@ -2,7 +2,7 @@
  * Created by fdimonte on 11/02/2015.
  */
 
-var UISliderWidget = (function(UIBaseWidget) {
+var UISliderWidget = (function($,UIBaseWidget) {
 
     /**
      * UISliderWidget Class
@@ -192,4 +192,4 @@ var UISliderWidget = (function(UIBaseWidget) {
 
     return UISliderWidget;
 
-}(UIBaseWidget));
+}(jQuery,UIBaseWidget));

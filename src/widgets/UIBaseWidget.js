@@ -2,7 +2,7 @@
  * Created by fdimonte on 10/02/2015.
  */
 
-var UIBaseWidget = (function(){
+var UIBaseWidget = (function($){
 
     /**
      * UIBaseWidget Class
@@ -21,7 +21,7 @@ var UIBaseWidget = (function(){
         this._styles = {};
         this._options = {
             extension : {},    // css extension (accepts all 'styles' object properties)
-            reference : 'body' // selector in which will search for element with background
+            reference : 'body' // selector of reference element for all widget features
         };
 
         this.init(options);
@@ -133,4 +133,4 @@ var UIBaseWidget = (function(){
 
     return UIBaseWidget;
 
-}());
+}(jQuery));

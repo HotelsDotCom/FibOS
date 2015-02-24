@@ -2,7 +2,7 @@
  * Created by fdimonte on 12/02/2015.
  */
 
-var UISpacerWidget = (function(UIBaseWidget){
+var UISpacerWidget = (function($,UIBaseWidget){
 
     /**
      * UISpacerWidget Class
@@ -36,6 +36,7 @@ var UISpacerWidget = (function(UIBaseWidget){
      ********************/
 
     UISpacerWidget.prototype.initOptions = function(options) {
+        console.log(this._options);
         this.extendObject(this._options, {
             localStorage  : 'fibonacciGroups',
             spacerClass   : 'fibospacer',
@@ -85,6 +86,20 @@ var UISpacerWidget = (function(UIBaseWidget){
     /********************
      * PUBLIC METHODS
      ********************/
+
+    UISpacerWidget.prototype.getSpacersList = function(onlyActiveSpacers){
+        return spacersFilter.call(this, onlyActiveSpacers ? this._options.spacerMin-1 : 0);
+    };
+    UISpacerWidget.prototype.getSpacerType = function(spacer){
+        return $(spacer).attr('class').replace(this._options.spacerMatch,'');
+    };
+    UISpacerWidget.prototype.updateGroups = function(){
+        htmlToSpacersGroups.call(this);
+    };
+    UISpacerWidget.prototype.newUsedGroup = function(newgroup){
+        this.lastUsedGroup = newgroup ? newgroup : this.defaultGroupName+(this.spacersGroups.totalGroups()+1);
+    };
+
 
     /*---GROUPS MANAGER---*/
 
@@ -239,7 +254,7 @@ var UISpacerWidget = (function(UIBaseWidget){
             if(!myasset[cont]) myasset[cont] = [];
 
             myasset[cont].push([
-                parseInt(getSpacerType.call(this,e)),
+                parseInt(this.getSpacerType.call(this,e)),
                 Number($(e).css('top').replace('px','')),
                 Number($(e).css('left').replace('px',''))
             ]);
@@ -467,10 +482,6 @@ var UISpacerWidget = (function(UIBaseWidget){
         return spacers;
     }
 
-    function getSpacerType(spacer) {
-        return $(spacer).attr('class').replace(this._options.spacerMatch,'');
-    }
-
     //the fibonacci sequence! (min and max represent the Nth values of the sequence)
     function fibonacciSequence(min,max) {
         var fibo=1,last=1,llast=0,fibos=[];
@@ -512,4 +523,4 @@ var UISpacerWidget = (function(UIBaseWidget){
 
     return UISpacerWidget;
 
-}(UIBaseWidget));
+}(jQuery,UIBaseWidget));

@@ -2,7 +2,7 @@
  * Created by fdimonte on 10/02/2015.
  */
 
-var UISpriterWidget = (function(UIBaseWidget){
+var UISpriterWidget = (function($,UIBaseWidget){
 
     /**
      * UISpriterWidget Class
@@ -262,4 +262,4 @@ var UISpriterWidget = (function(UIBaseWidget){
 
     return UISpriterWidget;
 
-}(UIBaseWidget));
+}(jQuery,UIBaseWidget));

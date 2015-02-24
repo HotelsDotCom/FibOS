@@ -9,7 +9,7 @@ var venereOptions = {
    uiRuler:   {},
    uiSlider:  {},
    uiSpacer:  {},
-   uiSpriter: {}
+   uiSpriter: {opt:{domain:'www.venere.com'}}
 };
 
 var venereFibos = new FibOS(venereID, venereOptions);

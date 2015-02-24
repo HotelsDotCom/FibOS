@@ -2,7 +2,7 @@
  * Created by fdimonte on 12/02/2015.
  */
 
-var UIMarkerWidget = (function(UIBaseWidget){
+var UIMarkerWidget = (function($,UIBaseWidget){
 
     /**
      * UIMarkerWidget Class
@@ -310,4 +310,4 @@ var UIMarkerWidget = (function(UIBaseWidget){
 
     return UIMarkerWidget;
 
-}(UIBaseWidget));
+}(jQuery,UIBaseWidget));

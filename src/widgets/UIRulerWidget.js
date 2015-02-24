@@ -2,7 +2,7 @@
  * Created by fdimonte on 12/02/2015.
  */
 
-var UIRulerWidget = (function(UIBaseWidget){
+var UIRulerWidget = (function($,UIBaseWidget){
 
     /**
      * UIRulerWidget Class
@@ -353,4 +353,4 @@ var UIRulerWidget = (function(UIBaseWidget){
 
     return UIRulerWidget;
 
-}(UIBaseWidget));
+}(jQuery,UIBaseWidget));
