@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+.project
+.svn/
+.idea/
+target/
+/nbproject/
