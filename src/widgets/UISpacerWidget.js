@@ -60,6 +60,11 @@ var UISpacerWidget = (function($,UIBaseWidget){
             shadow: '.'+this._options.spacerClass+':focus',
             after : '.'+this._options.spacerClass+':after'
         };
+        this._globalSelectors = {
+            spacer: true,
+            shadow: true,
+            after: true
+        };
         this.extendObject(this._styles, {
             main   :{position:'absolute',top:referencePos.call(this).top+'px',left:referencePos.call(this).left+'px',width:'0',height:'0',overflow:'visible'},
             spacer :{position:'absolute',display:'block',cursor:'pointer',overflow:'hidden','font-family':'Arial',outline:'0'},
@@ -333,7 +338,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
     function generateSpacersStyles() {
 
         var alpha = '65';//spacer symbols opacity
-        var fiboidx,fibonum,fibostr,
+        var fiboidx,fibonum,fibostr,fibocls,
             fibomin    = this._options.spacerMin-1;//fibomin represents the Nth index of spacers list (0-based)
         var fibos      = spacersFilter.call(this,fibomin),
             fibosObjs  = [];
@@ -352,20 +357,23 @@ var UISpacerWidget = (function($,UIBaseWidget){
                 fibonum = fibos[f];
                 fiboidx = spacerIndex.call(this,fibonum);
                 fibostr = ('000'+fibonum).substr(-3);
+                fibocls = this._options.spacerClass+'.fs_'+fibostr;
 
-                fibosObjs[this._options.spacerClass+'.fs_'+fibostr] = {
+                fibosObjs[fibocls] = {
                     width      : fibos[f]+'px',
                     height     : fibos[f]+'px',
                     background : d_colors[fc]
                 };
+                this._globalSelectors[fibocls] = true;
 
                 //dopo il primo ciclo sui colori aggiunge i simboli (ogni ciclo sui colori un simbolo diverso)
                 if(fiboidx>=fcLen){
-                    fibosObjs[this._options.spacerClass+'.fs_'+fibostr+':after'] = {
+                    fibosObjs[fibocls+':after'] = {
                         'content'     : '"'+d_symbols[fs].s+'"',
                         'font-size'   : Number(fibonum*d_symbols[fs].f) + 'px',
                         'line-height' : Number(fibonum*d_symbols[fs].l) + 'px'
                     };
+                    this._globalSelectors[fibocls+':after'] = true;
 
                     //determina l'inizio del ciclo sull'array spacerColors
                     if((fiboidx+1)%fcLen===0){

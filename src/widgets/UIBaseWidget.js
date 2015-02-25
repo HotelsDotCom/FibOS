@@ -18,6 +18,7 @@ var UIBaseWidget = (function($){
         this._ID = ID;
 
         this._selectorsMapping = null;
+        this._globalSelectors = null;
         this._styles = {};
         this._options = {
             extension : {},    // css extension (accepts all 'styles' object properties)
@@ -90,13 +91,14 @@ var UIBaseWidget = (function($){
             $('#'+styleId).remove();
 
             var $style = $('<style/>').attr('id',styleId),
-                selector,styleMap,styleClass,styleString;
+                selector,styleMap,styleClass,styleString,isGlobal;
 
             for(styleClass in this._styles){
                 if(this._styles.hasOwnProperty(styleClass)){
                     styleString = this._styles[styleClass];
-                    selector = '#'+this._ID;
                     styleMap = this._selectorsMapping && this._selectorsMapping[styleClass];
+                    isGlobal = this._globalSelectors && this._globalSelectors[styleClass];
+                    selector = isGlobal ? '' : '#'+this._ID;
 
                     if(styleClass!='main')
                         selector += ' ' + (styleMap || '.'+styleClass);
