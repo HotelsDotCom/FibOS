@@ -2,7 +2,7 @@
  * Created by fdimonte on 23/02/2015.
  */
 
-var UISpacerPanel = (function($,UIBasePanel){
+var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
 
     /**
      * UISpacerPanel Class
@@ -22,6 +22,7 @@ var UISpacerPanel = (function($,UIBasePanel){
             top       : baseID + 'top',
             remove    : baseID + 'delete',
             duplicate : baseID + 'duplicate',
+            opacity   : baseID + 'opacity',
             slider    : baseID + 'slider_container'
         };
 
@@ -42,6 +43,9 @@ var UISpacerPanel = (function($,UIBasePanel){
      ********************/
 
     UISpacerPanel.prototype.createContent = function() {
+
+        this.uiSlider = new UISliderWidget(this._selectors.opacity,{minValue:20,stepValue:10,callback:this.setOpacity.bind(this),extension:{slider_handler:{background:'rgba(200,100,100,.6)'}}});
+
         var $content = $('<div/>')
             .append($('<p/>')
                 .text('spacer: ')
@@ -53,8 +57,9 @@ var UISpacerPanel = (function($,UIBasePanel){
                 .text('top: ')
                 .append($('<input/>').attr('type','text').attr('id',this._selectors.top)))
             .append($('<p/>')
-                .text('opacity: '))
-            .append($('<div/>').attr('id',this._selectors.slider))
+                .text('opacity: ')
+                .append($('<div/>').attr('id',this._selectors.slider)
+                    .append(this.uiSlider.$el)))
             .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.remove).val('remove'))
             .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.duplicate).val('duplicate'));
 
@@ -100,7 +105,7 @@ var UISpacerPanel = (function($,UIBasePanel){
         $('#'+this._selectors.spacer).val(attr.f);
         $('#'+this._selectors.left).val(attr.l);
         $('#'+this._selectors.top).val(attr.t);
-        this._gui._components.uiSlider.setSliderVal(Number(attr.o)*100);
+        this.uiSlider.setSliderVal(Number(attr.o)*100);
     };
     UISpacerPanel.prototype.applyInfo = function(){
         var attr = this.getInfo();
@@ -152,4 +157,4 @@ var UISpacerPanel = (function($,UIBasePanel){
 
     return UISpacerPanel;
 
-}(jQuery,UIBasePanel));
+}(jQuery,UIBasePanel,UISliderWidget));
