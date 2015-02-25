@@ -15,6 +15,8 @@ var UIGroupPanel = (function($,UIBasePanel){
 
         var baseID = 'fibo_group_';
         this._selectors = {
+            toggle : 'toggle_group_',
+            hideall: 'hide_groups',
             tree   : 'groups_tree',
             name   : baseID + 'name',
             rename : baseID + 'rename',
@@ -77,27 +79,27 @@ var UIGroupPanel = (function($,UIBasePanel){
         var $li = $tree.find('li');
 
         if($li.length===0)
-            $tree.append(groupItem('hide_groups',false,'none'));
+            $tree.append(groupItem(this._selectors.hideall,false,'none'));
 
-        $tree.append(groupItem('hide_group_'+groupName, true, groupName));
+        $tree.append(groupItem(this._selectors.toggle+groupName, true, groupName));
 
-        this.showhideGroups({currentTarget:$('#showhide_group_'+groupName)});
+        this.showhideGroups({currentTarget:$('#'+this._selectors.toggle+groupName)});
     };
 
     UIGroupPanel.prototype.removeGroup = function(){
         var $tree = $('#'+this._selectors.tree);
         var $li = $tree.find('li');
         var $checked = $li.find('input:checked');
-        var $hide = $('#hide_groups');
+        var $hide = $('#'+this._selectors.hideall);
 
         if($li.length===0) return false;
-        if($checked.attr('id')==='hide_groups') return false;
+        if($checked.attr('id')===this._selectors.hideall) return false;
 
         $li.find('input').attr('checked',false);
         $hide.attr('checked',true);
 
         var oldID = $checked.attr('id');
-        var oldName = oldID.replace('showhide_group_','');
+        var oldName = oldID.replace(this._selectors.toggle,'');
 
         $('#'+oldName).remove();
         $('#'+oldID).closest('li').remove();
@@ -111,14 +113,14 @@ var UIGroupPanel = (function($,UIBasePanel){
         var $checked = $li.find('input:checked');
 
         if($li.length===0) return false;
-        if($checked.attr('id')==='hide_groups') return false;
+        if($checked.attr('id')===this._selectors.hideall) return false;
 
         var oldID = $checked.attr('id');
-        var oldName = oldID.replace('showhide_group_','');
-        var newName = $('#fibo_group_name').val();
+        var oldName = oldID.replace(this._selectors.toggle,'');
+        var newName = $('#'+this._selectors.name).val();
         newName = newName.split(' ').join('_');
 
-        var newID = 'showhide_group_'+newName;
+        var newID = this._selectors.toggle+newName;
         this._gui._components.uiSpacer.updateGroups();
 
         if(this._gui._components.uiSpacer.renameGroup(oldName,newName)){
@@ -134,16 +136,16 @@ var UIGroupPanel = (function($,UIBasePanel){
         var $li = $tree.find('li');
         var $checked = $li.find('input:checked');
 
-        var oldcheck = $checked.length>0 ? $checked.attr('id').replace('showhide_group_','') : false;
-        if(oldcheck==='hide_groups') oldcheck=false;
+        var oldcheck = $checked.length>0 ? $checked.attr('id').replace(this._selectors.toggle,'') : false;
+        if(oldcheck===this._selectors.hideall) oldcheck=false;
 
-        $tree.empty().append(groupItem('hide_groups', Boolean(oldcheck), 'none'));
+        $tree.empty().append(groupItem(this._selectors.hideall, Boolean(oldcheck), 'none'));
 
         var i,name;
         for(i in info_arr){
             if(info_arr.hasOwnProperty(i)){
                 name = info_arr[i];
-                $tree.append(groupItem('showhide_group_'+name, oldcheck===name, name));
+                $tree.append(groupItem(this._selectors.toggle+name, oldcheck===name, name));
             }
         }
 
