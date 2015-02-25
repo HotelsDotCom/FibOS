@@ -72,7 +72,7 @@ var UIBasePanel = (function($){
             $content.append(content);
 
             this.$el = $module.append($label).append($content);
-            this.$el.find('.fibo_checkbox').on('change',this.toggle_handler.bind(this));
+            this.$el.find('.fibo_checkbox').on('change',toggle_handler.bind(this));
             return true;
         },
 
@@ -99,13 +99,6 @@ var UIBasePanel = (function($){
                 this.close();
             else
                 this.open();
-        },
-        toggle_handler: function(e) {
-            var $t = $(e.currentTarget);
-            if($t.is(':checked'))
-                this.open();
-            else
-                this.close();
         },
 
         // events management
@@ -162,6 +155,13 @@ var UIBasePanel = (function($){
 
     function isPanelOpen(panel){
         return panel.$el.find('.vui-content').css('display')!=='none';
+    }
+    function toggle_handler(e) {
+        var $t = $(e.currentTarget);
+        if($t.is(':checked'))
+            this.open();
+        else
+            this.close();
     }
 
     return UIBasePanel;
