@@ -35,7 +35,6 @@ var FibOS = (function(
         this.$el = null;
         this.$toggles = null;
         this.$panels = null;
-        this.$clonable = null;
 
         this.init(jqueryMinVersion);
 
@@ -86,14 +85,12 @@ var FibOS = (function(
             this.$el       = $('<div/>').attr('id',this._ID);
             this.$toggles  = $('<div/>').attr('id','fibo_toggles');
             this.$panels   = $('<div/>').attr('id','fibo_panels').append($fibo_title);
-            this.$clonable = $('<div/>').attr('id','fibo_clonable');
 
             this.$el
                 .append($fibo_background)
                 .append($fibo_controls
                     .append(this.$toggles)
                     .append(this.$panels)
-                    .append(this.$clonable)
                 );
 
             $('body').append(this.$el);
@@ -117,6 +114,7 @@ var FibOS = (function(
         setupPanels: function() {
 
             var spacersList = this._components.uiSpacer.getSpacersList(true);
+            var spacersObject = this._components.uiSpacer.spacerObjects;
 
             // main panels
             this._panels.spacerPanel  = new panelSpacer(  'fibo_panel_selected', 'spacer selected', spacersList );
@@ -137,7 +135,7 @@ var FibOS = (function(
             this._panels.togglesPanel = new panelToggles( 'fibo_extrapanel_toggles' );
             this.addPanelTo(this._panels.togglesPanel, this.$toggles);
 
-            this._panels.selectPanel = new panelSelect( 'fibo_extrapanel_select', spacersList );
+            this._panels.selectPanel = new panelSelect( 'fibo_extrapanel_select', spacersList, spacersObject );
             this.addPanel(this._panels.selectPanel);
         },
 
@@ -150,6 +148,9 @@ var FibOS = (function(
             this._panels.togglesPanel.on('toggle_marker', function(data,event){});
 
             this._panels.selectPanel.on('clone_select', function(data,event){});
+            this._panels.selectPanel.on('clone_spacer', function(data){
+                fiboClone.call(this,data.pos,data.spacer,data.$clone);
+            }.bind(this));
 
             this._panels.groupPanel.on('group_select', function(data){
                 this._components.uiSpacer.newUsedGroup(data);
@@ -332,10 +333,10 @@ var FibOS = (function(
                         {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)',margin:'0',padding:'3px'},
                     '#fibo_panels>div.fibo_panel_open':
                         {background:'rgb(200,200,200)'},
-                    '#fibo_select':
+                    '#fibo_clone_select':
                         {display:'block','margin-left':'2px'},
-                    '#fibo_clonable':
-                        {padding:'8px'},
+                    '#fibo_clone_element':
+                        {position:'absolute',padding:'8px','margin-top':'9px',left:'0'},
 
                     // fibo panel - INPUT
                     '#fibo_input':
@@ -438,6 +439,22 @@ var FibOS = (function(
             }
             else callback();
         }
+    }
+
+    function fiboClone(e,spacer,$clone){
+        var spacernum = parseInt(this._components.uiSpacer.getSpacerType(spacer));
+        var newspacer = this._components.uiSpacer.addNewSpacer(spacernum);
+        if(!newspacer) return true;
+
+        var mzero = {top:newspacer.position().top-e.pageY,left:newspacer.position().left-e.pageX};
+        mzero.top  += $(document).scrollTop()  + $clone.position().top + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
+        mzero.left += $(document).scrollLeft() + $clone.position().left + parseInt($clone.css('padding-left'));
+
+        newspacer.offset({top:parseInt(e.pageY+mzero.top), left:parseInt(e.pageX+mzero.left)});
+        this._components.uiSpacer.setMouseZero(mzero);
+        this._components.uiSpacer.dragSpacer(newspacer);
+
+        return false;
     }
 
     return FibOS;

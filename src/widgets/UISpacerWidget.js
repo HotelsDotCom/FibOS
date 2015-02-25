@@ -103,7 +103,15 @@ var UISpacerWidget = (function($,UIBaseWidget){
     UISpacerWidget.prototype.newUsedGroup = function(newgroup){
         this.lastUsedGroup = newgroup ? newgroup : this.defaultGroupName+(this.spacersGroups.totalGroups()+1);
     };
-
+    UISpacerWidget.prototype.setMouseZero = function(mzero){
+        if((mzero.top || mzero.top===0) && (mzero.left || mzero.left===0))
+            this.mousezero = mzero;
+        else
+            console.log('WARNING: setMouseZero called with wrong parameter');
+    };
+    UISpacerWidget.prototype.dragSpacer = function($target){
+        dragSpacer.call(this,$target);
+    };
 
     /*---GROUPS MANAGER---*/
 
