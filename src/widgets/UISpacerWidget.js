@@ -36,7 +36,6 @@ var UISpacerWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpacerWidget.prototype.initOptions = function(options) {
-        console.log(this._options);
         this.extendObject(this._options, {
             localStorage  : 'fibonacciGroups',
             spacerClass   : 'fibospacer',
@@ -163,7 +162,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
     };
 
     UISpacerWidget.prototype.addNewSpacer = function(num,group) {
-        if(spacerIndex.call(this,spacernum)==-1) {
+        if(spacerIndex.call(this,num)==-1) {
             console.log('WARNING: addSpacer called with unsupported spacer');
             return null;
         }
@@ -252,10 +251,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
     function htmlToSpacersGroups() {
         var cont,myasset = {};
 
-        $('#'+id+' .'+this._options.spacerClass).each(function(i,e){
+        $('#'+this._ID+' .'+this._options.spacerClass).each(function(i,e){
             cont = $(e).parent().attr('id');
 
-            if(cont===id) cont='spacerGroupDefault';
+            if(cont===this._ID) cont='spacerGroupDefault';
             if(!myasset[cont]) myasset[cont] = [];
 
             myasset[cont].push([
