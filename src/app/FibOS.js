@@ -24,6 +24,7 @@ var FibOS = (function(
         this._fibosID='fibos_form';
         this._fibosTitle='FibOS';
         this._fibosVersion='1.7.2';
+        this._logEvents = true;
 
         this._reference = ($(reference).length===0) ? 'body' : reference;
 
@@ -53,6 +54,7 @@ var FibOS = (function(
             checkJqueryVersion(jqMinVer,function(){
                 this.createStyles();
                 this.createElement();
+                this.initEvents();
             }.bind(this));
         },
 
@@ -137,6 +139,23 @@ var FibOS = (function(
 
             this._panels.selectPanel = new panelSelect( 'fibo_extrapanel_select', spacersList );
             this.addPanel(this._panels.selectPanel);
+        },
+
+        initEvents: function() {
+
+            this._panels.togglesPanel.on('toggle_fibos',  function(data,event){});
+            this._panels.togglesPanel.on('toggle_spacers',function(data,event){});
+            this._panels.togglesPanel.on('toggle_overlay',function(data,event){});
+            this._panels.togglesPanel.on('toggle_rulers', function(data,event){});
+            this._panels.togglesPanel.on('toggle_marker', function(data,event){});
+
+            this._panels.selectPanel.on('clone_select', function(data,event){});
+
+            this._panels.groupPanel.on('group_select', function(data){
+                this._components.uiSpacer.newUsedGroup(data);
+                this._panels.offsetPanel.selectGroup(data);
+                this._components.uiSpacer.updateGroups();
+            }.bind(this));
         },
 
         addWidget: function(widget) {

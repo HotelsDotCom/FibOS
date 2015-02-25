@@ -49,6 +49,19 @@ var UIGroupPanel = (function($,UIBasePanel){
 
     UIGroupPanel.prototype.setEvents = function() {
 
+        this.addListener('click', '#'+this._selectors.remove, function(e){
+            this.trigger('group_remove');
+            this.removeGroup();
+        });
+        this.addListener('click', '#'+this._selectors.rename, function(e){
+            this.trigger('group_rename');
+            this.renameGroup();
+        });
+        this.addListener('change', '#'+this._selectors.tree+' input', function(e){
+            this.trigger('group_toggle');
+            this.showhideGroups(e);
+        });
+
     };
 
     UIGroupPanel.prototype.getStyles = function() {
@@ -142,22 +155,18 @@ var UIGroupPanel = (function($,UIBasePanel){
 
     UIGroupPanel.prototype.showhideGroups = function(e){
         var group,gid = $(e.currentTarget).attr('id');
+        var $name = $('#'+this._selectors.name);
+
+        $name.val('');
         $('.spacers_group').hide();
 
-        $('#'+this._selectors.name).val('');
-
-        if(gid=='hide_groups'){
-            this._gui._components.uiSpacer.newUsedGroup();
-            this._gui._panels.offsetPanel.selectGroup();
-        }else{
-            group = gid.replace('showhide_group_','');
+        if(gid!=this._selectors.hideall){
+            group = gid.replace(this._selectors.toggle,'');
             $('#'+group).show();
-            $('#fibo_group_name').val(group);
-            this._gui._components.uiSpacer.newUsedGroup(group);
-            this._gui._panels.offsetPanel.selectGroup(group);
+            $name.val(group);
         }
 
-        this._gui._components.uiSpacer.updateGroups();
+        this.trigger('group_select',group);
     };
 
     UIGroupPanel.prototype.showGroupsList = function(stJson){

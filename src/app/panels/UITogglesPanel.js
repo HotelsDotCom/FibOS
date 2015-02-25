@@ -48,6 +48,13 @@ var UITogglesPanel = (function($,UIExtraPanel){
 
     UITogglesPanel.prototype.setEvents = function() {
 
+        this.addListener('click',  '#'+this._selectors.main, function(e){this.trigger('toggle_fibos');});
+
+        this.addListener('change', '#'+this._selectors.spacers+' .fibo_checkbox', checkbox_handler.call(this,'toggle_spacers'));
+        this.addListener('change', '#'+this._selectors.overlay+' .fibo_checkbox', checkbox_handler.call(this,'toggle_overlay'));
+        this.addListener('change', '#'+this._selectors.rulers +' .fibo_checkbox', checkbox_handler.call(this,'toggle_rulers') );
+        this.addListener('change', '#'+this._selectors.markers+' .fibo_checkbox', checkbox_handler.call(this,'toggle_markers'));
+
     };
 
     UITogglesPanel.prototype.getStyles = function() {
@@ -63,6 +70,11 @@ var UITogglesPanel = (function($,UIExtraPanel){
      * PRIVATE METHODS
      ********************/
 
+    function checkbox_handler(event){
+        return function(e){
+            this.trigger(event, $(e.currentTarget).is(':checked'));
+        }.bind(this);
+    }
 
     return UITogglesPanel;
 

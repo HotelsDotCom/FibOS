@@ -63,6 +63,23 @@ var UISpacerPanel = (function($,UIBasePanel){
 
     UISpacerPanel.prototype.setEvents = function() {
 
+        this.addListener('keyup', '#'+this._selectors.left+',#'+this._selectors.top, function(e){
+            changeSpacerPos.call(this,e);
+            this.trigger('spacer_offset',"{l:"+$('#'+this._selectors.left).val()+",t:"+$('#'+this._selectors.top).val()+"}");
+        });
+        this.addListener('change keyup', '#'+this._selectors.spacer, function(e){
+            this.trigger('spacer_changed',$(e.currentTarget).val());
+            this.applyInfo();
+        });
+        this.addListener('click', '#'+this._selectors.remove, function(e){
+            this.trigger('spacer_delete',this._spacerSelected);
+            this.deleteSpacer();
+        });
+        this.addListener('click', '#'+this._selectors.duplicate, function(e){
+            this.trigger('spacer_duplicate',this._spacerSelected);
+            this.duplicateSpacer();
+        });
+
     };
 
     UISpacerPanel.prototype.getStyles = function() {
@@ -123,6 +140,15 @@ var UISpacerPanel = (function($,UIBasePanel){
      * PRIVATE METHODS
      ********************/
 
+    function changeSpacerPos(e){
+        var offset = e.shiftKey ? 10 : e.altKey ? 0.5 : 1;
+        var val = Number($(e.currentTarget).val());
+
+        $(e.currentTarget).val(val+(e.keyCode===38?offset:e.keyCode===40?-offset:0));
+        this.applyInfo();
+
+        return false;
+    }
 
     return UISpacerPanel;
 

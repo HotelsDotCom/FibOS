@@ -11,12 +11,14 @@ var UISelectPanel = (function($,UIExtraPanel){
      * @param id
      * @param list
      */
-    function UISelectPanel(id,list) {
+    function UISelectPanel(id,list,spacers) {
         this._spacersList = list;
+        this._spacersObject = spacers;
 
         var baseID = 'fibo_clone_';
         this._selectors = {
-            select: baseID + 'select'
+            choose  : baseID + 'select',
+            element : baseID + 'element'
         };
 
         UIExtraPanel.call(this,id);
@@ -35,12 +37,25 @@ var UISelectPanel = (function($,UIExtraPanel){
 
     UISelectPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append(this.fiboSelect(this._spacersList,this._selectors.select));
+            .append(this.fiboSelect(this._spacersList,this._selectors.choose))
+            .append($('<div/>').attr('id',this._selectors.element));
 
         return $content.children();
     };
 
     UISelectPanel.prototype.setEvents = function() {
+
+        this.addListener('change keyup', '#'+this._selectors.choose, function(e){
+            this.trigger('clone_select', $(e.currentTarget).val());
+            $('#'+this._selectors.element).html(this._spacersObject['f_'+$(e.currentTarget).val()]);
+        });
+        this.addListener('mousedown', '#'+this._selectors.element+' .fibospacer', function(e){
+            this.trigger('clone_spacer', {
+                pos    : {pageX:e.pageX,pageY:e.pageY},
+                $clone : $('#'+this._selectors.element),
+                spacer : e.currentTarget
+            });
+        });
 
     };
 
