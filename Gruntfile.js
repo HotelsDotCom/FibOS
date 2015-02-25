@@ -24,6 +24,7 @@ module.exports = function(grunt) {
                     'src/widgets/UISpriterWidget.js',
                     //panels
                     'src/app/panels/UIBasePanel.js',
+                    'src/app/panels/UIExtraPanel.js',
                     'src/app/panels/UIGroupPanel.js',
                     'src/app/panels/UIInputPanel.js',
                     'src/app/panels/UIOffsetPanel.js',

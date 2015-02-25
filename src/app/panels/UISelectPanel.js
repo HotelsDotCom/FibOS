@@ -2,7 +2,7 @@
  * Created by fdimonte on 23/02/2015.
  */
 
-var UISelectPanel = (function($,UIBasePanel){
+var UISelectPanel = (function($,UIExtraPanel){
 
     /**
      * UISelectPanel Class
@@ -19,7 +19,7 @@ var UISelectPanel = (function($,UIBasePanel){
             select: baseID + 'select'
         };
 
-        UIBasePanel.call(this,id);
+        UIExtraPanel.call(this,id);
     }
 
     /**
@@ -27,13 +27,7 @@ var UISelectPanel = (function($,UIBasePanel){
      *
      * @type {UIBasePanel}
      */
-    UISelectPanel.prototype = Object.create(UIBasePanel.prototype);
-
-    UISelectPanel.prototype.createElement = function(content) {
-        if(!content) return false;
-        this.$el = $('<div/>').attr('id',this._ID).append(content);
-        return true;
-    };
+    UISelectPanel.prototype = Object.create(UIExtraPanel.prototype);
 
     /********************
      * OVERRIDABLE METHODS
@@ -66,4 +60,4 @@ var UISelectPanel = (function($,UIBasePanel){
 
     return UISelectPanel;
 
-}(jQuery,UIBasePanel));
+}(jQuery,UIExtraPanel));
