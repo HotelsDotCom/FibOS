@@ -17,6 +17,8 @@ var UIBasePanel = (function($){
         this._label = label;
         this._gui = null;
 
+        this._listeners = {};
+
         /*
         the initialize process will call
             this.createContent() - should be overridden
@@ -104,6 +106,28 @@ var UIBasePanel = (function($){
                 this.open();
             else
                 this.close();
+        },
+
+        // events management
+        addListener: function(event,child,callback){
+            if(typeof(child)=='function')
+                this.$el.on(event,child.bind(this));
+            else if(typeof(child)=='string')
+                this.$el.on(event,child,callback.bind(this));
+        },
+        on: function(event,handler){
+            this._listeners[event] || (this._listeners[event]=[]);
+            this._listeners[event].push(handler);
+        },
+        off: function(event){
+            this._listeners[event] = null;
+        },
+        trigger: function(event,data){
+            this._gui && this._gui._logEvents && console.log('trigger [%s] -> %s(%s)',this._ID,event,data);
+
+            var events = this._listeners[event];
+            if(!events) return;
+            for(var e in events) if(events.hasOwnProperty(e)) events[e](data,event);
         },
 
         /*---FACTORY METHODS---*/
