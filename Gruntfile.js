@@ -128,4 +128,6 @@ module.exports = function(grunt) {
     grunt.registerTask('build-spacer', ['clean', 'concat:spacer', 'uglify:spacer', 'copy:widget']);
     grunt.registerTask('build-spriter',['clean', 'concat:spriter','uglify:spriter','copy:widget']);
 
+    grunt.registerTask('build-all',['clean', 'concat','uglify','copy']);
+
 };
