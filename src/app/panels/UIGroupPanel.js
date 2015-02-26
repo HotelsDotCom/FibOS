@@ -60,7 +60,6 @@ var UIGroupPanel = (function($,UIBasePanel){
             this.renameGroup();
         });
         this.addListener('change', '#'+this._selectors.tree+' input', function(e){
-            this.trigger('group_toggle');
             this.showhideGroups(e);
         });
 

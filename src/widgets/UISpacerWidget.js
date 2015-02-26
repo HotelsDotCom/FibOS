@@ -137,10 +137,11 @@ var UISpacerWidget = (function($,UIBaseWidget){
             spacers = this.spacersGroups.groups[this.lastUsedGroup],
             $spacers = $('#'+this.lastUsedGroup).find('.'+this._options.spacerClass);
 
+        if(!spacers) return;
         $spacers.each(function(i,e){
-            var $spacer = $(this);
-            t = Number(spacers[i][1]);//Number($spacer.css('top').replace('px',''));
-            l = Number(spacers[i][2]);//Number($spacer.css('left').replace('px',''));
+            var $spacer = $(e);
+            t = Number(spacers[i][1]);
+            l = Number(spacers[i][2]);
             $spacer.css('top',t+Number(offset.top));
             $spacer.css('left',l+Number(offset.left));
         });
@@ -148,6 +149,8 @@ var UISpacerWidget = (function($,UIBaseWidget){
 
     UISpacerWidget.prototype.saveOffsetGroup = function(offset) {
         var s,spacers = this.spacersGroups.groups[this.lastUsedGroup];
+
+        if(!spacers) return;
         for(s in spacers){
             if(spacers.hasOwnProperty(s)){
                 spacers[s][1] = Number(spacers[s][1]) + Number(offset.top);
@@ -158,8 +161,8 @@ var UISpacerWidget = (function($,UIBaseWidget){
     };
 
     UISpacerWidget.prototype.offsetCustomGroup = function(spacerslist,offset) {
-        for(var i=0;i<this.spacerslist.length;i++){
-            var $spacer = $(this.spacerslist[i]);
+        for(var i=0;i<spacerslist.length;i++){
+            var $spacer = $(spacerslist[i]);
             var zero = $spacer.offset();
             var pos = {
                 left: zero.left + Number(offset.left),

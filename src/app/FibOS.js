@@ -21,7 +21,6 @@ var FibOS = (function(
         var jqueryMinVersion = '1.7';
 
         this._ID='fibos';
-        this._fibosID='fibos_form';
         this._fibosTitle='FibOS';
         this._fibosVersion='1.7.2';
         this._logEvents = true;
@@ -178,10 +177,6 @@ var FibOS = (function(
             this.$panels.find('.vui-content').slideUp();
         },
 
-        /*---------------------------------------------- INIT AND EVENTS ---*/
-
-        eventHandlers: {},
-
         /*---------------------------------------------- FIBOS PANELS AND COMPONENTS ---*/
 
         panelsManager: {
@@ -268,10 +263,6 @@ var FibOS = (function(
                     opt.image = this.getImage('alpha');
                     return new uiSpriter( id, opt );
                 }
-            },
-
-            toggles: function() {
-
             },
 
             styles: function() {
