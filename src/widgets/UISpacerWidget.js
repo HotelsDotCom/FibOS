@@ -262,7 +262,8 @@ var UISpacerWidget = (function($,UIBaseWidget){
     function htmlToSpacersGroups() {
         var cont,myasset = {};
 
-        $('#'+this._ID+' .'+this._options.spacerClass).each(function(i,e){
+        //$('#'+this._ID+' .'+this._options.spacerClass).each(function(i,e){
+        this.$el.find('.'+this._options.spacerClass).each(function(i,e){
             cont = $(e).parent().attr('id');
 
             if(cont===this._ID) cont='spacerGroupDefault';

@@ -140,17 +140,26 @@ var FibOS = (function(
 
         initEvents: function() {
 
+            // panelToggles
             this._panels.togglesPanel.on('toggle_fibos',  function(data,event){});
             this._panels.togglesPanel.on('toggle_spacers',function(data,event){});
             this._panels.togglesPanel.on('toggle_overlay',function(data,event){});
             this._panels.togglesPanel.on('toggle_rulers', function(data,event){});
             this._panels.togglesPanel.on('toggle_marker', function(data,event){});
 
+            // panelSelect
             this._panels.selectPanel.on('clone_select', function(data,event){});
             this._panels.selectPanel.on('clone_spacer', function(data){
                 fiboClone.call(this,data.pos,data.spacer,data.$clone);
             }.bind(this));
 
+            // panelSpacer
+            this._panels.spacerPanel.on('spacer_changed', function(data,event){});
+            this._panels.spacerPanel.on('spacer_offset', function(data,event){});
+            this._panels.spacerPanel.on('spacer_delete', function(data,event){});
+            this._panels.spacerPanel.on('spacer_duplicate', function(data,event){});
+
+            // panelGroups
             this._panels.groupPanel.on('group_remove', function(data,event){});
             this._panels.groupPanel.on('group_rename', function(data,event){});
             this._panels.groupPanel.on('group_select', function(data){
@@ -162,6 +171,7 @@ var FibOS = (function(
                 this.openPanel('groupPanel');
             }.bind(this));
 
+            // panelOffset
             this._panels.offsetPanel.on('group_offset_apply', function(data,event){});
             this._panels.offsetPanel.on('group_offset_save', function(data,event){});
             this._panels.offsetPanel.on('group_toggle_multiple', function(data,event){});
