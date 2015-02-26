@@ -151,11 +151,18 @@ var FibOS = (function(
                 fiboClone.call(this,data.pos,data.spacer,data.$clone);
             }.bind(this));
 
+            this._panels.groupPanel.on('group_remove', function(data,event){});
+            this._panels.groupPanel.on('group_rename', function(data,event){});
             this._panels.groupPanel.on('group_select', function(data){
                 this._components.uiSpacer.newUsedGroup(data);
                 this._panels.offsetPanel.selectGroup(data);
                 this._components.uiSpacer.updateGroups();
             }.bind(this));
+
+            this._panels.offsetPanel.on('group_offset_apply', function(data,event){});
+            this._panels.offsetPanel.on('group_offset_save', function(data,event){});
+            this._panels.offsetPanel.on('group_toggle_multiple', function(data,event){});
+
         },
 
         addWidget: function(widget) {

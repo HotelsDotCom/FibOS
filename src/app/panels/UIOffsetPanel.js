@@ -20,12 +20,13 @@ var UIOffsetPanel = (function($,UIBasePanel){
             top     : mainID + 'top',
             left    : mainID + 'left',
             multi   : mainID + 'multiple',
-            multi_p : mainID + 'multiple_p'
+            multi_p : mainID + 'multiple_p',
+            multi_box:mainID + 'multiple_box'
         };
 
         UIBasePanel.call(this,id,label);
 
-        this._groupSelected = null;
+        this._groupSelected = [];
     }
 
     /**
@@ -62,6 +63,19 @@ var UIOffsetPanel = (function($,UIBasePanel){
 
     UIOffsetPanel.prototype.setEvents = function() {
 
+        this.addListener('keydown', '#'+this._selectors.left+', #'+this._selectors.top, function(e){
+            changeGroupPos.call(this,e);
+            this.trigger('group_offset_apply',"{l:"+$('#'+this._selectors.left).val()+",t:"+$('#'+this._selectors.top).val()+"}");
+        });
+        this.addListener('blur', '#'+this._selectors.left+', #'+this._selectors.top, function(e){
+            this.trigger('group_offset_save',"{l:"+$('#'+this._selectors.left).val()+",t:"+$('#'+this._selectors.top).val()+"}");
+            saveOffset.call(this,e)
+        });
+        this.addListener('change', '#'+this._selectors.multi, function(e){
+            this.trigger('group_toggle_multiple');
+            multiSpacerManager.toggle($(e.currentTarget).is(':checked'),this);
+        });
+
     };
 
     UIOffsetPanel.prototype.getStyles = function() {
@@ -87,66 +101,109 @@ var UIOffsetPanel = (function($,UIBasePanel){
 
     UIOffsetPanel.prototype.selectGroup = function(groupName){
         groupName || (groupName='');
-        $('#fibo_grp_sel').text(groupName);
-        $('#fibo_grp_sel_multiple_p').find('span').text($('#'+groupName).find('div').length);
+        $('#'+this._selectors.group).text(groupName);
+        $('#'+this._selectors.multi_p).find('span').text($('#'+groupName).find('div').length);
     };
 
-    UIOffsetPanel.prototype.saveOffset = function(e){
+    /********************
+     * PRIVATE METHODS
+     ********************/
+
+    function changeGroupPos(e){
+        var offset = e.shiftKey ? 10 : e.altKey ? 0.5 : 1;
+        var val = Number($(e.currentTarget).val());
+
+        $(e.currentTarget).val(val+(e.keyCode===38?offset:e.keyCode===40?-offset:0));
+        this.applyInfo(e);
+
+        return false;
+    }
+
+    function saveOffset(e){
         var offset = {
             top: $('#'+this._selectors.top).val(),
             left: $('#'+this._selectors.left).val()
         };
         this._gui._components.uiSpacer.saveOffsetGroup(offset);
         $(e.currentTarget).val('0');
-    };
+    }
 
-    UIOffsetPanel.prototype.toggleMultiSpacer = function(){
-        var zero = {top:0,left:0};
-        var groupSelecting;
+    var multiSpacerManager = {
 
-        function selectStart(e){
+        toggle: function(isActive,ctx){
+            this.ctx = ctx;
+            this.fibos = ctx._gui;
+            this.id_multibox = ctx._selectors.multi_box;
+            this.id_multipar = ctx._selectors.multi_p;
+            this.id_grouptxt = ctx._selectors.group;
+
+            this.zero = {top:0,left:0};
+            this.groupSelecting = false;
+            this.ctx._groupSelected = [];
+
+            if(isActive){
+                $('#'+this.id_multipar).find('span').text('0');
+                $('body')
+                    .css('cursor','crosshair')
+                    .on('mousedown.multiselect',this.selectStart.bind(this))
+                    .on('mousemove.multiselect',this.selectMulti.bind(this))
+                    .on('mouseup.multiselect',this.selectEnd.bind(this));
+            }else{
+                $('#'+this.id_multipar).find('span').text($('#'+this.fibos._components.uiSpacer.lastUsedGroup).find('div').length);
+                $('body')
+                    .css('cursor','inherit')
+                    .off('.multiselect');
+            }
+        },
+
+        selectStart: function(e){
             var $this = $(e.target);
-            var gui_id = '#'+this._gui._ID;
+            var gui_id = '#'+this.fibos._ID;
             if($this.parents(gui_id).length>0 || $this.is(gui_id)) return true;
 
-            groupSelecting = true;
             e.preventDefault();
-            zero = {top:e.pageY, left:e.pageX};
-            $('#fibo_grp_sel_multiple_box').remove();
-            $('<div/>').attr('id','fibo_grp_sel_multiple_box').appendTo('body');
-        }
-        function selectMulti(e){
-            if(!groupSelecting) return true;
+            this.groupSelecting = true;
+            this.zero = {top:e.pageY, left:e.pageX};
+
+            $('#'+this.id_multibox).remove();
+            this.fibos.$el.append($('<div/>').attr('id',this.id_multibox));
+        },
+
+        selectMulti: function(e){
+            if(!this.groupSelecting) return true;
 
             var toX,toY;
-            var pos = zero;
+            var pos = this.zero;
             var pX = e.pageX;
             var pY = e.pageY;
-            if(pX<zero.left){
+            if(pX<this.zero.left){
                 pos.left = pX;
-                toX = zero.left;
+                toX = this.zero.left;
             }else{
                 toX = pX;
             }
-            if(pY<zero.top){
+            if(pY<this.zero.top){
                 pos.top = pY;
-                toY = zero.top;
+                toY = this.zero.top;
             }else{
                 toY = pY;
             }
             var w = toX - pos.left;
             var h = toY - pos.top;
 
-            $('#fibo_grp_sel_multiple_box')
+            $('#'+this.id_multibox)
                 .offset(pos)
                 .width(w)
                 .height(h);
-        }
-        function selectEnd(e){
-            if(!groupSelecting) return true;
-            groupSelecting = false;
+        },
 
-            var mbox = $('#fibo_grp_sel_multiple_box');
+        selectEnd: function(e){
+            if(!this.groupSelecting) return true;
+            this.groupSelecting = false;
+
+            var mbox = $('#'+this.id_multibox);
+            if(mbox.length==0) return;
+
             var mboxOffset = mbox.offset();
             var box = {
                 left: mboxOffset.left,
@@ -156,13 +213,14 @@ var UIOffsetPanel = (function($,UIBasePanel){
             };
             mbox.remove();
 
-            this._groupSelected = findSpacersInsideBox(box);
-            $('#'+this._selectors.multi_p).find('span').text(this._groupSelected.length);
-        }
-        function findSpacersInsideBox(box){
+            this.ctx._groupSelected = this.findSpacersInsideBox(box);
+            $('#'+this.id_multipar).find('span').text(this.ctx._groupSelected.length);
+        },
+
+        findSpacersInsideBox: function(box){
             box || (box={top:0,left:0,width:0,height:0});
             var selectedSpacers = [];
-            var spacerslist = $('#'+$('#fibo_grp_sel').text()).find('div');
+            var spacerslist = $('#'+$('#'+this.id_grouptxt).text()).find('div');
             var singlespacer,singleoffset,isInside;
 
             spacerslist.each(function(i,e){
@@ -180,26 +238,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
             return selectedSpacers;
         }
 
-        this._groupSelected = [];
-        if($(this).is(':checked')){
-            $('#'+this._selectors.multi_p).find('span').text('0');
-            $('body')
-                .css('cursor','crosshair')
-                .on('mousedown.multiselect',selectStart.bind(this))
-                .on('mousemove.multiselect',selectMulti.bind(this))
-                .on('mouseup.multiselect',selectEnd.bind(this));
-        }else{
-            $('#'+this._selectors.multi_p).find('span').text($('#'+this._gui._components.uiSpacer.lastUsedGroup).find('div').length);
-            $('body')
-                .css('cursor','inherit')
-                .off('.multiselect');
-        }
     };
-
-    /********************
-     * PRIVATE METHODS
-     ********************/
-
 
     return UIOffsetPanel;
 
