@@ -154,14 +154,38 @@ var FibOS = (function(
             this._panels.groupPanel.on('group_remove', function(data,event){});
             this._panels.groupPanel.on('group_rename', function(data,event){});
             this._panels.groupPanel.on('group_select', function(data){
-                this._components.uiSpacer.newUsedGroup(data);
+                data && this._components.uiSpacer.newUsedGroup(data);
                 this._panels.offsetPanel.selectGroup(data);
                 this._components.uiSpacer.updateGroups();
+            }.bind(this));
+            this._panels.groupPanel.on('group_list_open', function(){
+                this.openPanel('groupPanel');
             }.bind(this));
 
             this._panels.offsetPanel.on('group_offset_apply', function(data,event){});
             this._panels.offsetPanel.on('group_offset_save', function(data,event){});
             this._panels.offsetPanel.on('group_toggle_multiple', function(data,event){});
+
+            // panelStorage
+            this._panels.storagePanel.on('history_restore', function(){
+                var stJson = this._components.uiSpacer.getLocalStorage(true);
+                this._panels.groupPanel.showGroupsList(stJson);
+            }.bind(this));
+            this._panels.storagePanel.on('history_save', function(){
+                this._components.uiSpacer.setLocalStorage();
+            }.bind(this));
+
+            // panelInput
+            this._panels.inputPanel.on('input_import', function(data){
+                this._components.uiSpacer.loadSpacersFromJson(data,true);
+                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
+                this._panels.groupPanel.showGroupsList(stJson);
+            }.bind(this));
+            this._panels.inputPanel.on('input_export', function(){
+                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
+                console.log(stJson);
+                alert("Open your browser's console and see the export string.");
+            }.bind(this));
 
         },
 
@@ -180,8 +204,27 @@ var FibOS = (function(
 
         addStyle: function(styles) {},
 
+        openPanel: function(panelOrName) {
+            var panel = panelOrName instanceof UIBasePanel ? panelOrName : this._panels[panelOrName];
+
+            if(panel && !panel.isOpen()){
+                this.closeAllPanels();
+                panel.open();
+            }
+        },
+        closePanel: function(panelOrName) {
+            var panel = panelOrName instanceof UIBasePanel ? panelOrName : this._panels[panelOrName];
+
+            if(panel && panel.isOpen()){
+                panel.close();
+            }
+        },
         closeAllPanels: function() {
-            this.$panels.find('.vui-content').slideUp();
+            for(var p in this._panels) if(this._panels.hasOwnProperty(p)) this._panels[p].close();
+
+            //this.$panels.find('.vui-label').find('.fibo_checkbox').attr('checked',false);
+            //this.$panels.find('.vui-content').slideUp();
+            //this.$panels.find('.fibo_panel_open').removeClass('fibo_panel_open');
         },
 
         /*---------------------------------------------- FIBOS PANELS AND COMPONENTS ---*/
@@ -337,7 +380,7 @@ var FibOS = (function(
                         {position:'absolute',padding:'8px','margin-top':'9px',left:'0'},
 
                     // fibo panel - INPUT
-                    '#fibo_input':
+                    '#fibo_input_text':
                         {display:'block',height:'55px',margin:'2px auto 5px',resize:'none',width:'92%'},
                     // fibo panel - SELECTED
                     '#fibo_panel_selected p':
@@ -373,7 +416,7 @@ var FibOS = (function(
                         {'font-size':'12px'},
 
                     // common input styles
-                    '#fibo_input,#fibo_sel_left,#fibo_sel_top,#fibo_group_name,#fibo_grp_sel_left,#fibo_grp_sel_top':
+                    '#fibo_input_text,#fibo_sel_left,#fibo_sel_top,#fibo_group_name,#fibo_grp_sel_left,#fibo_grp_sel_top':
                         {overflow:'hidden',background:'transparent',border:'1px solid #777','font-size':'10px'},
 
                     // venere ui styles

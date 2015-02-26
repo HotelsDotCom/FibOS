@@ -13,7 +13,7 @@ var UIStoragePanel = (function($,UIBasePanel){
      */
     function UIStoragePanel(id,label) {
 
-        var baseID = 'fibo_';
+        var baseID = 'fibo_storage_';
         this._selectors = {
             restore : baseID + 'restore',
             save    : baseID + 'save'
@@ -43,6 +43,9 @@ var UIStoragePanel = (function($,UIBasePanel){
 
     UIStoragePanel.prototype.setEvents = function() {
 
+        this.addListener('click', '#'+this._selectors.restore, function(e){this.trigger('history_restore');});
+        this.addListener('click', '#'+this._selectors.save,    function(e){this.trigger('history_save');});
+
     };
 
     UIStoragePanel.prototype.getStyles = function() {
@@ -53,23 +56,6 @@ var UIStoragePanel = (function($,UIBasePanel){
      * PUBLIC METHODS
      ********************/
 
-    UIStoragePanel.prototype.save = function(){
-        this._gui._components.uiSpacer.setLocalStorage();
-    };
-    UIStoragePanel.prototype.restore = function(){
-        var stJson = this._gui._components.uiSpacer.getLocalStorage(true);
-        this._gui._panels.groupPanel.showGroupsList(stJson);
-    };
-    UIStoragePanel.prototype.importJson = function(){
-        this._gui._components.uiSpacer.loadSpacersFromJson($('#fibo_input').val(),true);
-        var stJson = JSON.stringify(this._gui._components.uiSpacer.spacersGroups.groups);
-        this._gui._panels.groupPanel.showGroupsList(stJson);
-    };
-    UIStoragePanel.prototype.exportJson = function(){
-        var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
-        console.log(stJson);
-        alert("Open your browser's console and see the export string.");
-    };
 
     /********************
      * PRIVATE METHODS

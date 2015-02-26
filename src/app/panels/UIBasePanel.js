@@ -100,6 +100,9 @@ var UIBasePanel = (function($){
             else
                 this.open();
         },
+        isOpen: function() {
+            return isPanelOpen(this);
+        },
 
         // events management
         addListener: function(event,child,callback){
@@ -156,12 +159,13 @@ var UIBasePanel = (function($){
     function isPanelOpen(panel){
         return panel.$el.find('.vui-content').css('display')!=='none';
     }
+
     function toggle_handler(e) {
         var $t = $(e.currentTarget);
         if($t.is(':checked'))
-            this.open();
+            this._gui.openPanel(this);
         else
-            this.close();
+            this._gui.closePanel(this);
     }
 
     return UIBasePanel;

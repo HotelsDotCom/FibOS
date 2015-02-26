@@ -86,10 +86,10 @@ var UIGroupPanel = (function($,UIBasePanel){
     };
 
     UIGroupPanel.prototype.removeGroup = function(){
+        var $hide = $('#'+this._selectors.hideall);
         var $tree = $('#'+this._selectors.tree);
         var $li = $tree.find('li');
         var $checked = $li.find('input:checked');
-        var $hide = $('#'+this._selectors.hideall);
 
         if($li.length===0) return false;
         if($checked.attr('id')===this._selectors.hideall) return false;
@@ -151,7 +151,7 @@ var UIGroupPanel = (function($,UIBasePanel){
         $tree.show();
 
         if($checked.length>0) this.showhideGroups({currentTarget:$checked});
-        //TODO: panelsManager.openPanel($('#fibo_showhide_groups'));
+        this.trigger('group_list_open');
     };
 
     UIGroupPanel.prototype.showhideGroups = function(e){
