@@ -197,6 +197,14 @@ var FibOS = (function(
                 alert("Open your browser's console and see the export string.");
             }.bind(this));
 
+            // panelSprite
+            this._panels.spritePanel.on('sprites_analyze', function(){
+                this._components.uiSpriter.analyze();
+            }.bind(this));
+            this._panels.spritePanel.on('sprites_toggle', function(data){
+                this._components.uiSpriter.toggleSprite(data);
+            }.bind(this));
+
         },
 
         addWidget: function(widget) {
@@ -281,7 +289,9 @@ var FibOS = (function(
                 }
             },
             uiSpriter : {
-                didAnalyze: function(){}
+                didAnalyze: function(info){
+                    this._panels.spritePanel.didAnalyze(info);
+                }
             }
         },
 

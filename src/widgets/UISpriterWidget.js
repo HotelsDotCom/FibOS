@@ -17,6 +17,11 @@ var UISpriterWidget = (function($,UIBaseWidget){
         this.spritesTotal = 0;  // updated by getCSSImages()
 
         UIBaseWidget.call(this, ID, options);
+
+        // resize event
+        windowResizeEvent.call(this);
+        $(window).off('.iuSpriter')
+            .on('resize.iuSpriter',windowResizeEvent.bind(this));
     }
 
     /**
@@ -70,6 +75,22 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     UISpriterWidget.prototype.analyze = function(){
         getCSSImages.call(this,imagesAnalyzed.bind(this));
+    };
+
+    UISpriterWidget.prototype.toggleSprite = function(sid) {
+        var sprite,$cont;
+        var $sprites = $('#'+this._ID);
+        var $sprites_bg = $('#fibo_sprites_bg');
+
+        $sprites.hide();
+        $sprites_bg.show();
+        $('.obscurers_container').hide();
+        if(sid!=='hide_sprites'){
+            sprite = sid.replace('toggle_sprite_','');
+            $cont = $('.obscurers_container#'+sprite);
+            $cont.show();
+            $sprites.show();
+        }
     };
 
     /********************
@@ -159,7 +180,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
             if(_spritesInfo.hasOwnProperty(i)){
                 filename = this.filenameFromCss(i,true);
                 arr = spriteObscurerArray(_spritesInfo[i]);
-                $img = this.spriteImage(i);
+                $img = spriteImage.call(this,i);
                 $obsCont = $('<div id="'+filename+'" class="obscurers_container"/>');
                 $obsCont.append($img);
                 for(var s in arr){
@@ -258,6 +279,14 @@ var UISpriterWidget = (function($,UIBaseWidget){
     //given url wrapped in css property
     function cssFromUrl(url) {
         return 'url("'+url+'")';
+    }
+
+    /*---EVENT HANDLERS---*/
+
+    function windowResizeEvent(e) {
+        this.$el
+            .width($(window).width())
+            .height($(window).height());
     }
 
     return UISpriterWidget;
