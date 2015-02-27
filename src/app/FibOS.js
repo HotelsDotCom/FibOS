@@ -224,7 +224,6 @@ var FibOS = (function(
 
         openPanel: function(panelOrName) {
             var panel = panelOrName instanceof UIBasePanel ? panelOrName : this._panels[panelOrName];
-
             if(panel && !panel.isOpen()){
                 this.closeAllPanels();
                 panel.open();
@@ -232,39 +231,15 @@ var FibOS = (function(
         },
         closePanel: function(panelOrName) {
             var panel = panelOrName instanceof UIBasePanel ? panelOrName : this._panels[panelOrName];
-
             if(panel && panel.isOpen()){
                 panel.close();
             }
         },
         closeAllPanels: function() {
             for(var p in this._panels) if(this._panels.hasOwnProperty(p)) this._panels[p].close();
-
-            //this.$panels.find('.vui-label').find('.fibo_checkbox').attr('checked',false);
-            //this.$panels.find('.vui-content').slideUp();
-            //this.$panels.find('.fibo_panel_open').removeClass('fibo_panel_open');
         },
 
         /*---------------------------------------------- FIBOS PANELS AND COMPONENTS ---*/
-
-        panelsManager: {
-            openPanel : function($p){
-                this.panelsManager.closeAll();
-                $p.find('.vui-label').find('.fibo_checkbox').attr('checked',true);
-                $p.find('.vui-content').slideDown();
-                $p.addClass('fibo_panel_open');
-            },
-            closePanel : function($p){
-                $p.find('.vui-label').find('.fibo_checkbox').attr('checked',false);
-                $p.find('.vui-content').slideUp();
-                $p.removeClass('fibo_panel_open');
-            },
-            closeAll : function(){
-                $('.vui-label').find('.fibo_checkbox').attr('checked',false);
-                $('.vui-content').slideUp();
-                $('.fibo_panel_open').removeClass('fibo_panel_open');
-            }
-        },
 
         callbacks: {
             uiMarker : {
@@ -326,11 +301,11 @@ var FibOS = (function(
                 },
                 uiSpriter : function(id,opt){
                     opt || (opt={});
-                    opt.extension = {obscurerContainer:{top:'auto',left:'auto',margin:'0 auto'}};
+                    opt.extension = {obscurers_container:{top:'auto',left:'auto',margin:'0 auto'}};
                     opt.reference = this._reference;
                     opt.callback = this.callbacks.uiSpriter.didAnalyze.bind(this);
                     opt.visible = false;
-                    opt.image = this.getImage('alpha');
+                    opt.image = this.getImage('alpha_image');
                     return new uiSpriter( id, opt );
                 }
             },
@@ -425,7 +400,7 @@ var FibOS = (function(
                         {display:'block',width:'160px',height:'auto'},
                     // fibo panel - SPRITES
                     '#fibo_sprites_bg':
-                        {position:'fixed',width:'100%',height:'100%','z-index':'-1',background:'#000',opacity:'0.6'},
+                        {position:'fixed',width:'100%',height:'100%','z-index':'-1',background:'#000',opacity:'0.5'},
                     '#sprites_tree':
                         {'list-style':'none outside none',margin:'5px 0',padding:'0'},
                     '#sprites_tree li label':
@@ -450,8 +425,8 @@ var FibOS = (function(
 
                 var initialDisplay = {
                     '#fibo_bg': {display:'none'},
-                    '#fibo_rulers': {display:'none'},
-                    '#fibo_sprites': {display:'none'},
+                    '#fibos_ruler': {display:'none'},
+                    '#fibos_spriter': {display:'none'},
                     '#fibo_sel_spacer_multiple_p':{display:'none'},
                     '.vui-content': {display:'none'}
                 };
@@ -459,10 +434,10 @@ var FibOS = (function(
                 var zIndexes = {
                     main: {'z-index':'9999'},
                     '#fibo_bg': {'z-index':'0'},
-                    '#fibo_markers': {'z-index':'1'},
-                    '#fibo_container': {'z-index':'2'},
-                    '#fibo_rulers': {'z-index':'3'},
-                    '#fibo_sprites': {'z-index':'4'},
+                    '#fibos_marker': {'z-index':'1'},
+                    '#fibos_spacers': {'z-index':'2'},
+                    '#fibos_ruler': {'z-index':'3'},
+                    '#fibos_spriter': {'z-index':'4'},
                     '#fibo_grp_sel_multiple_box': {'z-index':'5'},
                     '#fibo_controls': {'z-index':'10'}
                 };

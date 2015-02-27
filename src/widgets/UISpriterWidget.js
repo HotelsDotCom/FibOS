@@ -73,7 +73,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
             f;
     };
 
-    UISpriterWidget.prototype.analyze = function(){
+    UISpriterWidget.prototype.analyze = function() {
         getCSSImages.call(this,imagesAnalyzed.bind(this));
     };
 
@@ -183,9 +183,9 @@ var UISpriterWidget = (function($,UIBaseWidget){
                 $img = spriteImage.call(this,i);
                 $obsCont = $('<div id="'+filename+'" class="obscurers_container"/>');
                 $obsCont.append($img);
-                for(var s in arr){
-                    $obsCont.append(arr[s]);
-                }
+
+                for(var s in arr) if(arr.hasOwnProperty(s)) $obsCont.append(arr[s]);
+
                 this.$el.append($obsCont);
             }
         }
