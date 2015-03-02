@@ -28,10 +28,12 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     UIMarkerWidget.prototype.initOptions = function(options) {
         this.extendObject(this._options, {
-            checkUseMarker : null,          //if this function returns true the marker will work
-            checkUseFont   : null,          //if this function returns true the fontinfo will work
-            markerClass    : 'uieMarker',   //common highlight element class
-            fontClass      : 'uieFontinfo', //common fontinfo element class
+            checkUseMarker : null,          //if this function returns false the marker won't be applied
+            checkUseFont   : null,          //if this function returns false the fontinfo won't be applied
+            markerClass    : 'fiboMarker',  //common highlight element class
+            fontClass      : 'fiboFontinfo',//common fontinfo element class
+            markerData     : 'markerHL',    //data name for marker elements
+            fontData       : 'markerFI',    //data name for fontinfo elements
             excluded       : '',            //selector excluded from marker functionality
             taglist        : {              //list of known tags on which to apply the marker
                 p:true,span:true,strong:true,li:true,
@@ -71,10 +73,14 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     UIMarkerWidget.prototype.initEvents = function() {
         var ref = this._options.reference;
         var cls = '.'+this._options.markerClass;
+        var tag = taglistToString(this._options.taglist);
 
         $(ref).off('.markerevent')
             .on('click.markerevent',doHighlight.bind(this))
             .on('click.markerevent',cls,undoHighlight.bind(this));
+
+        $(tag).data(this._options.markerData,null);
+        $(tag).data(this._options.fontData,null);
     };
 
     /********************
@@ -117,7 +123,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     //add text highlight around given element
     function addTextHighlight(elem,size) {
-        var dataName = 'markerHL';
+        var dataName = this._options.markerData;
         if($(elem).data(dataName)===true) return true;
 
         size || (size=markerSize(elem));
@@ -132,7 +138,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     //add font info above given element
     function addFontInfo(elem,size) {
-        var dataName = 'markerFI';
+        var dataName = this._options.fontData;
         if($(elem).data(dataName)===true) return true;
 
         size || (size=markerSize(elem));
@@ -146,7 +152,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
                 top  : size.offset.top - 45,
                 left : size.offset.left + 10
             })
-            .click(function(e){console.log(this);removeFromMarker.call(this,$(e.currentTarget),dataName);}.bind(this));
+            .click(function(e){removeFromMarker.call(this,$(e.currentTarget),dataName);}.bind(this));
 
         appendToMarker.call(this,elem,tfi,dataName);
     }
@@ -168,7 +174,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     //prevent default behavior for not excluded tags
     function preventDefaults() {
-        var tl = taglistToString.call(this);
+        var tl = taglistToString(this._options.taglist);
         $(tl).off('.prevent')
             .on('click.prevent',function(e){
                 if($(e.target).is(tl) && $(e.target).closest(this._options.excluded).length===0)
@@ -178,7 +184,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     //restore all default behaviors
     function restoreDefaults() {
-        var tl = taglistToString.call(this);
+        var tl = taglistToString(this._options.taglist);
         $(tl).off('.prevent');
     }
 
@@ -220,8 +226,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             width  : $el.width(),
             height : $el.height()-(fontOffset.t + fontOffset.b),
             offset : {
-                left: $el.offset().left + Number($el.css('padding-left').replace('px','')),
-                top : $el.offset().top  + Number($el.css('padding-top').replace('px','')) + fontOffset.t
+                left: $el.offset().left + parseInt($el.css('padding-left')),
+                top : $el.offset().top  + parseInt($el.css('padding-top')) + fontOffset.t
             }
         };
     }
@@ -232,31 +238,32 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             loginfo = true,
             fw = $el.css('font-weight'),
             fs = $el.css('font-size').replace('px',''),
-            ff = $el.css('font-family').split(',')[0].replace(/\"|'/g,'');
+            ff = $el.css('font-family').split(',')[0].replace(/\"|\'| /g,'').toLowerCase();
 
-        var sizesDef = {8:fo(),9:fo(),
-            10:fo(),11:fo(),12:fo(),13:fo(),14:fo(),15:fo(),16:fo(),17:fo(),18:fo(),19:fo(),
-            20:fo(),21:fo(),22:fo(),23:fo(),24:fo(),25:fo(),26:fo(),27:fo(),28:fo(),29:fo()};
-
-        var sizes = {'Arial':sizesDef,'Open Sans':sizesDef};
-        sizes['Arial']['8']      = fo(0,0);
-        sizes['Open Sans']['12'] = fo(1,-1);
-        sizes['Open Sans']['21'] = fo(5,1);
-        sizes['Open Sans']['26'] = fo(11,5);
+        var sizes = {'arial':sizesDefault(),'open sans':sizesDefault()};
+        sizes['arial']['8']      = fo(0,0);
+        sizes['arial']['12']     = fo(3,1);
+        sizes['arial']['18']     = fo(2,-1);
+        sizes['arial']['20']     = fo(6,3);
+        sizes['open sans']['12'] = fo(1,-1);
+        sizes['open sans']['21'] = fo(5,1);
+        sizes['open sans']['26'] = fo(11,5);
 
         if(loginfo){
             var textlog=[];
             textlog.push('family:"'+ff+'" - size:'+fs+' - weight:'+fw);
+
             if(!sizes[ff])
                 textlog.push('fontFAMILY not used.. we\'ll implement it soon!');
             if(sizes[ff] && (!sizes[ff][fs] || (sizes[ff][fs]['t']===0&&sizes[ff][fs]['b']===0)))
                 textlog.push('fontSIZE not used.. we\'ll implement it soon!');
+
             textlog.push('-----------------');
             console.log(textlog.join('\n'));
         }
 
         var finalSize;
-        finalSize = sizes[ff] ? sizes[ff] : sizesDef;
+        finalSize = sizes[ff] ? sizes[ff] : sizesDefault();
         finalSize = finalSize[fs] ? finalSize[fs] : finalSize['8'];
         return finalSize;
     }
@@ -266,15 +273,19 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             b : (b&&b!==0) ? b : 0
         };
     }
+    function sizesDefault(){
+        return {8:fo(),9:fo(),
+            10:fo(),11:fo(),12:fo(),13:fo(),14:fo(),15:fo(),16:fo(),17:fo(),18:fo(),19:fo(),
+            20:fo(),21:fo(),22:fo(),23:fo(),24:fo(),25:fo(),26:fo(),27:fo(),28:fo(),29:fo()};
+    }
 
     /*---SERVICE GETTERS---*/
 
     //convert taglist array to string including only tags setted to 'true'
-    function taglistToString() {
-        var obj = this._options.taglist,
-            list = [];
+    function taglistToString(tagList) {
+        var list = [];
 
-        for(var tag in obj) if(obj.hasOwnProperty(tag)) if(obj[tag]) list.push(tag);
+        for(var tag in tagList) if(tagList.hasOwnProperty(tag)) if(tagList[tag]) list.push(tag);
         return list.join(',');
     }
 
