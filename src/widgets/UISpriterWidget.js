@@ -137,9 +137,12 @@ var UISpriterWidget = (function($,UIBaseWidget){
                 img = $elm.css('background-image');
 
             var canContinue = (this._options.domain==='');
+
             if(!canContinue && img.indexOf(this._options.domain)>-1)
                 canContinue = true;
             if(canContinue && img.substr(0,3)!=='url')
+                canContinue = false;
+            if(canContinue && img.indexOf('http')===-1)
                 canContinue = false;
 
             if(canContinue){
