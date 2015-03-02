@@ -84,7 +84,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     /*---SERVICE METHODS---*/
 
     //prevent/restore default behaviors for elements in defaults.taglist
-    UIMarkerWidget.prototype.toggleDefaults = function(prevent) {
+    UIMarkerWidget.prototype.toggleListener = function(prevent) {
         if(prevent)
             preventDefaults.call(this);
         else

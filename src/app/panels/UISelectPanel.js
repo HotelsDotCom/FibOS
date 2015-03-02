@@ -67,6 +67,12 @@ var UISelectPanel = (function($,UIExtraPanel){
      * PUBLIC METHODS
      ********************/
 
+    UISelectPanel.prototype.toggleCloneDisplay = function(show) {
+        if(show)
+            $('#'+this._selectors.element).show();
+        else
+            $('#'+this._selectors.element).hide();
+    };
 
     /********************
      * PRIVATE METHODS

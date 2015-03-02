@@ -110,6 +110,9 @@ var UIBaseWidget = (function($){
             $('head').append($style);
         },
 
+        show: function(){this.$el.show();},
+        hide: function(){this.$el.hide();},
+
         /********************
          * SERVICE METHODS
          ********************/
