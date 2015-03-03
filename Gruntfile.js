@@ -160,7 +160,10 @@ module.exports = function(grunt) {
          * CLEAN
          ********************/
         clean: {
-            build: ["target"]
+            target: ["target"],
+            build:  ["build"],
+            build_v:["build/<%= pkg.version %>"],
+            deploy: ["public/<%= pkg.version %>"]
         },
 
         /********************
@@ -223,18 +226,15 @@ module.exports = function(grunt) {
     // Default task
     grunt.registerTask('default', ['build']);
 
-    // Private tasks
-    grunt.registerTask('_concat_fibos',   ['concat:widgets', 'concat:panels', 'concat:full']);
-
     // Widget tasks
-    grunt.registerTask('widget', '', function(arg){
+    grunt.registerTask('widget', 'custom task to build a single widget', function(arg){
         if(arguments.length>0){
             grunt.task.run(
-                'clean',
+                'clean:target',
                 'concat:'+arg,
                 'uglify:'+arg,
                 'copy:widget',
-                'clean'
+                'clean:target'
             );
         }else{
             grunt.log.error('[ERROR] task WIDGET needs an argument');
@@ -242,16 +242,17 @@ module.exports = function(grunt) {
     });
 
     // Main tasks
-    grunt.registerTask('build', 'custom task to build depending on arguments', function(){
+    grunt.registerTask('_concat_fibos', ['concat:widgets', 'concat:panels', 'concat:full']);
+    grunt.registerTask('build', 'custom task to build full FibOS with different initial config', function(){
         var task = 'fibos' + (arguments.length>0 ? '_'+arguments[0] : '');
         if(task){
             grunt.task.run(
-                'clean',
+                'clean:target',
                 '_concat_fibos',
                 'concat:'+task,
                 'uglify:'+task,
                 'copy:main',
-                'clean'
+                'clean:target'
             );
         }else{
             grunt.log.error('[ERROR] no FIBOS sub task with given name: %s',arg);
@@ -270,6 +271,6 @@ module.exports = function(grunt) {
         'widget:spriter'
     ]);
 
-    grunt.registerTask('deploy', ['build-all', 'copy:deploy']);
+    grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
 
 };
