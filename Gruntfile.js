@@ -83,21 +83,21 @@ module.exports = function(grunt) {
             fibos: {
                 src: [
                     'target/temp/fibos_full.js',
-                    'src/app/fibos_default.js'
+                    'src/app/init/fibos_default.js'
                 ],
                 dest: 'target/<%= pkg.name %>-<%= pkg.version %>.js'
             },
             fibos_hotels: {
                 src: [
                     'target/temp/fibos_full.js',
-                    'src/app/fibos_hotels.js'
+                    'src/app/init/fibos_hotels.js'
                 ],
                 dest: 'target/<%= pkg.name %>-hotels-<%= pkg.version %>.js'
             },
             fibos_venere: {
                 src: [
                     'target/temp/fibos_full.js',
-                    'src/app/fibos_venere.js'
+                    'src/app/init/fibos_venere.js'
                 ],
                 dest: 'target/<%= pkg.name %>-venere-<%= pkg.version %>.js'
             },
