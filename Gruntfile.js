@@ -130,11 +130,11 @@ module.exports = function(grunt) {
                 files: {'target/<%= pkg.name %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-<%= pkg.version %>.js']}
             },
             fibos_hotels: {
-                options: { banner: '<%= opt.header %> [HOTELS.COM] \n' },
+                options: { banner: '<%= opt.header %>/** built for HOTELS.COM **/\n' },
                 files: {'target/<%= pkg.name %>-hotels-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-hotels-<%= pkg.version %>.js']}
             },
             fibos_venere: {
-                options: { banner: '<%= opt.header %> [VENERE.COM] \n' },
+                options: { banner: '<%= opt.header %>/** built for VENERE.COM **/\n' },
                 files: {'target/<%= pkg.name %>-venere-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-venere-<%= pkg.version %>.js']}
             },
 
@@ -160,9 +160,9 @@ module.exports = function(grunt) {
          * CLEAN
          ********************/
         clean: {
+            all:    ["target","build","public"],
             target: ["target"],
             build:  ["build"],
-            build_v:["build/<%= pkg.version %>"],
             deploy: ["public/<%= pkg.version %>"]
         },
 
