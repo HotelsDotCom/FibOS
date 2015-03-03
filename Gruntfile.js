@@ -1,11 +1,3 @@
-/*
-// usage:
-// install node!!!
-// npm install -g grunt-cli
-// npm install
-// grunt
-*/
-
 /* ACCEPTED LINE COMMANDS
 
 // folders cleaners
@@ -30,10 +22,12 @@ grunt deploy            // build and minify ALL into build/[version]/ folder and
 
 grunt                   // defaults to "grunt build"
 
-note: dynamic folders are used as follows:
-- target: (git ignores it) temporary folder to host processing files
-- build:  (git ignores it) final folder to host built files (both minified and debuggable ones)
-- public: (git stages it)  final folder only for minified files
+// please note
+// dynamic folders are used as follows:
+// - target: (git ignores it) temporary folder to host processing files
+// - build:  (git ignores it) final folder to host built files (both minified and debuggable ones)
+// - public: (git stages it)  final folder only for minified files
+
 */
 
 module.exports = function(grunt) {
