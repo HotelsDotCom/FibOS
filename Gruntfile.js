@@ -17,7 +17,11 @@ module.exports = function(grunt) {
 
         opt: {
             header: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
-            footer: ''
+            footer: '',
+            nl: grunt.util.linefeed,
+            brand : function(brand){
+                return '/** built for '+brand.toUpperCase()+' **/';
+            }
         },
 
         /********************
@@ -62,8 +66,10 @@ module.exports = function(grunt) {
             // --- concat WIDGETS + PANELS + FIBOS --- //
             full: {
                 options: {
-                    banner: '<%= opt.header %> \n' + 'var FibOS = (function(){\n',
-                    footer: '\nreturn FibOS;}());'
+                    banner: '<%= opt.header %><%= opt.nl %>'+
+                            'var FibOS = (function(){' + '<%= opt.nl %>',
+                    footer: '<%= opt.nl %>'+
+                            'return FibOS;}());'
                 },
                 src: [
                     'target/temp/UIWidgets.js',
@@ -126,15 +132,15 @@ module.exports = function(grunt) {
 
             // --- minify FIBOS --- //
             fibos: {
-                options: { banner: '<%= opt.header %> \n' },
+                options: { banner: '<%= opt.header %><%= opt.nl %>' },
                 files: {'target/<%= pkg.name %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-<%= pkg.version %>.js']}
             },
             fibos_hotels: {
-                options: { banner: '<%= opt.header %>/** built for HOTELS.COM **/\n' },
+                options: { banner: '<%= opt.header %><%= opt.brand("hotels.com") %><%= opt.nl %>' },
                 files: {'target/<%= pkg.name %>-hotels-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-hotels-<%= pkg.version %>.js']}
             },
             fibos_venere: {
-                options: { banner: '<%= opt.header %>/** built for VENERE.COM **/\n' },
+                options: { banner: '<%= opt.header %><%= opt.brand("venere.com") %><%= opt.nl %>' },
                 files: {'target/<%= pkg.name %>-venere-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-venere-<%= pkg.version %>.js']}
             },
 
@@ -198,7 +204,7 @@ module.exports = function(grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['build/<%= pkg.version %>/*'],
+                        src: ['build/<%= pkg.version %>/*.min.js'],
                         dest: 'public/<%= pkg.version %>/'
                     }
                 ]
