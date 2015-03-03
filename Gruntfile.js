@@ -1,8 +1,40 @@
+/*
 // usage:
 // install node!!!
 // npm install -g grunt-cli
 // npm install
 // grunt
+*/
+
+/* ACCEPTED LINE COMMANDS
+
+// folders cleaners
+grunt clean:all         // remove ALL dynamic folders ( build/, target/, public/ )
+grunt clean:target      // remove target/ folder
+grunt clean:build       // remove build/ folder
+grunt clean:deploy      // remove public/[version]/ folder
+
+// single widget builders
+grunt widget:marker     // build and minify MARKER widget into build/[version]/ folder
+grunt widget:ruler      // build and minify RULER widget into build/[version]/ folder
+grunt widget:slider     // build and minify SLIDER widget into build/[version]/ folder
+grunt widget:spacer     // build and minify SPACER widget into build/[version]/ folder
+grunt widget:spriter    // build and minify SPRITER widget into build/[version]/ folder
+
+// full builders
+grunt build             // build and minify the FibOS GUI with default initializer into build/[version]/ folder
+grunt build:venere      // build and minify the FibOS GUI with VENERE initializer into build/[version]/ folder
+grunt build:hotels      // build and minify the FibOS GUI with HOTELS initializer into build/[version]/ folder
+grunt build-all         // build and minify the FibOS GUI with ALL initializers along with ALL widgets into build/[version]/ folder
+grunt deploy            // build and minify ALL into build/[version]/ folder and copy only minified files into public/[version]/ folder
+
+grunt                   // defaults to "grunt build"
+
+note: dynamic folders are used as follows:
+- target: (git ignores it) temporary folder to host processing files
+- build:  (git ignores it) final folder to host built files (both minified and debuggable ones)
+- public: (git stages it)  final folder only for minified files
+*/
 
 module.exports = function(grunt) {
 
@@ -29,10 +61,11 @@ module.exports = function(grunt) {
          ********************/
         concat: {
             options: {
-                separator: ';'
+                separator: grunt.util.linefeed+';'+grunt.util.linefeed
             },
 
             // --- concat WIDGETS (for FibOS) --- //
+
             widgets: {
                 src: [
                     'src/widgets/UIBaseWidget.js',
@@ -46,6 +79,7 @@ module.exports = function(grunt) {
             },
 
             // --- concat PANELS (for FibOS) --- //
+
             panels: {
                 src: [
                     'src/app/panels/UIBasePanel.js',
@@ -64,6 +98,7 @@ module.exports = function(grunt) {
             },
 
             // --- concat WIDGETS + PANELS + FIBOS --- //
+
             full: {
                 options: {
                     banner: '<%= opt.header %><%= opt.nl %>'+
@@ -81,6 +116,7 @@ module.exports = function(grunt) {
             },
 
             // --- concat FINAL (with initialize) --- //
+
             fibos: {
                 src: [
                     'target/temp/fibos_full.js',
@@ -104,6 +140,7 @@ module.exports = function(grunt) {
             },
 
             // --- concat ONLY WIDGETS --- //
+
             marker: {
                 src: ['src/widgets/UIBaseWidget.js','src/widgets/UIMarkerWidget.js'],
                 dest: 'target/uiMarker-<%= pkg.version %>.js'
@@ -132,6 +169,7 @@ module.exports = function(grunt) {
         uglify: {
 
             // --- minify FIBOS --- //
+
             fibos: {
                 options: { banner: '<%= opt.header %><%= opt.nl %>' },
                 files: {'target/<%= pkg.name %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-<%= pkg.version %>.js']}
@@ -146,6 +184,7 @@ module.exports = function(grunt) {
             },
 
             // --- minify WIDGETS --- //
+
             marker: {
                 files: {'target/uiMarker-<%= pkg.version %>.min.js': ['target/uiMarker-<%= pkg.version %>.js']}
             },
@@ -248,6 +287,7 @@ module.exports = function(grunt) {
      *
      ****************************************/
 
+    // --- METHOD tasks --- //
 
     // Private tasks
     grunt.registerTask('_create_images_js', '', function(){
@@ -279,34 +319,32 @@ module.exports = function(grunt) {
     // Main task
     grunt.registerTask('build', 'custom task to build full FibOS with different initial config', function(){
         var task = 'fibos' + (arguments.length>0 ? '_'+arguments[0] : '');
-        if(task){
-            grunt.task.run(
-                'clean:target',
-                '_concat_fibos',
-                'concat:'+task,
-                'uglify:'+task,
-                'copy:main',
-                'clean:target'
-            );
-        }else{
-            grunt.log.error('[ERROR] no FIBOS sub task with given name: %s',arg);
-        }
+        grunt.task.run(
+            'clean:target',
+            '_concat_fibos',
+            'concat:'+task,
+            'uglify:'+task,
+            'copy:main',
+            'clean:target'
+        );
     });
 
     // Widget task
-    grunt.registerTask('widget', 'custom task to build a single widget', function(arg){
-        if(arguments.length>0){
+    grunt.registerTask('widget', 'custom task to build a single widget', function(){
+        if(arguments.length>=1){
             grunt.task.run(
                 'clean:target',
-                'concat:'+arg,
-                'uglify:'+arg,
+                'concat:'+arguments[0],
+                'uglify:'+arguments[0],
                 'copy:widget',
                 'clean:target'
             );
         }else{
-            grunt.log.error('[ERROR] task WIDGET needs an argument');
+            grunt.log.error('[ERROR] task WIDGET needs the widget name as argument');
         }
     });
+
+    // --- ALIAS tasks --- //
 
     // Full tasks
     grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
