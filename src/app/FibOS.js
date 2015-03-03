@@ -14,7 +14,6 @@ var FibOS = (function(
 
         this._ID='fibos';
         this._fibosTitle='FibOS';
-        this._fibosVersion='1.7.2';
         this._logEvents = options.logEvents || false;
         delete options.logEvents;
 
@@ -70,7 +69,7 @@ var FibOS = (function(
         createElement: function() {
             $('#'+this._ID).remove();
 
-            var $fibo_title  = $('<h1/>').text(this._fibosTitle).append($('<small/>').text(this._fibosVersion));
+            var $fibo_title  = $('<h1/>').text(this._fibosTitle);
 
             this.$el         = $('<div/>').attr('id',this._ID);
             this.$background = $('<div/>').attr('id','fibo_bg');
