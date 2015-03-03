@@ -18,7 +18,8 @@ var FibOS = (function(
         this._ID='fibos';
         this._fibosTitle='FibOS';
         this._fibosVersion='1.7.2';
-        this._logEvents = true;
+        this._logEvents = options.logEvents || false;
+        delete options.logEvents;
 
         this._reference = ($(reference).length===0) ? 'body' : reference;
 

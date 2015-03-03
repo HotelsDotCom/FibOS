@@ -2,4 +2,7 @@
  * Created by fdimonte on 20/02/2015.
  */
 
-var fibos = new FibOS();
+var defaultOptions = {
+    logEvents: true
+};
+var fibos = new FibOS('body',defaultOptions);

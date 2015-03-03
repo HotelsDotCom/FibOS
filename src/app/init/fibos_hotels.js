@@ -3,8 +3,9 @@
  */
 
 var hotelsOptions = {
-   uiMarker:  {taglist:{dt:true,dd:true}},
-   uiSpriter: {domain:'hotels.com'}
+    logEvents: false,
+    uiMarker:  {taglist:{dt:true,dd:true}},
+    uiSpriter: {domain:'hotels.com'}
 };
 
-var fibos = new FibOS(null, hotelsOptions);
+var fibos = new FibOS('body', hotelsOptions);
