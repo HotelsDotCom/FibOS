@@ -4,12 +4,11 @@
 
 var venereID = '#themewrapper';
 var venereOptions = {
-   //uiWidget: {}, // EXAMPLE.1
    uiMarker:  {},
    uiRuler:   {},
    uiSlider:  {},
    uiSpacer:  {},
-   uiSpriter: {opt:{domain:'www.venere.com'}}
+   uiSpriter: {domain:'www.venere.com'}
 };
 
-var venereFibos = new FibOS(venereID, venereOptions);
+var fibos = new FibOS(venereID, venereOptions);

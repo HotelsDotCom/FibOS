@@ -9,20 +9,31 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
+        /********************
+         * CONCAT FILES
+         ********************/
         concat: {
             options: {
                 separator: ';'
             },
-            fibos: {
+
+            // --- concat WIDGETS (for FibOS) --- //
+            widgets: {
                 src: [
-                    //widgets
                     'src/widgets/UIBaseWidget.js',
                     'src/widgets/UIMarkerWidget.js',
                     'src/widgets/UIRulerWidget.js',
                     'src/widgets/UISliderWidget.js',
                     'src/widgets/UISpacerWidget.js',
-                    'src/widgets/UISpriterWidget.js',
-                    //panels
+                    'src/widgets/UISpriterWidget.js'
+                ],
+                dest: 'target/temp/UIWidgets.js'
+            },
+
+            // --- concat PANELS (for FibOS) --- //
+            panels: {
+                src: [
                     'src/app/panels/UIBasePanel.js',
                     'src/app/panels/UIExtraPanel.js',
                     'src/app/panels/UIGroupPanel.js',
@@ -31,15 +42,47 @@ module.exports = function(grunt) {
                     'src/app/panels/UISpacerPanel.js',
                     'src/app/panels/UISpritePanel.js',
                     'src/app/panels/UIStoragePanel.js',
-                    //extra panels
+
                     'src/app/panels/UISelectPanel.js',
-                    'src/app/panels/UITogglesPanel.js',
-                    //main
-                    'src/app/FibOS.js',
+                    'src/app/panels/UITogglesPanel.js'
+                ],
+                dest: 'target/temp/UIPanels.js'
+            },
+
+            // --- concat WIDGETS + PANELS + FIBOS --- //
+            full: {
+                src: [
+                    'target/temp/UIWidgets.js',
+                    'target/temp/UIPanels.js',
+                    'src/app/FibOS.js'
+                ],
+                dest: 'target/temp/fibos_full.js'
+            },
+
+            // --- concat FINAL (with initialize) --- //
+            fibos: {
+                src: [
+                    'target/temp/fibos_full.js',
                     'src/app/fibos_default.js'
                 ],
                 dest: 'target/<%= pkg.name %>-<%= pkg.version %>.js'
             },
+            fibos_hotels: {
+                src: [
+                    'target/temp/fibos_full.js',
+                    'src/app/fibos_hotels.js'
+                ],
+                dest: 'target/<%= pkg.name %>-hotels-<%= pkg.version %>.js'
+            },
+            fibos_venere: {
+                src: [
+                    'target/temp/fibos_full.js',
+                    'src/app/fibos_venere.js'
+                ],
+                dest: 'target/<%= pkg.name %>-venere-<%= pkg.version %>.js'
+            },
+
+            // --- concat ONLY WIDGETS --- //
             marker: {
                 src: ['src/widgets/UIBaseWidget.js','src/widgets/UIMarkerWidget.js'],
                 dest: 'target/uiMarker-<%= pkg.version %>.js'
@@ -61,10 +104,24 @@ module.exports = function(grunt) {
                 dest: 'target/uiSpriter-<%= pkg.version %>.js'
             }
         },
+
+        /********************
+         * MINIFY FILES
+         ********************/
         uglify: {
+
+            // --- minify FIBOS --- //
             fibos: {
                 files: {'target/<%= pkg.name %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-<%= pkg.version %>.js']}
             },
+            fibos_hotels: {
+                files: {'target/<%= pkg.name %>-hotels-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-hotels-<%= pkg.version %>.js']}
+            },
+            fibos_venere: {
+                files: {'target/<%= pkg.name %>-venere-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-venere-<%= pkg.version %>.js']}
+            },
+
+            // --- minify WIDGETS --- //
             marker: {
                 files: {'target/uiMarker-<%= pkg.version %>.min.js': ['target/uiMarker-<%= pkg.version %>.js']}
             },
@@ -81,9 +138,17 @@ module.exports = function(grunt) {
                 files: {'target/uiSpriter-<%= pkg.version %>.min.js': ['target/uiSpriter-<%= pkg.version %>.js']}
             }
         },
+
+        /********************
+         * CLEAN
+         ********************/
         clean: {
             build: ["target"]
         },
+
+        /********************
+         * COPY
+         ********************/
         copy: {
             main: {
                 files: [
@@ -91,7 +156,7 @@ module.exports = function(grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['target/fibos*'],
+                        src: ['target/<%= pkg.name %>*'],
                         dest: 'build/<%= pkg.version %>/'
                     }
                 ]
@@ -104,6 +169,17 @@ module.exports = function(grunt) {
                         filter: 'isFile',
                         src: ['target/ui*'],
                         dest: 'build/<%= pkg.version %>/'
+                    }
+                ]
+            },
+            deploy: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        filter: 'isFile',
+                        src: ['build/<%= pkg.version %>/*'],
+                        dest: 'public/<%= pkg.version %>/'
                     }
                 ]
             }
@@ -119,8 +195,9 @@ module.exports = function(grunt) {
     // Default task
     grunt.registerTask('default', ['build']);
 
-    // Main task
-    grunt.registerTask('build',        ['clean', 'concat:fibos',  'uglify:fibos',  'copy:main']);
+    // Private tasks
+    grunt.registerTask('_concat_fibos',   ['concat:widgets', 'concat:panels', 'concat:full']);
+
     // Widget tasks
     grunt.registerTask('build-marker', ['clean', 'concat:marker', 'uglify:marker', 'copy:widget']);
     grunt.registerTask('build-ruler',  ['clean', 'concat:ruler',  'uglify:ruler',  'copy:widget']);
@@ -128,6 +205,22 @@ module.exports = function(grunt) {
     grunt.registerTask('build-spacer', ['clean', 'concat:spacer', 'uglify:spacer', 'copy:widget']);
     grunt.registerTask('build-spriter',['clean', 'concat:spriter','uglify:spriter','copy:widget']);
 
-    grunt.registerTask('build-all',['clean', 'concat','uglify','copy']);
+    // Main tasks
+    grunt.registerTask('build',        ['clean', '_concat_fibos', 'concat:fibos', 'uglify:fibos',  'copy:main']);
+    grunt.registerTask('build-hotels', ['clean', '_concat_fibos', 'concat:fibos_hotels', 'uglify:fibos_hotels',  'copy:main']);
+    grunt.registerTask('build-venere', ['clean', '_concat_fibos', 'concat:fibos_venere', 'uglify:fibos_venere',  'copy:main']);
 
-};
+    grunt.registerTask('deploy', ['build-all', 'copy:deploy']);
+
+    grunt.registerTask('build-all', [
+        'build',
+        'build-hotels',
+        'build-venere',
+        'build-marker',
+        'build-ruler',
+        'build-slider',
+        'build-spacer',
+        'build-spriter'
+    ]);
+
+ };
