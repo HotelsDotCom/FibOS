@@ -226,21 +226,6 @@ module.exports = function(grunt) {
     // Default task
     grunt.registerTask('default', ['build']);
 
-    // Widget tasks
-    grunt.registerTask('widget', 'custom task to build a single widget', function(arg){
-        if(arguments.length>0){
-            grunt.task.run(
-                'clean:target',
-                'concat:'+arg,
-                'uglify:'+arg,
-                'copy:widget',
-                'clean:target'
-            );
-        }else{
-            grunt.log.error('[ERROR] task WIDGET needs an argument');
-        }
-    });
-
     // Main tasks
     grunt.registerTask('_concat_fibos', ['concat:widgets', 'concat:panels', 'concat:full']);
     grunt.registerTask('build', 'custom task to build full FibOS with different initial config', function(){
@@ -259,16 +244,25 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('build-all', [
-        'build',
-        'build:hotels',
-        'build:venere',
+    // Widget task
+    grunt.registerTask('widget', 'custom task to build a single widget', function(arg){
+        if(arguments.length>0){
+            grunt.task.run(
+                'clean:target',
+                'concat:'+arg,
+                'uglify:'+arg,
+                'copy:widget',
+                'clean:target'
+            );
+        }else{
+            grunt.log.error('[ERROR] task WIDGET needs an argument');
+        }
+    });
 
-        'widget:marker',
-        'widget:ruler',
-        'widget:slider',
-        'widget:spacer',
-        'widget:spriter'
+    // Full tasks
+    grunt.registerTask('build-all', [
+        'build', 'build:hotels', 'build:venere',
+        'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter'
     ]);
 
     grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
