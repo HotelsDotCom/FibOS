@@ -1,8 +1,5 @@
 /**
  * Created by fdimonte on 10/02/2015.
- *
- * // test in localhost:8000
- * $ python -m SimpleHTTPServer
  */
 
 var FibOS = (function(
