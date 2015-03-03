@@ -11,11 +11,6 @@ var FibOS = (function(
    panelSpacer, panelOffset, panelGroup, panelStorage, panelInput, panelSprite, panelSelect, panelToggles
 ) {
 
-    var images = {
-        fibos_sprite : 'iVBORw0KGgoAAAANSUhEUgAAABIAAABaCAYAAAC1xQZWAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV/QAAFf0BzXBRYQAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAVdEVYdENyZWF0aW9uIFRpbWUAMzAvNy8xMyVy0IgAAALQSURBVFiF7ZXPaxNREMe/T6qQwKZBo5JUL7uLBbcQjyaB9lgstbdsQU8B/4GmR/XoH9BTSVtoL5aAhkAixh5LAxaSXiQg1N2ctCWxP9K0JAQk4yEttLv7jG1WKWUH3mWG+fDezHznsWKxSLDB+vb39+3goK/dbl8yEJEtJXKe5oDsAV3hrl3hp9kFYnbV6JotFAfUO0iSJJIkyc8YA2Os5xttiaLo7+lG54Gdp0ZbdoECdoAC5XJ5u1dQVwjgiNYBOaD/BerjBSRJ4opQ13XT3v3Tje5x/ANWTi6oXC7/sIAFwNmU3DVy8muIojgA4DuAgK7r3L3k7CMHdDVBJvWfSIOIxgGEANwCQAD2AKwDyFqSiOjMOfa9SiQSKUVRKqIokiiKpChKdXFx8RMRvTbmEJEZRERPFxYWsicA45mbm0sT0bgxz0q0b4aGhl40m807Vi9wuVw/S6XSPICXp/1WxfbxIADQbDZvA7hp9P/T9u+4XK4qL8Htdu+g08GuoPV4PF7kgeLxeAHAZ6Pfao6yRPSo3W7/mpmZCTcaDR/QKfLU1NR6LBYrAPhgyjN2zTCQj9EZSADYRWcgTRBL0EXt8onWAXU37mJTVXVZ07Sxer3uYYxBEIQDSZJyGxsbzwBA1/WzeVYDGQqFtlqtljA6Ovo1FottMsYwOzv7MJvNBn0+X7VSqfiNINNiU1V1WVGUVj6ff0dEidNndXX1fTAYbKiqumzMM9VI07SxiYmJL5FIxKTw4eHh3ZGRkU1N054YYyZQrVbrn56eLllWFEA0GtUODw/7u4IAoFqt3uCB6vX6dSu/CeT1emtLS0uDPFA6nZYFQTjoCpJlOZfJZIIrKyt3jbFkMnl/bW1tUJblnDHGa//20dGRNxwOa9Fo9BsRsVQqJefz+QeCIOxZtZ+72CYnJ98eD2Q/AHg8ngNZlj8WCoXnwF8M5EXt8onWNtBv0kKv/nwGlC8AAAAASUVORK5CYII=',
-        alpha_image  : 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMAABX9AAAV/QHNcFFhAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABV0RVh0Q3JlYXRpb24gVGltZQAzMC83LzEzJXLQiAAAACpJREFUKJFj/P//PwM28ODBA6ziTFhF8YBRDcQAFlzhraCgQB0bRjUQAwCn8Qi/9sh3kAAAAABJRU5ErkJggg=='
-    };
-
     function FibOS(reference,options){
 
         var jqueryMinVersion = '1.7';
@@ -42,7 +37,7 @@ var FibOS = (function(
     FibOS.prototype = {
 
         getImage : function(name){
-            if(images[name])
+            if(images && images[name])
                 return 'data:image/png;base64,'+images[name];
             else
                 return null;
@@ -323,15 +318,13 @@ var FibOS = (function(
                     opt.reference = this._reference;
                     opt.callback = this.callbacks.uiSpriter.didAnalyze.bind(this);
                     opt.visible = false;
-                    opt.image = this.getImage('alpha_image');
+                    opt.image = this.getImage('alpha_pattern');
                     return new uiSpriter( id, opt );
                 }
             },
 
             styles: function() {
-                var img_sprite = this.getImage('fibos_sprite');
-                var img_alpha = this.getImage('alpha_image');
-
+                var img_sprite = this.getImage('sprite_fibos');
                 var styleObject = {
 
                     main:

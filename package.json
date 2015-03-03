@@ -16,6 +16,7 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "^0.8.0",
-    "grunt-contrib-copy": "^0.8.0"
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-base64": "^0.1.0"
   }
 }

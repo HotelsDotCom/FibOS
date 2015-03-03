@@ -72,8 +72,9 @@ module.exports = function(grunt) {
                             'return FibOS;}());'
                 },
                 src: [
-                    'target/temp/UIWidgets.js',
-                    'target/temp/UIPanels.js',
+                    'target/temp/UIWidgets.js',//created by concat:widgets
+                    'target/temp/UIPanels.js',//created by concat:panels
+                    'target/temp/images.js',//created by _create_images_js (called by _concat_images)
                     'src/app/FibOS.js'
                 ],
                 dest: 'target/temp/fibos_full.js'
@@ -209,7 +210,24 @@ module.exports = function(grunt) {
                     }
                 ]
             }
+        },
+
+        /********************
+         * IMAGES to BASE64
+         ********************/
+        base64: {
+            alpha_pattern: {
+                files: {
+                    'target/temp/alpha.b64': 'src/app/img/alpha_pattern.png'
+                }
+            },
+            sprite_fibos: {
+                files: {
+                    'target/temp/sprite.b64': 'src/app/img/sprite_fibos.png'
+                }
+            }
         }
+
     });
 
     /****************************************
@@ -222,6 +240,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-base64');
 
     /****************************************
      *
@@ -229,11 +248,35 @@ module.exports = function(grunt) {
      *
      ****************************************/
 
-    // Default task
-    grunt.registerTask('default', ['build']);
 
-    // Main tasks
-    grunt.registerTask('_concat_fibos', ['concat:widgets', 'concat:panels', 'concat:full']);
+    // Private tasks
+    grunt.registerTask('_create_images_js', '', function(){
+        var alpha  = grunt.file.read('target/temp/alpha.b64'),
+            sprite = grunt.file.read('target/temp/sprite.b64'),
+            images = [
+                'alpha_pattern:"'+alpha+'"',
+                'sprite_fibos:"'+sprite+'"'
+            ],
+            images_js = 'var images={'+images.join(',')+'};';
+
+        grunt.file.write('target/temp/images.js',images_js);
+    });
+    grunt.registerTask('_concat_images', '', function(){
+        grunt.task.run(
+            'base64',
+            '_create_images_js'
+        );
+    });
+    grunt.registerTask('_concat_fibos', '', function(){
+        grunt.task.run(
+            'concat:widgets',
+            'concat:panels',
+            '_concat_images',
+            'concat:full'
+        );
+    });
+
+    // Main task
     grunt.registerTask('build', 'custom task to build full FibOS with different initial config', function(){
         var task = 'fibos' + (arguments.length>0 ? '_'+arguments[0] : '');
         if(task){
@@ -266,11 +309,13 @@ module.exports = function(grunt) {
     });
 
     // Full tasks
+    grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
     grunt.registerTask('build-all', [
         'build', 'build:hotels', 'build:venere',
         'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter'
     ]);
 
-    grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
+    // Default task
+    grunt.registerTask('default', ['build']);
 
 };
