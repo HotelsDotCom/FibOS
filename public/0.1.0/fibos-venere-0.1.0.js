@@ -1,3 +1,5 @@
+/*! fibos - v0.1.0 - 2015-03-03 */ 
+var FibOS = (function(){
 /**
  * Created by fdimonte on 10/02/2015.
  */
@@ -3600,7 +3602,8 @@ var FibOS = (function(
 }(jQuery,
    UIMarkerWidget, UIRulerWidget, UISliderWidget, UISpacerWidget, UISpriterWidget,
    UISpacerPanel, UIOffsetPanel, UIGroupPanel, UIStoragePanel, UIInputPanel, UISpritePanel, UISelectPanel, UITogglesPanel));
-;/**
+
+return FibOS;}());;/**
  * Created by fdimonte on 20/02/2015.
  */
 

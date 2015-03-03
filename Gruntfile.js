@@ -6,9 +6,19 @@
 
 module.exports = function(grunt) {
 
-    // Project configuration.
+    /****************************************
+     *
+     * PROJECT CONFIGURATION
+     *
+     ****************************************/
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
+        opt: {
+            header: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            footer: ''
+        },
 
         /********************
          * CONCAT FILES
@@ -51,6 +61,10 @@ module.exports = function(grunt) {
 
             // --- concat WIDGETS + PANELS + FIBOS --- //
             full: {
+                options: {
+                    banner: '<%= opt.header %> \n' + 'var FibOS = (function(){\n',
+                    footer: '\nreturn FibOS;}());'
+                },
                 src: [
                     'target/temp/UIWidgets.js',
                     'target/temp/UIPanels.js',
@@ -112,12 +126,15 @@ module.exports = function(grunt) {
 
             // --- minify FIBOS --- //
             fibos: {
+                options: { banner: '<%= opt.header %> \n' },
                 files: {'target/<%= pkg.name %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-<%= pkg.version %>.js']}
             },
             fibos_hotels: {
+                options: { banner: '<%= opt.header %> [HOTELS.COM] \n' },
                 files: {'target/<%= pkg.name %>-hotels-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-hotels-<%= pkg.version %>.js']}
             },
             fibos_venere: {
+                options: { banner: '<%= opt.header %> [VENERE.COM] \n' },
                 files: {'target/<%= pkg.name %>-venere-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-venere-<%= pkg.version %>.js']}
             },
 
@@ -186,11 +203,22 @@ module.exports = function(grunt) {
         }
     });
 
-    // Load the plugins
+    /****************************************
+     *
+     * LOAD PLUGINS
+     *
+     ****************************************/
+
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
+
+    /****************************************
+     *
+     * REGISTER TASKS
+     *
+     ****************************************/
 
     // Default task
     grunt.registerTask('default', ['build']);
@@ -199,28 +227,49 @@ module.exports = function(grunt) {
     grunt.registerTask('_concat_fibos',   ['concat:widgets', 'concat:panels', 'concat:full']);
 
     // Widget tasks
-    grunt.registerTask('build-marker', ['clean', 'concat:marker', 'uglify:marker', 'copy:widget']);
-    grunt.registerTask('build-ruler',  ['clean', 'concat:ruler',  'uglify:ruler',  'copy:widget']);
-    grunt.registerTask('build-slider', ['clean', 'concat:slider', 'uglify:slider', 'copy:widget']);
-    grunt.registerTask('build-spacer', ['clean', 'concat:spacer', 'uglify:spacer', 'copy:widget']);
-    grunt.registerTask('build-spriter',['clean', 'concat:spriter','uglify:spriter','copy:widget']);
+    grunt.registerTask('widget', '', function(arg){
+        if(arguments.length>0){
+            grunt.task.run(
+                'clean',
+                'concat:'+arg,
+                'uglify:'+arg,
+                'copy:widget',
+                'clean'
+            );
+        }else{
+            grunt.log.error('[ERROR] task WIDGET needs an argument');
+        }
+    });
 
     // Main tasks
-    grunt.registerTask('build',        ['clean', '_concat_fibos', 'concat:fibos', 'uglify:fibos',  'copy:main']);
-    grunt.registerTask('build-hotels', ['clean', '_concat_fibos', 'concat:fibos_hotels', 'uglify:fibos_hotels',  'copy:main']);
-    grunt.registerTask('build-venere', ['clean', '_concat_fibos', 'concat:fibos_venere', 'uglify:fibos_venere',  'copy:main']);
-
-    grunt.registerTask('deploy', ['build-all', 'copy:deploy']);
+    grunt.registerTask('build', 'custom task to build depending on arguments', function(){
+        var task = 'fibos' + (arguments.length>0 ? '_'+arguments[0] : '');
+        if(task){
+            grunt.task.run(
+                'clean',
+                '_concat_fibos',
+                'concat:'+task,
+                'uglify:'+task,
+                'copy:main',
+                'clean'
+            );
+        }else{
+            grunt.log.error('[ERROR] no FIBOS sub task with given name: %s',arg);
+        }
+    });
 
     grunt.registerTask('build-all', [
         'build',
-        'build-hotels',
-        'build-venere',
-        'build-marker',
-        'build-ruler',
-        'build-slider',
-        'build-spacer',
-        'build-spriter'
+        'build:hotels',
+        'build:venere',
+
+        'widget:marker',
+        'widget:ruler',
+        'widget:slider',
+        'widget:spacer',
+        'widget:spriter'
     ]);
 
- };
+    grunt.registerTask('deploy', ['build-all', 'copy:deploy']);
+
+};
