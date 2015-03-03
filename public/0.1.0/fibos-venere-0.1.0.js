@@ -3609,10 +3609,6 @@ return FibOS;}());;/**
 
 var venereID = '#themewrapper';
 var venereOptions = {
-   uiMarker:  {},
-   uiRuler:   {},
-   uiSlider:  {},
-   uiSpacer:  {},
    uiSpriter: {domain:'www.venere.com'}
 };
 
