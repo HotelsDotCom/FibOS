@@ -238,8 +238,15 @@ module.exports = function(grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['build/<%= pkg.version %>/*.min.js'],
+                        src: ['build/<%= pkg.version %>/fibos*.min.js'],
                         dest: 'public/<%= pkg.version %>/'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        filter: 'isFile',
+                        src: ['build/<%= pkg.version %>/ui*.min.js'],
+                        dest: 'public/<%= pkg.version %>/widgets/'
                     }
                 ]
             }
