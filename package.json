@@ -2,9 +2,9 @@
   "name": "fibos",
   "title": "FibOS",
   "description": "Bookmarklet UI Tool for easily check layout implementations",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
-    "name": "VenereDotCom"
+    "name": "FabioDiMonte"
   },
   "repository": {
     "type": "git",
