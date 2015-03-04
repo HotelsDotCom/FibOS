@@ -72,7 +72,10 @@ var UIBasePanel = (function($){
             $content.append(content);
 
             this.$el = $module.append($label).append($content);
-            this.$el.find('.fibo_checkbox').on('change',toggle_handler.bind(this));
+            this.$el.find('.fibo_checkbox').on('change',function(e){
+                this.trigger( 'toggle_panel', {target:this, toggle:$(e.currentTarget).is(':checked')} );
+            }.bind(this));
+
             return true;
         },
 
@@ -86,12 +89,12 @@ var UIBasePanel = (function($){
         // open/close panel management
         open: function() {
             this.$el.addClass('fibo_panel_open');
-            this.$el.find('.vui-label').find('.fibo_checkbox').attr('checked',true);
+            this.$el.find('.vui-label').find('.fibo_checkbox').prop('checked',true);
             this.$el.find('.vui-content').slideDown();
         },
         close: function() {
             this.$el.removeClass('fibo_panel_open');
-            this.$el.find('.vui-label').find('.fibo_checkbox').attr('checked',false);
+            this.$el.find('.vui-label').find('.fibo_checkbox').prop('checked',false);
             this.$el.find('.vui-content').slideUp();
         },
         toggle: function() {
@@ -158,14 +161,6 @@ var UIBasePanel = (function($){
 
     function isPanelOpen(panel){
         return panel.$el.find('.vui-content').css('display')!=='none';
-    }
-
-    function toggle_handler(e) {
-        var $t = $(e.currentTarget);
-        if($t.is(':checked'))
-            this._gui.openPanel(this);
-        else
-            this._gui.closePanel(this);
     }
 
     return UIBasePanel;

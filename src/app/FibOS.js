@@ -224,13 +224,18 @@ var FibOS = (function(
             this.$el.append(widget.$el);
         },
         addPanel: function(panel) {
-            this.$panels.append(panel.$el);
-            panel.addTo(this);
-            //this.addStyle(panel.getStyles());
+            this.addPanelTo(panel,this.$panels);
         },
         addPanelTo: function(panel,$elem) {
             $elem.append(panel.$el);
             panel.addTo(this);
+            //this.addStyle(panel.getStyles());
+
+            panel.on('toggle_panel', function(data){
+                var p = data.target;
+                var t = data.toggle;
+                t ? this.openPanel(p) : this.closePanel(p);
+            }.bind(this));
         },
 
         addStyle: function(styles) {},
