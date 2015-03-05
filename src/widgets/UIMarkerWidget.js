@@ -38,7 +38,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             taglist        : {              //list of known tags on which to apply the marker
                 p:true,span:true,strong:true,li:true,
                 h1:true,h2:true,h3:true,h4:true,h5:true,h6:true,
-                a:true,input:true,select:true,textfield:true
+                a:true,input:true,select:true,textfield:true,label:true
             }
         });
         UIBaseWidget.prototype.initOptions.call(this, options);
