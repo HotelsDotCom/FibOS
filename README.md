@@ -186,3 +186,11 @@ While this toggle is active, the user can click on any text in the page revealin
 Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, ie. for links).
 
 Disabling this toggle, will hide all Markers already placed as well as disable the click event.
+
+---
+
+## Credits
+Created by [Fabio Di Monte](https://github.com/FabioDiMonte), with thanks to: Daniele Amurri, Simone Rescio, Gianluca Bargelli, Claudio Corridore, Francesco Saverio Ferrara.
+
+## Legal
+This project is available under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
