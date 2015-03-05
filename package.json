@@ -6,6 +6,10 @@
   "author": {
     "name": "FabioDiMonte"
   },
+  "brands": {
+    "hotels":"HOTELS.COM",
+    "venere":"VENERE.COM"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/VenereDotCom/FibOS.git"

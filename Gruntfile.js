@@ -1,7 +1,7 @@
 /* ACCEPTED LINE COMMANDS
 
 // folders cleaners
-grunt clean:all         // remove ALL dynamic folders ( build/, target/, public/ )
+grunt clean:all         // remove ALL dynamic folders ( build/, target/, public/[version]/ )
 grunt clean:target      // remove target/ folder
 grunt clean:build       // remove build/ folder
 grunt clean:deploy      // remove public/[version]/ folder
@@ -30,6 +30,14 @@ grunt                   // defaults to "grunt build"
 
 */
 
+/* ADDING NEW INITIALIZERs (like for venere)
+
+- add the new brand under pkg.brands into package.json file (kay/value pair is brandName/brandMsg)
+- create the new init file under src/app/init/
+- for a brand named 'newBrand' add the call to 'build:newBrand' into 'build-all' task or simply run it in command line
+
+*/
+
 module.exports = function(grunt) {
 
     /****************************************
@@ -42,11 +50,13 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         opt: {
-            header: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            header: '/*! <%= pkg.title %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
             footer: '',
+            wheader: '/*! ui<%= widgetName %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            wfooter: '',
             nl: grunt.util.linefeed,
             brand : function(brand){
-                return '/** built for '+brand.toUpperCase()+' **/';
+                return '/** built for '+brand+' **/';
             }
         },
 
@@ -109,52 +119,26 @@ module.exports = function(grunt) {
                 dest: 'target/temp/fibos_full.js'
             },
 
-            // --- concat FINAL (with initialize) --- //
+            // --- concat FINAL (with initializer for brand) --- //
 
             fibos: {
-                src: [
-                    'target/temp/fibos_full.js',
-                    'src/app/init/fibos_default.js'
-                ],
-                dest: 'target/<%= pkg.name %>-<%= pkg.version %>.js'
-            },
-            fibos_hotels: {
-                src: [
-                    'target/temp/fibos_full.js',
-                    'src/app/init/fibos_hotels.js'
-                ],
-                dest: 'target/<%= pkg.name %>-hotels-<%= pkg.version %>.js'
-            },
-            fibos_venere: {
-                src: [
-                    'target/temp/fibos_full.js',
-                    'src/app/init/fibos_venere.js'
-                ],
-                dest: 'target/<%= pkg.name %>-venere-<%= pkg.version %>.js'
+                src: ['target/temp/fibos_full.js', 'src/app/init/fibos_<%= brandName %>.js'],
+                dest: 'target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.js'
             },
 
             // --- concat ONLY WIDGETS --- //
 
-            marker: {
-                src: ['src/widgets/UIBaseWidget.js','src/widgets/UIMarkerWidget.js'],
-                dest: 'target/uiMarker-<%= pkg.version %>.js'
-            },
-            ruler: {
-                src: ['src/widgets/UIBaseWidget.js','src/widgets/UIRulerWidget.js'],
-                dest: 'target/uiRuler-<%= pkg.version %>.js'
-            },
-            slider: {
-                src: ['src/widgets/UIBaseWidget.js','src/widgets/UISliderWidget.js'],
-                dest: 'target/uiSlider-<%= pkg.version %>.js'
-            },
-            spacer: {
-                src: ['src/widgets/UIBaseWidget.js','src/widgets/UISpacerWidget.js'],
-                dest: 'target/uiSpacer-<%= pkg.version %>.js'
-            },
-            spriter: {
-                src: ['src/widgets/UIBaseWidget.js','src/widgets/UISpriterWidget.js'],
-                dest: 'target/uiSpriter-<%= pkg.version %>.js'
+            widget: {
+                options: {
+                    banner: '<%= opt.header %><%= opt.nl %>'+
+                            'var ui<%= widgetName %> = (function(){' + '<%= opt.nl %>',
+                    footer: '<%= opt.nl %>'+
+                            'return UI<%= widgetName %>Widget;}());'
+                },
+                src: ['src/widgets/UIBaseWidget.js','src/widgets/UI<%= widgetName %>Widget.js'],
+                dest: 'target/ui<%= widgetName %>-<%= pkg.version %>.js'
             }
+
         },
 
         /********************
@@ -165,42 +149,24 @@ module.exports = function(grunt) {
             // --- minify FIBOS --- //
 
             fibos: {
-                options: { banner: '<%= opt.header %><%= opt.nl %>' },
-                files: {'target/<%= pkg.name %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-<%= pkg.version %>.js']}
-            },
-            fibos_hotels: {
-                options: { banner: '<%= opt.header %><%= opt.brand("hotels.com") %><%= opt.nl %>' },
-                files: {'target/<%= pkg.name %>-hotels-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-hotels-<%= pkg.version %>.js']}
-            },
-            fibos_venere: {
-                options: { banner: '<%= opt.header %><%= opt.brand("venere.com") %><%= opt.nl %>' },
-                files: {'target/<%= pkg.name %>-venere-<%= pkg.version %>.min.js': ['target/<%= pkg.name %>-venere-<%= pkg.version %>.js']}
+                options: { banner: '<%= opt.header %><%= brandMsg %><%= opt.nl %>' },
+                files: {'target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.js']}
             },
 
             // --- minify WIDGETS --- //
 
-            marker: {
-                files: {'target/uiMarker-<%= pkg.version %>.min.js': ['target/uiMarker-<%= pkg.version %>.js']}
-            },
-            ruler: {
-                files: {'target/uiRuler-<%= pkg.version %>.min.js': ['target/uiRuler-<%= pkg.version %>.js']}
-            },
-            slider: {
-                files: {'target/uiSlider-<%= pkg.version %>.min.js': ['target/uiSlider-<%= pkg.version %>.js']}
-            },
-            spacer: {
-                files: {'target/uiSpacer-<%= pkg.version %>.min.js': ['target/uiSpacer-<%= pkg.version %>.js']}
-            },
-            spriter: {
-                files: {'target/uiSpriter-<%= pkg.version %>.min.js': ['target/uiSpriter-<%= pkg.version %>.js']}
+            widget: {
+                options: { banner: '<%= opt.wheader %><%= opt.nl %>' },
+                files: {'target/ui<%= widgetName %>-<%= pkg.version %>.min.js': ['target/ui<%= widgetName %>-<%= pkg.version %>.js']}
             }
+
         },
 
         /********************
          * CLEAN
          ********************/
         clean: {
-            all:    ["target","build","public"],
+            all:    ["target","build","public/<%= pkg.version %>"],
             target: ["target"],
             build:  ["build"],
             deploy: ["public/<%= pkg.version %>"]
@@ -210,7 +176,7 @@ module.exports = function(grunt) {
          * COPY
          ********************/
         copy: {
-            main: {
+            fibos: {
                 files: [
                     {
                         expand: true,
@@ -238,7 +204,7 @@ module.exports = function(grunt) {
                         expand: true,
                         flatten: true,
                         filter: 'isFile',
-                        src: ['build/<%= pkg.version %>/fibos*.min.js'],
+                        src: ['build/<%= pkg.version %>/<%= pkg.name %>*.min.js'],
                         dest: 'public/<%= pkg.version %>/'
                     },
                     {
@@ -302,12 +268,14 @@ module.exports = function(grunt) {
 
         grunt.file.write('target/temp/images.js',images_js);
     });
+
     grunt.registerTask('_concat_images', '', function(){
         grunt.task.run(
             'base64',
             '_create_images_js'
         );
     });
+
     grunt.registerTask('_concat_fibos', '', function(){
         grunt.task.run(
             'concat:widgets',
@@ -318,25 +286,32 @@ module.exports = function(grunt) {
     });
 
     // Main task
-    grunt.registerTask('build', 'custom task to build full FibOS with different initial config', function(){
-        var task = 'fibos' + (arguments.length>0 ? '_'+arguments[0] : '');
+    grunt.registerTask('build', 'custom task to build full FibOS with different initial config', function(brand){
+        var pkgBrand = grunt.config.get('pkg').brands[brand];
+        grunt.config.set('brandName',pkgBrand ? brand : 'default');
+        grunt.config.set('brandFile',brand ? '-'+brand : '');
+        grunt.config.set('brandMsg', brand ? '<%= opt.brand("'+(pkgBrand || brand)+'") %>' : '');
+
         grunt.task.run(
             'clean:target',
             '_concat_fibos',
-            'concat:'+task,
-            'uglify:'+task,
-            'copy:main',
+            'concat:fibos',
+            'uglify:fibos',
+            'copy:fibos',
             'clean:target'
         );
     });
 
     // Widget task
-    grunt.registerTask('widget', 'custom task to build a single widget', function(){
+    grunt.registerTask('widget', 'custom task to build a single widget', function(widget){
+        var widgetName = widget[0].toUpperCase() + widget.slice(1).toLowerCase();
+        grunt.config.set('widgetName',widgetName);
+
         if(arguments.length>=1){
             grunt.task.run(
                 'clean:target',
-                'concat:'+arguments[0],
-                'uglify:'+arguments[0],
+                'concat:widget',
+                'uglify:widget',
                 'copy:widget',
                 'clean:target'
             );
@@ -350,7 +325,7 @@ module.exports = function(grunt) {
     // Full tasks
     grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
     grunt.registerTask('build-all', [
-        'build', 'build:hotels', 'build:venere',
+        'clean:build', 'build', 'build:hotels', 'build:venere',
         'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter'
     ]);
 
