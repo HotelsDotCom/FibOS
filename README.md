@@ -16,21 +16,21 @@ For Venere.com use this one
 ## Usage
 Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page.
 
-The tools a dropdown for chosing spacers and other 6 panels to manage them and other features as well.
+The tools a [dropdown](#select-dropdown) for chosing spacers and other [6 panels](#panels) to manage them and other features as well.
 
 The 6 panels are as follows:
-- spacer selected
-- offset group
-- spacer groups
-- local storage
-- input string
-- loaded sprites
+- [spacer selected](#spacer-selected)
+- [offset group](#offset-group)
+- [spacer groups](#spacer-groups)
+- [local storage](#local-storage)
+- [input string](#input-string)
+- [loaded sprites](#loaded-sprites)
 
-Additionally, it has 4 radio toggles on the right side in order to show/hide specific features such as:
-- all spacers
-- a dark overlay
-- the rulers and lineguides
-- the font-info feature
+Additionally, it has [4 toggles](#toggles) on the right side in order to show/hide specific features such as:
+- [all spacers](#spacers)
+- [a dark overlay](#overlay)
+- [the rulers and lineguides](#rulers)
+- [the font-info feature](#font-info)
 
 ### Select dropdown
 Using the dropdown, a spacer can be chosen and then drag/drop onto the page.
