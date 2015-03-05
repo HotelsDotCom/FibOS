@@ -13,6 +13,42 @@ For Venere.com use this one
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-venere.min.js");})();
 
+---
+
+## Build
+First of all, NodeJS should be installed.
+
+Once the project is cloned, go into the project's root folder and run:
+
+```
+npm install -g grunt-cli
+npm install
+grunt deploy
+```
+
+With the `grunt deploy` command, all files for the project will be created under the `build/` (both minified and full, for debugging) and all the minified will be also copied into `public/[version]/` folder along with `*-latest.min.js` version in `public/` folder.
+
+Eg. With the version `1.1.2`, running `grunt deploy` will produce this file tree:
+
+```
+public/
+  |- fibos-latest.min.js
+  |- fibos-latest-hotels.min.js
+  |- fibos-latest-venere.min.js
+  |- 1.1.2/
+    |- fibos-1.1.2.min.js
+    |- fibos-hotels-1.1.2.min.js
+    |- fibos-venere-1.1.2.min.js
+    |- widgets/
+      |- uiMarker-1.1.2-min.js
+      |- uiRuler-1.1.2-min.js
+      |- uiSlider-1.1.2-min.js
+      |- uiSpacer-1.1.2-min.js
+      |- uiSpriter-1.1.2-min.js
+```
+
+---
+
 ## Usage
 Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page.
 
