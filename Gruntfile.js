@@ -169,7 +169,7 @@ module.exports = function(grunt) {
             all:    ["target","build","public/<%= pkg.version %>"],
             target: ["target"],
             build:  ["build"],
-            deploy: ["public/<%= pkg.version %>"]
+            deploy: ["public/<%= pkg.version %>","public/<%= pkg.name %>-latest*.js"]
         },
 
         /********************
@@ -200,6 +200,23 @@ module.exports = function(grunt) {
             },
             deploy: {
                 files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        filter: 'isFile',
+                        src: ['build/<%= pkg.version %>/<%= pkg.name %>*.min.js'],
+                        dest: 'public/',
+                        opt: {
+                            from:'<%= pkg.name %>',
+                            to:'<%= pkg.name %>-latest'
+                        },
+                        rename: function(dest, src) {
+                            src = src.replace(/[0-9]/g,'');
+                            src = src.replace(/-\.\./,'');
+                            src = src.replace(this.opt.from,this.opt.to);
+                            return dest + src;
+                        }
+                    },
                     {
                         expand: true,
                         flatten: true,
