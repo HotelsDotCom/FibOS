@@ -1,5 +1,8 @@
 # FibOS
-Bookmarklet UI Tool for easily check layout implementations
+Bookmarklet UI Tool for easily check layout implementations.
+
+- [Here](#usage) is how to use the tool.
+- [Here](#build) is how to build and debug the tool.
 
 Use this string as "location" for the bookmarklet
 
@@ -12,40 +15,6 @@ For Hotels.com use this one
 For Venere.com use this one
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-venere.min.js");})();
-
----
-
-## Build
-First of all, NodeJS should be installed.
-
-Once the project is cloned, go into the project's root folder and run:
-
-```
-npm install -g grunt-cli
-npm install
-grunt deploy
-```
-
-With the `grunt deploy` command, all files for the project will be created under the `build/` (both minified and full, for debugging) and all the minified will be also copied into `public/[version]/` folder along with `*-latest.min.js` version in `public/` folder.
-
-Eg. With the version `1.1.2`, running `grunt deploy` will produce this file tree:
-
-```
-public/
-  |- fibos-latest.min.js
-  |- fibos-latest-hotels.min.js
-  |- fibos-latest-venere.min.js
-  |- 1.1.2/
-    |- fibos-1.1.2.min.js
-    |- fibos-hotels-1.1.2.min.js
-    |- fibos-venere-1.1.2.min.js
-    |- widgets/
-      |- uiMarker-1.1.2-min.js
-      |- uiRuler-1.1.2-min.js
-      |- uiSlider-1.1.2-min.js
-      |- uiSpacer-1.1.2-min.js
-      |- uiSpriter-1.1.2-min.js
-```
 
 ---
 
@@ -186,6 +155,69 @@ While this toggle is active, the user can click on any text in the page revealin
 Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, ie. for links).
 
 Disabling this toggle, will hide all Markers already placed as well as disable the click event.
+
+---
+
+## Build
+First of all, NodeJS should be installed.
+
+Once the project is cloned, go into the project's root folder and run:
+
+```
+npm install -g grunt-cli
+npm install
+grunt deploy
+```
+
+With the `grunt deploy` command, all files for the project will be created under the `build/` (both minified and full, for debugging) and all the minified will be also copied into `public/[version]/` folder along with `*-latest.min.js` version in `public/` folder.
+
+Eg. With the version `1.1.2`, running `grunt deploy` will produce this file tree:
+
+```
+public/
+  |- fibos-latest.min.js
+  |- fibos-latest-hotels.min.js
+  |- fibos-latest-venere.min.js
+  |- 1.1.2/
+    |- fibos-1.1.2.min.js
+    |- fibos-hotels-1.1.2.min.js
+    |- fibos-venere-1.1.2.min.js
+    |- widgets/
+      |- uiMarker-1.1.2-min.js
+      |- uiRuler-1.1.2-min.js
+      |- uiSlider-1.1.2-min.js
+      |- uiSpacer-1.1.2-min.js
+      |- uiSpriter-1.1.2-min.js
+```
+
+#### Folder cleaners
+
+| command | notes |
+| -------- | -------- |
+| `grunt clean:all` | removes ALL dynamic folders ( build/, target/, public/[version]/ ) |
+| `grunt clean:target` | remove target/ folder |
+| `grunt clean:build` | remove build/ folder |
+| `grunt clean:deploy` | remove public/[version]/ folder |
+
+#### Single Widget builders
+
+| command | notes |
+| -------- | -------- |
+| `grunt widget:marker` | build/minify MARKER widget into build/[version]/ |
+| `grunt widget:ruler` | build/minify RULER widget into build/[version]/ |
+| `grunt widget:slider` | build/minify SLIDER widget into build/[version]/ |
+| `grunt widget:spacer` | build/minify SPACER widget into build/[version]/ |
+| `grunt widget:spriter` | build/minify SPRITER widget into build/[version]/ |
+
+#### Full builders
+
+| command | notes |
+| -------- | -------- |
+| `grunt build` | build/minify FibOS with default initializer into build/[version]/ |
+| `grunt build:venere` | build/minify FibOS with VENERE initializer into build/[version]/ |
+| `grunt build:hotels` | build/minify FibOS with HOTELS initializer into build/[version]/ |
+| `grunt build-all` | build/minify FibOS with ALL initializers along with ALL widgets into build/[version]/ |
+| `grunt deploy` | build/minify ALL into build/[version]/ and copy only minified into public/[version]/ |
 
 ---
 
