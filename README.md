@@ -191,13 +191,17 @@ public/
 ```
 
 #### Folder cleaners
+Dynamic folders are used as follows:
+- target: (git ignores it) temporary folder to host processing files
+- build:  (git ignores it) final folder to host built files (both minified and debuggable ones)
+- public: (git stages it) final folder only for minified files (it host also the *-latest.min.js files)
 
 | command | notes |
 | -------- | -------- |
 | `grunt clean:all` | removes ALL dynamic folders ( build/, target/, public/[version]/ ) |
 | `grunt clean:target` | remove target/ folder |
 | `grunt clean:build` | remove build/ folder |
-| `grunt clean:deploy` | remove public/[version]/ folder |
+| `grunt clean:deploy` | remove public/[version]/ folder (and all the *-latest.min.js files) |
 
 #### Single Widget builders
 
