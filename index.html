@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Fibos by VenereDotCom</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Fibos</h1>
+        <h2>Bookmarklet UI Tool for easily check layout implementations</h2>
+        <a href="https://github.com/VenereDotCom/FibOS" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="fibos" class="anchor" href="#fibos" aria-hidden="true"><span class="octicon octicon-link"></span></a>FibOS</h1>
+
+<p>Bookmarklet UI Tool for easily check layout implementations.</p>
+
+<ul>
+<li>
+<a href="#usage">Here</a> is how to use the tool.</li>
+<li>
+<a href="#build">Here</a> is how to build and debug the tool.</li>
+<li>
+<a href="#contributing">Here</a> is how to customize the tool and its components.</li>
+</ul>
+
+<p>Use this string as "location" for the bookmarklet:</p>
+
+<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
+</code></pre>
+
+<p>For Hotels.com use this one:</p>
+
+<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-hotels.min.js");})();
+</code></pre>
+
+<p>For Venere.com use this one:</p>
+
+<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-venere.min.js");})();
+</code></pre>
+
+<hr>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page.</p>
+
+<p><img src="readme/fibos-panel-closed.jpg" alt="FibOS closed"></p>
+
+<p>The tool has a <a href="#select-dropdown">dropdown</a> for chosing spacers, <a href="#panels">6 panels</a> to manage them and <a href="#toggles">4 toggles</a> on the right side to show/hide specific features.</p>
+
+<p>The 6 panels are as follows:</p>
+
+<ul>
+<li><a href="#spacer-selected">spacer selected</a></li>
+<li><a href="#offset-group">offset group</a></li>
+<li><a href="#spacer-groups">spacer groups</a></li>
+<li><a href="#local-storage">local storage</a></li>
+<li><a href="#input-string">input string</a></li>
+<li><a href="#loaded-sprites">loaded sprites</a></li>
+</ul>
+
+<p>The 4 toggles on the right side enable features as follows:</p>
+
+<ul>
+<li><a href="#spacers">toggle all spacers</a></li>
+<li><a href="#overlay">toggle dark overlay</a></li>
+<li><a href="#rulers">toggle rulers and lineguides</a></li>
+<li><a href="#font-info">toggle font-info feature</a></li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="select-dropdown" class="anchor" href="#select-dropdown" aria-hidden="true"><span class="octicon octicon-link"></span></a>Select dropdown</h3>
+
+<p>Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.</p>
+
+<p>Once the spacer is dropped, it still can be dragged around the page.</p>
+
+<p>When a spacer is clicked (or when it's just dropped) it can be moved around using arrow keys:</p>
+
+<ul>
+<li>arrows moves it by 1 pixel</li>
+<li>while SHIFT key is pressed moves it by 10 pixels</li>
+<li>while ALT key is pressed moves it by 0.5 pixel (for retina displays)</li>
+</ul>
+
+<hr>
+
+<h2>
+<a id="panels" class="anchor" href="#panels" aria-hidden="true"><span class="octicon octicon-link"></span></a>Panels</h2>
+
+<h3>
+<a id="spacer-selected" class="anchor" href="#spacer-selected" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spacer Selected</h3>
+
+<p><img src="readme/fibos-panel-1.jpg" alt="FibOS panel spacer selected"></p>
+
+<p>Here the user can modify a specific spacer (already droppend onto the page).</p>
+
+<p>The user can:</p>
+
+<ul>
+<li>change the spacer value</li>
+<li>change the spacer position (top and left)</li>
+<li>change the spacer opacity</li>
+<li>remove or duplicate the spacer</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="offset-group" class="anchor" href="#offset-group" aria-hidden="true"><span class="octicon octicon-link"></span></a>Offset Group</h3>
+
+<p><img src="readme/fibos-panel-2.jpg" alt="FibOS panel offset group"></p>
+
+<p>Here the user can offset a full group of spacers.</p>
+
+<p>Additionally the user can select an inner set of spacers for the selected group checking the 'select inner group' option.</p>
+
+<hr>
+
+<h3>
+<a id="spacer-groups" class="anchor" href="#spacer-groups" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spacer Groups</h3>
+
+<p><img src="readme/fibos-panel-3.jpg" alt="FibOS panel spacer groups"></p>
+
+<p>From here the user can choose between groups of spacers.</p>
+
+<p>Once the first spacer is dropped onto the page, the first default group is created named 'spacerGroup_0', and then it can be renamed or removed using the relative buttons.</p>
+
+<p>While new spacers are dropped when 'none' group is selected, the tool creates a new group named 'spacerGroup_N', where N is an incremental number for each newer group.</p>
+
+<p>The user will always have the ability to choose a group from the list.</p>
+
+<hr>
+
+<h3>
+<a id="local-storage" class="anchor" href="#local-storage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Local Storage</h3>
+
+<p><img src="readme/fibos-panel-4.jpg" alt="FibOS panel local storage"></p>
+
+<p>Using <a href="http://dev.w3.org/html5/webstorage/#the-localstorage-attribute">HTML5 localStorage</a> feature, the user can save the current spacers groups or restore the previously saved ones.</p>
+
+<p>Once the 'restore' button is pressed, the panel 'spacer groups' will be open showing all groups restored.</p>
+
+<hr>
+
+<h3>
+<a id="input-string" class="anchor" href="#input-string" aria-hidden="true"><span class="octicon octicon-link"></span></a>Input String</h3>
+
+<p><img src="readme/fibos-panel-5.jpg" alt="FibOS panel input string"></p>
+
+<p>In this panel the user can export in json format the current spacers groups (shown in the browser's console).</p>
+
+<p>The user can also import a group set of spacers using the same json string returned after 'export' is clicked (useful for sharing spacers groups).</p>
+
+<hr>
+
+<h3>
+<a id="loaded-sprites" class="anchor" href="#loaded-sprites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loaded Sprites</h3>
+
+<p><img src="readme/fibos-panel-6.jpg" alt="FibOS panel loaded sprites"></p>
+
+<p>Once the 'analyze' button is pressed, the tool checks for all DOM elements with a css <code>background-image</code> property set and stores sprites in a checkable list.</p>
+
+<p>Checking a sprite from the list, the tool will show the selected sprite (or image) with red semi-transparent boxes representing the actual used pixels.</p>
+
+<p>This is useful to check for re-usable areas of a sprite, overlapping areas, wrong areas set, and so on.</p>
+
+<hr>
+
+<h2>
+<a id="toggles" class="anchor" href="#toggles" aria-hidden="true"><span class="octicon octicon-link"></span></a>Toggles</h2>
+
+<h3>
+<a id="spacers" class="anchor" href="#spacers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spacers</h3>
+
+<p>Click here to show/hide spacers.</p>
+
+<p>NOTE: there is a known issue about dropping new spacers when this toggle is disabled. Please, be aware of this and avoid to drop-in new spacers when this toggle is disabled.</p>
+
+<hr>
+
+<h3>
+<a id="overlay" class="anchor" href="#overlay" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overlay</h3>
+
+<p>Click here to show/hide a dark semi-transparent overlay, in order to see all spacers more clearly.</p>
+
+<hr>
+
+<h3>
+<a id="rulers" class="anchor" href="#rulers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rulers</h3>
+
+<p>Click here to show/hide rulers.</p>
+
+<p>Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.</p>
+
+<p>Once a lineguide is dropped onto the page, it can be moved with the mouse or arrow keys:</p>
+
+<ul>
+<li>arrows moves it by 1 pixel</li>
+<li>while SHIFT key is pressed moves it by 10 pixels</li>
+<li>while ALT key is pressed moves it by 0.5 pixel (for retina displays)</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="font-info" class="anchor" href="#font-info" aria-hidden="true"><span class="octicon octicon-link"></span></a>Font-Info</h3>
+
+<p>Click here to show/hide the Marker feature.</p>
+
+<p>While this toggle is active, the user can click on any text in the page revealing 2 type of informations:</p>
+
+<ul>
+<li>a cyano semi-transparent box over the text, highlighting its block</li>
+<li>a small box on top of the text with font-family, font-weight and font-size css properties</li>
+</ul>
+
+<p>Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).</p>
+
+<p>Disabling this toggle, will hide all Markers already placed as well as disable the click event.</p>
+
+<hr>
+
+<h2>
+<a id="build" class="anchor" href="#build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build</h2>
+
+<p>First of all, NodeJS should be installed.</p>
+
+<p>Once the project is cloned, go into the project's root folder and run:</p>
+
+<pre><code>npm install -g grunt-cli
+npm install
+grunt deploy
+</code></pre>
+
+<p><code>grunt-cli</code> is the Grunt Command Line Interface needed to run Grunt tasks.</p>
+
+<p>With <code>npm install</code> all node packages needed by the tool compiler will be installed into <code>/node_modules/</code> folder.</p>
+
+<p>With the <code>grunt deploy</code> command, all files for the project will be created under the <code>build/</code> (both minified and full, for debugging) and all the minified will be also copied into <code>public/[version]/</code> folder along with <code>*-latest.min.js</code> version in <code>public/</code> folder.</p>
+
+<p>Eg. With the version <code>1.1.2</code>, running <code>grunt deploy</code> will produce this file tree:</p>
+
+<pre><code>public/
+  |- fibos-latest.min.js
+  |- fibos-latest-hotels.min.js
+  |- fibos-latest-venere.min.js
+  |- 1.1.2/
+    |- fibos-1.1.2.min.js
+    |- fibos-hotels-1.1.2.min.js
+    |- fibos-venere-1.1.2.min.js
+    |- widgets/
+      |- uiMarker-1.1.2-min.js
+      |- uiRuler-1.1.2-min.js
+      |- uiSlider-1.1.2-min.js
+      |- uiSpacer-1.1.2-min.js
+      |- uiSpriter-1.1.2-min.js
+</code></pre>
+
+<h4>
+<a id="folder-cleaners" class="anchor" href="#folder-cleaners" aria-hidden="true"><span class="octicon octicon-link"></span></a>Folder cleaners</h4>
+
+<p>Dynamic folders are used as follows:</p>
+
+<ul>
+<li>target: (git ignores it) temporary folder to host processing files</li>
+<li>build:  (git ignores it) final folder to host built files (both minified and debuggable ones)</li>
+<li>public: (git stages it) final folder only for minified files</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grunt clean:target</code></td>
+<td>remove <code>target/</code> folder</td>
+</tr>
+<tr>
+<td><code>grunt clean:build</code></td>
+<td>remove <code>build/</code> folder</td>
+</tr>
+<tr>
+<td><code>grunt clean:deploy</code></td>
+<td>remove <code>public/[version]/</code> folder (and all the <code>public/*-latest.min.js</code> files)</td>
+</tr>
+<tr>
+<td><code>grunt clean:all</code></td>
+<td>removes ALL dynamic folders ( <code>build/</code>, <code>target/</code>, <code>public/[version]/</code> )</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="single-widget-builders" class="anchor" href="#single-widget-builders" aria-hidden="true"><span class="octicon octicon-link"></span></a>Single Widget builders</h4>
+
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grunt widget:marker</code></td>
+<td>build/minify MARKER widget into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt widget:ruler</code></td>
+<td>build/minify RULER widget into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt widget:slider</code></td>
+<td>build/minify SLIDER widget into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt widget:spacer</code></td>
+<td>build/minify SPACER widget into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt widget:spriter</code></td>
+<td>build/minify SPRITER widget into <code>build/[version]/</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="full-builders" class="anchor" href="#full-builders" aria-hidden="true"><span class="octicon octicon-link"></span></a>Full builders</h4>
+
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grunt build</code></td>
+<td>build/minify FibOS with default initializer into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt build:venere</code></td>
+<td>build/minify FibOS with VENERE initializer into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt build:hotels</code></td>
+<td>build/minify FibOS with HOTELS initializer into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt build-all</code></td>
+<td>build/minify FibOS with ALL initializers and ALL widgets into <code>build/[version]/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt deploy</code></td>
+<td>build/minify ALL into <code>build/[version]/</code> and copy only minified into <code>public/[version]/</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>With <code>grunt deploy</code> will be created also all *-latest.min.js files per brand into <code>public/</code> folder.</p>
+
+<hr>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<h3>
+<a id="custom-initializer" class="anchor" href="#custom-initializer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom initializer</h3>
+
+<p>To set up a new initializer (as for venere or hotels already set) please follow these steps:</p>
+
+<ol>
+<li>add the new brand under <code>pkg.brands</code> into <code>package.json</code> file (kay/value pair is brandName/brandMsg)</li>
+<li>create the new init file under <code>src/app/init/</code>
+</li>
+<li>for a brand named <code>newbrand</code> add the call to <code>build:newbrand</code> into <code>build-all</code> task or simply run it in command line</li>
+</ol>
+
+<p>Note for 1: the brandMsg will be used in the final minified file as comment in this form: <code>/** built for brandMsg **/</code></p>
+
+<p>Note for 2: the initializer file serves as options overrider for each widget that needs to be customized. The <code>FibOS()</code> constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if <code>null</code> the tool will work for <code>body</code> selector).</p>
+
+<p>eg. for a brand named <code>newbrand</code> the file <code>src/app/init/fibos_newbrand.js</code> should be created with following content as example:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> myOptions <span class="pl-k">=</span> {
+    logEvents<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+    uiSpacer<span class="pl-k">:</span>  {spacersList<span class="pl-k">:</span>[<span class="pl-c1">5</span>,<span class="pl-c1">10</span>,<span class="pl-c1">15</span>,<span class="pl-c1">20</span>,<span class="pl-c1">25</span>,<span class="pl-c1">30</span>,<span class="pl-c1">35</span>,<span class="pl-c1">40</span>],spacerMin<span class="pl-k">:</span><span class="pl-c1">1</span>},
+    uiRuler<span class="pl-k">:</span>   {rulerWidth<span class="pl-k">:</span><span class="pl-c1">8</span>},
+    uiMarker<span class="pl-k">:</span>  {taglist<span class="pl-k">:</span>{a<span class="pl-k">:</span><span class="pl-c1">false</span>,input<span class="pl-k">:</span><span class="pl-c1">false</span>,dfn<span class="pl-k">:</span><span class="pl-c1">true</span>}},
+    uiSpriter<span class="pl-k">:</span> {domain<span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">'</span>img.mydomain.com<span class="pl-pds">'</span></span>}
+};
+
+<span class="pl-s">var</span> fibos <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FibOS</span>(<span class="pl-s1"><span class="pl-pds">'</span>#elemId.elemClass<span class="pl-pds">'</span></span>, myOptions);</pre></div>
+
+<p>Note for 3: enhance the <code>build-all</code> grunt task into the Gruntfile (this is optional though recomended). If the brand <code>newbrand</code> is intended to be added, add the <code>build</code> task with the new brand as parameter, so that Grunt can append the correct initializer found in <code>src/app/init/fibos_newbrand.js</code>, or simply run <code>grunt build:newbrand</code> in command line.</p>
+
+<div class="highlight highlight-javascript"><pre>grunt.registerTask(<span class="pl-s1"><span class="pl-pds">'</span>build-all<span class="pl-pds">'</span></span>, [
+    <span class="pl-s1"><span class="pl-pds">'</span>clean:build<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:hotels<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:venere<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:newbrand<span class="pl-pds">'</span></span>,
+    <span class="pl-s1"><span class="pl-pds">'</span>widget:marker<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:ruler<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:slider<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spacer<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spriter<span class="pl-pds">'</span></span>
+]);</pre></div>
+
+<hr>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>Created by <a href="https://github.com/FabioDiMonte">Fabio Di Monte</a>, with thanks to: <a href="https://github.com/damurri">Daniele Amurri</a>, <a href="https://github.com/srescio">Simone Rescio</a>, <a href="https://github.com/proudlygeek">Gianluca Bargelli</a>, <a href="https://github.com/ClaudioCorridore">Claudio Corridore</a>, <a href="https://github.com/fsferrara">Francesco Saverio Ferrara</a>.</p>
+
+<h2>
+<a id="legal" class="anchor" href="#legal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Legal</h2>
+
+<p>This project is available under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 License</a>.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/VenereDotCom/FibOS/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/VenereDotCom/FibOS/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/VenereDotCom/FibOS"></a> is maintained by <a href="https://github.com/VenereDotCom">VenereDotCom</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
