@@ -766,6 +766,22 @@ footer a:hover {
   color: #444;
 }
 
+/* Code Colors */
+.pl-k, .pl-s, .pl-st {
+  color: #a71d5d;
+}
+.pl-c1, .pl-mdh, .pl-mm, .pl-mp, .pl-mr, .pl-s1 .pl-v, .pl-s3, .pl-sc, .pl-sv {
+  color: #0086b3;
+  font-weight: bold;
+}
+.pl-pds, .pl-s1, .pl-s1 .pl-pse .pl-s2, .pl-sr, .pl-sr .pl-cce, .pl-sr .pl-sra, .pl-sr .pl-sre, .pl-src {
+  color: #669933;
+}
+.pl-e, .pl-en {
+  color: #795da3;
+  font-weight: bold;
+}
+
 /* MISC */
 .clearfix:after {
   display: block;
