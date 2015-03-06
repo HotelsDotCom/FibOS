@@ -590,6 +590,7 @@ hr {
 table {
   width: 100%;
   border: 1px solid #ebebeb;
+  margin-bottom: 10px;
 }
 
 th {
@@ -597,9 +598,17 @@ th {
 }
 
 td {
+  font-size: 13px;
   font-weight: 300;
-  text-align: center;
   border: 1px solid #ebebeb;
+  padding: 1px 4px 3px;
+}
+td:first-child {
+  width: 150px;
+}
+
+td code, td pre {
+  font-size: 11px;
 }
 
 form {
