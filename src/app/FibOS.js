@@ -132,6 +132,10 @@ var FibOS = (function(
 
         initEvents: function() {
 
+            // keyboard shortcuts
+            $('body').off('.fibos')
+                     .on('keydown.fibos',keyHandler.bind(this));
+
             // panelToggles
             this._panels.togglesPanel.on('toggle_fibos',  function(){
                 var isHidden = this.$controls.hasClass('hidden');
@@ -504,6 +508,19 @@ var FibOS = (function(
         this._components.uiSpacer.dragSpacer(newspacer);
 
         return false;
+    }
+
+    function keyHandler(e){
+        var key = e.keyCode;
+        var mod = e.ctrlKey?'c': e.shiftKey?'s': e.altKey?'a': '';
+        switch(key){
+            case 68:// letter D
+                mod==='a' && this._panels.spacerPanel.duplicateSpacer();
+                break;
+            case 88:// letter X
+                mod==='a' && this._panels.spacerPanel.deleteSpacer();
+                break;
+        }
     }
 
     return FibOS;

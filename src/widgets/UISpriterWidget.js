@@ -20,8 +20,8 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
         // resize event
         windowResizeEvent.call(this);
-        $(window).off('.iuSpriter')
-            .on('resize.iuSpriter',windowResizeEvent.bind(this));
+        $(window).off('.uiSpriter')
+                 .on('resize.uiSpriter',windowResizeEvent.bind(this));
     }
 
     /**
