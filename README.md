@@ -243,7 +243,7 @@ eg. for a brand named `newbrand` the file `src/app/init/fibos_newbrand.js` shoul
 ```javascript
 var myOptions = {
     logEvents: true,
-    uiSpacer:  {spacersList:[5,10,15,20,25,30,35,40]},
+    uiSpacer:  {spacersList:[5,10,15,20,25,30,35,40],spacerMin:1},
     uiRuler:   {rulerWidth:8},
     uiMarker:  {taglist:{a:false,input:false,dfn:true}},
     uiSpriter: {domain:'img.mydomain.com'}
