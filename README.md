@@ -59,13 +59,13 @@ When a spacer is clicked (or when it's just dropped) it can be moved around usin
 ### Spacer Selected
 ![FibOS panel spacer selected](readme/fibos-panel-1.jpg)
 
-Here the user can modify a specific spacer (already droppend onto the page).
+Here the user can modify a specific spacer (already dropped onto the page).
 
 The user can:
 - change the spacer value
 - change the spacer position (top and left)
 - change the spacer opacity
-- remove or duplicate the spacer
+- remove or duplicate the spacer (also using shortcuts respectively: `ATL+X` and `ALT+D`)
 
 ---
 
@@ -206,7 +206,7 @@ Dynamic folders are used as follows:
 | `grunt clean:target` | remove `target/` folder |
 | `grunt clean:build` | remove `build/` folder |
 | `grunt clean:deploy` | remove `public/[version]/` folder (and all the `public/*-latest.min.js` files) |
-| `grunt clean:all` | removes ALL dynamic folders ( `build/`, `target/`, `public/[version]/` ) |
+| `grunt clean:all` | removes ALL dynamic folders (`build/`, `target/`, `public/[version]/`) |
 
 #### Single Widget builders
 
