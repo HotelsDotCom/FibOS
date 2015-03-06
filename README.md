@@ -198,10 +198,10 @@ Dynamic folders are used as follows:
 
 | command | notes |
 | -------- | -------- |
-| `grunt clean:all` | removes ALL dynamic folders ( build/, target/, public/[version]/ ) |
 | `grunt clean:target` | remove target/ folder |
 | `grunt clean:build` | remove build/ folder |
 | `grunt clean:deploy` | remove public/[version]/ folder (and all the *-latest.min.js files) |
+| `grunt clean:all` | removes ALL dynamic folders ( build/, target/, public/[version]/ ) |
 
 #### Single Widget builders
 
@@ -220,8 +220,45 @@ Dynamic folders are used as follows:
 | `grunt build` | build/minify FibOS with default initializer into build/[version]/ |
 | `grunt build:venere` | build/minify FibOS with VENERE initializer into build/[version]/ |
 | `grunt build:hotels` | build/minify FibOS with HOTELS initializer into build/[version]/ |
-| `grunt build-all` | build/minify FibOS with ALL initializers along with ALL widgets into build/[version]/ |
+| `grunt build-all` | build/minify FibOS with ALL initializers and ALL widgets into build/[version]/ |
 | `grunt deploy` | build/minify ALL into build/[version]/ and copy only minified into public/[version]/ |
+
+---
+
+## Contributing
+
+### Custom initializer
+To set up a new initializer (as for venere or hotels already set) please follow these steps:
+
+1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)
+2. create the new init file under `src/app/init/`
+3. for a brand named `newbrand` add the call to `build:newbrand` into `build-all` task or simply run it in command line
+
+Note for 1: the brandMsg will be used in the final minified file as comment in this form: `/** built for brandMsg **/`
+
+Note for 2: the initializer file serves as options overrider for each widget that needs to be customized. The `FibOS()` constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if `null` the tool will work for `body` selector).
+
+eg. for a brand named `newbrand` the file `src/app/init/fibos_newbrand.js` should be created with following content as example:
+```javascript
+var myOptions = {
+    logEvents: true,
+    uiSpacer:  {spacersList:[5,10,15,20,25,30,35,40]},
+    uiRuler:   {rulerWidth:8},
+    uiMarker:  {taglist:{a:false,input:false,dfn:true}},
+    uiSpriter: {domain:'img.mydomain.com'}
+};
+
+var fibos = new FibOS('#elemId.elemClass', myOptions);
+```
+
+Note for 3: enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended). If the brand `newbrand` is intended to be added, add the `build` task with the new brand as parameter, so that Grunt can append the correct initializer found in `src/app/init/fibos_newbrand.js`, or simply run `grunt build:newbrand` in command line.
+
+```javascript
+grunt.registerTask('build-all', [
+    'clean:build', 'build', 'build:hotels', 'build:venere', 'build:newbrand',
+    'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter'
+]);
+```
 
 ---
 
