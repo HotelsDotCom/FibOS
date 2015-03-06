@@ -5,15 +5,15 @@ Bookmarklet UI Tool for easily check layout implementations.
 - [Here](#build) is how to build and debug the tool.
 - [Here](#contributing) is how to customize the tool and its components.
 
-Use this string as "location" for the bookmarklet
+Use this string as "location" for the bookmarklet:
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
 
-For Hotels.com use this one
+For Hotels.com use this one:
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-hotels.min.js");})();
 
-For Venere.com use this one
+For Venere.com use this one:
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-venere.min.js");})();
 
@@ -24,7 +24,7 @@ Once the bookmarklet is loaded, the GUI will be appended to the body and it will
 
 ![FibOS closed](readme/fibos-panel-closed.jpg)
 
-The tools a [dropdown](#select-dropdown) for chosing spacers and other [6 panels](#panels) to manage them and other features as well.
+The tool has a [dropdown](#select-dropdown) for chosing spacers, [6 panels](#panels) to manage them and [4 toggles](#toggles) on the right side to show/hide specific features.
 
 The 6 panels are as follows:
 - [spacer selected](#spacer-selected)
@@ -34,18 +34,18 @@ The 6 panels are as follows:
 - [input string](#input-string)
 - [loaded sprites](#loaded-sprites)
 
-Additionally, it has [4 toggles](#toggles) on the right side in order to show/hide specific features such as:
-- [all spacers](#spacers)
-- [a dark overlay](#overlay)
-- [the rulers and lineguides](#rulers)
-- [the font-info feature](#font-info)
+The 4 toggles on the right side enable features as follows:
+- [toggle all spacers](#spacers)
+- [toggle dark overlay](#overlay)
+- [toggle rulers and lineguides](#rulers)
+- [toggle font-info feature](#font-info)
 
 ---
 
 ### Select dropdown
-Using the dropdown, a spacer can be chosen and then drag/drop onto the page.
+Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.
 
-Once the spacer is dropped onto the page, it still can be dragged around the page.
+Once the spacer is dropped, it still can be dragged around the page.
 
 When a spacer is clicked (or when it's just dropped) it can be moved around using arrow keys:
 - arrows moves it by 1 pixel
@@ -94,7 +94,7 @@ The user will always have the ability to choose a group from the list.
 ### Local Storage
 ![FibOS panel local storage](readme/fibos-panel-4.jpg)
 
-Using HTML5LocalStorage feature, the user can save the current spacers groups or restore the previously saved ones.
+Using [HTML5 localStorage](http://dev.w3.org/html5/webstorage/#the-localstorage-attribute) feature, the user can save the current spacers groups or restore the previously saved ones.
 
 Once the 'restore' button is pressed, the panel 'spacer groups' will be open showing all groups restored.
 
@@ -112,11 +112,11 @@ The user can also import a group set of spacers using the same json string retur
 ### Loaded Sprites
 ![FibOS panel loaded sprites](readme/fibos-panel-6.jpg)
 
-Once the 'analyze' button is pressed, the tool checks for all DOM elements with a css 'background-image' property set and stores sprite infos in a checkable list.
+Once the 'analyze' button is pressed, the tool checks for all DOM elements with a css `background-image` property set and stores sprites in a checkable list.
 
 Checking a sprite from the list, the tool will show the selected sprite (or image) with red semi-transparent boxes representing the actual used pixels.
 
-This is useful to check for re-usable areas of a sprite, or for easily check overlapping areas.
+This is useful to check for re-usable areas of a sprite, overlapping areas, wrong areas set, and so on.
 
 ---
 
@@ -150,10 +150,10 @@ Once a lineguide is dropped onto the page, it can be moved with the mouse or arr
 Click here to show/hide the Marker feature.
 
 While this toggle is active, the user can click on any text in the page revealing 2 type of informations:
-- a cyano semi-transparent box over the text highlighting its block
-- a small box on top of the text with font-family, font-weight and font-size css property
+- a cyano semi-transparent box over the text, highlighting its block
+- a small box on top of the text with font-family, font-weight and font-size css properties
 
-Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, ie. for links).
+Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).
 
 Disabling this toggle, will hide all Markers already placed as well as disable the click event.
 
@@ -169,6 +169,10 @@ npm install -g grunt-cli
 npm install
 grunt deploy
 ```
+
+`grunt-cli` is the Grunt Command Line Interface needed to run Grunt tasks.
+
+With `npm install` all node packages needed by the tool compiler will be installed into `/node_modules/` folder.
 
 With the `grunt deploy` command, all files for the project will be created under the `build/` (both minified and full, for debugging) and all the minified will be also copied into `public/[version]/` folder along with `*-latest.min.js` version in `public/` folder.
 
@@ -195,34 +199,36 @@ public/
 Dynamic folders are used as follows:
 - target: (git ignores it) temporary folder to host processing files
 - build:  (git ignores it) final folder to host built files (both minified and debuggable ones)
-- public: (git stages it) final folder only for minified files (it host also the *-latest.min.js files)
+- public: (git stages it) final folder only for minified files
 
 | command | notes |
 | -------- | -------- |
-| `grunt clean:target` | remove target/ folder |
-| `grunt clean:build` | remove build/ folder |
-| `grunt clean:deploy` | remove public/[version]/ folder (and all the *-latest.min.js files) |
-| `grunt clean:all` | removes ALL dynamic folders ( build/, target/, public/[version]/ ) |
+| `grunt clean:target` | remove `target/` folder |
+| `grunt clean:build` | remove `build/` folder |
+| `grunt clean:deploy` | remove `public/[version]/` folder (and all the `public/*-latest.min.js` files) |
+| `grunt clean:all` | removes ALL dynamic folders ( `build/`, `target/`, `public/[version]/` ) |
 
 #### Single Widget builders
 
 | command | notes |
 | -------- | -------- |
-| `grunt widget:marker` | build/minify MARKER widget into build/[version]/ |
-| `grunt widget:ruler` | build/minify RULER widget into build/[version]/ |
-| `grunt widget:slider` | build/minify SLIDER widget into build/[version]/ |
-| `grunt widget:spacer` | build/minify SPACER widget into build/[version]/ |
-| `grunt widget:spriter` | build/minify SPRITER widget into build/[version]/ |
+| `grunt widget:marker` | build/minify MARKER widget into `build/[version]/` |
+| `grunt widget:ruler` | build/minify RULER widget into `build/[version]/` |
+| `grunt widget:slider` | build/minify SLIDER widget into `build/[version]/` |
+| `grunt widget:spacer` | build/minify SPACER widget into `build/[version]/` |
+| `grunt widget:spriter` | build/minify SPRITER widget into `build/[version]/` |
 
 #### Full builders
 
 | command | notes |
 | -------- | -------- |
-| `grunt build` | build/minify FibOS with default initializer into build/[version]/ |
-| `grunt build:venere` | build/minify FibOS with VENERE initializer into build/[version]/ |
-| `grunt build:hotels` | build/minify FibOS with HOTELS initializer into build/[version]/ |
-| `grunt build-all` | build/minify FibOS with ALL initializers and ALL widgets into build/[version]/ |
-| `grunt deploy` | build/minify ALL into build/[version]/ and copy only minified into public/[version]/ |
+| `grunt build` | build/minify FibOS with default initializer into `build/[version]/` |
+| `grunt build:venere` | build/minify FibOS with VENERE initializer into `build/[version]/` |
+| `grunt build:hotels` | build/minify FibOS with HOTELS initializer into `build/[version]/` |
+| `grunt build-all` | build/minify FibOS with ALL initializers and ALL widgets into `build/[version]/` |
+| `grunt deploy` | build/minify ALL into `build/[version]/` and copy only minified into `public/[version]/` |
+
+With `grunt deploy` will be created also all *-latest.min.js files per brand into `public/` folder.
 
 ---
 
