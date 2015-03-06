@@ -264,7 +264,7 @@ grunt.registerTask('build-all', [
 ---
 
 ## Credits
-Created by [Fabio Di Monte](https://github.com/FabioDiMonte), with thanks to: Daniele Amurri, Simone Rescio, Gianluca Bargelli, Claudio Corridore, Francesco Saverio Ferrara.
+Created by [Fabio Di Monte](https://github.com/FabioDiMonte), with thanks to: [Daniele Amurri](https://github.com/damurri), [Simone Rescio](https://github.com/srescio), [Gianluca Bargelli](https://github.com/proudlygeek), [Claudio Corridore](https://github.com/ClaudioCorridore), [Francesco Saverio Ferrara](https://github.com/fsferrara).
 
 ## Legal
 This project is available under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0.html).
