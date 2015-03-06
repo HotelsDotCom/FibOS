@@ -65,7 +65,7 @@ The user can:
 - change the spacer value
 - change the spacer position (top and left)
 - change the spacer opacity
-- remove or duplicate the spacer (also using shortcuts respectively: `ATL+X` and `ALT+D`)
+- remove or duplicate the spacer (also using shortcuts respectively: `ALT+X` and `ALT+D`)
 
 ---
 
