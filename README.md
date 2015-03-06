@@ -3,6 +3,7 @@ Bookmarklet UI Tool for easily check layout implementations.
 
 - [Here](#usage) is how to use the tool.
 - [Here](#build) is how to build and debug the tool.
+- [Here](#contributing) is how to customize the tool and its components.
 
 Use this string as "location" for the bookmarklet
 
