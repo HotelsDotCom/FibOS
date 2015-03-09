@@ -145,6 +145,7 @@ var FibOS = (function(
             }.bind(this));
             this._panels.togglesPanel.on('toggle_spacers',function(data){
                 toggleElement(this._components.uiSpacer,data);
+                this._panels.selectPanel.toggleCloneDisplay(data);
             }.bind(this));
             this._panels.togglesPanel.on('toggle_rulers', function(data){
                 toggleElement(this._components.uiRuler,data);
