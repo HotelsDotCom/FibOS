@@ -101,8 +101,10 @@ var UIOffsetPanel = (function($,UIBasePanel){
 
     UIOffsetPanel.prototype.selectGroup = function(groupName){
         groupName || (groupName='');
+        var $group = $('#'+groupName);
+        var amount = $group.length>0 ? $group.find('div').length : 0;
         $('#'+this._selectors.group).text(groupName);
-        $('#'+this._selectors.multi_p).find('span').text($('#'+groupName).find('div').length);
+        $('#'+this._selectors.multi_p).find('span').text(amount);
     };
 
     /********************

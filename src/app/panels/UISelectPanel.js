@@ -51,7 +51,7 @@ var UISelectPanel = (function($,UIExtraPanel){
         });
         this.addListener('mousedown', '#'+this._selectors.element+' .fibospacer', function(e){
             this.trigger('clone_spacer', {
-                pos    : {pageX:e.pageX,pageY:e.pageY},
+                pos    : {left:e.pageX,top:e.pageY},
                 $clone : $('#'+this._selectors.element),
                 spacer : e.currentTarget
             });

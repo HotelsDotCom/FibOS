@@ -3,7 +3,7 @@
  */
 
 var FibOS = (function(
-   $,
+   $, images,
    uiMarker, uiRuler, uiSlider, uiSpacer, uiSpriter,
    panelSpacer, panelOffset, panelGroup, panelStorage, panelInput, panelSprite, panelSelect, panelToggles
 ) {
@@ -12,8 +12,8 @@ var FibOS = (function(
 
         var jqueryMinVersion = '1.7';
 
-        this._ID='fibos';
-        this._fibosTitle='FibOS';
+        this._ID = 'fibos';
+        this._fibosTitle = 'FibOS';
         this._logEvents = options.logEvents || false;
         delete options.logEvents;
 
@@ -32,13 +32,6 @@ var FibOS = (function(
     }
 
     FibOS.prototype = {
-
-        getImage : function(name){
-            if(images && images[name])
-                return 'data:image/png;base64,'+images[name];
-            else
-                return null;
-        },
 
         init: function(jqMinVer) {
             checkJqueryVersion(jqMinVer,function(){
@@ -139,28 +132,24 @@ var FibOS = (function(
             // panelToggles
             this._panels.togglesPanel.on('toggle_fibos',  function(){
                 var isHidden = this.$controls.hasClass('hidden');
-                if(isHidden){
+                if(isHidden)
                     this.$controls.removeClass('hidden').css('left','0px');
-                }else{
+                else
                     this.$controls.addClass('hidden').css('left',(this.$controls.width()*-1)+'px');
-                }
+
                 this._panels.selectPanel.toggleCloneDisplay(isHidden);
             }.bind(this));
             this._panels.togglesPanel.on('toggle_overlay',function(data){
-                var w = this.$background;
-                data ? w.show() : w.hide();
+                toggleElement(this.$background,data);
             }.bind(this));
             this._panels.togglesPanel.on('toggle_spacers',function(data){
-                var w = this._components.uiSpacer;
-                data ? w.show() : w.hide();
+                toggleElement(this._components.uiSpacer,data);
             }.bind(this));
             this._panels.togglesPanel.on('toggle_rulers', function(data){
-                var w = this._components.uiRuler;
-                data ? w.show() : w.hide();
+                toggleElement(this._components.uiRuler,data);
             }.bind(this));
             this._panels.togglesPanel.on('toggle_markers', function(data){
-                var w = this._components.uiMarker;
-                data ? w.show() : w.hide();
+                toggleElement(this._components.uiMarker,data);
                 this._components.uiMarker.toggleListener(data);
             }.bind(this));
 
@@ -296,6 +285,7 @@ var FibOS = (function(
             components: {
                 uiMarker : function(id,opt){
                     opt || (opt={});
+                    opt.reference = this._reference;
                     opt.checkUseMarker = this.callbacks.uiMarker.highlightCheck.bind(this);
                     opt.checkUseFont = this.callbacks.uiMarker.fontinfoCheck.bind(this);
                     opt.excluded = '#'+this._ID;
@@ -320,17 +310,17 @@ var FibOS = (function(
                 },
                 uiSpriter : function(id,opt){
                     opt || (opt={});
-                    opt.extension = {obscurers_container:{top:'auto',left:'auto',margin:'0 auto'}};
                     opt.reference = this._reference;
+                    opt.extension = {obscurers_container:{top:'auto',left:'auto',margin:'0 auto'}};
                     opt.callback = this.callbacks.uiSpriter.didAnalyze.bind(this);
                     opt.visible = false;
-                    opt.image = this.getImage('alpha_pattern');
+                    opt.image = getImage('alpha_pattern');
                     return new uiSpriter( id, opt );
                 }
             },
 
             styles: function() {
-                var img_sprite = this.getImage('sprite_fibos');
+                var img_sprite = getImage('sprite_fibos') || '';
                 var styleObject = {
 
                     main:
@@ -472,6 +462,13 @@ var FibOS = (function(
 
     };
 
+    function getImage(name){
+        if(images && images[name])
+            return 'data:image/png;base64,'+images[name];
+        else
+            return null;
+    }
+
     function checkJqueryVersion(jqueryMinVersion,callback){
         if (typeof jQuery != 'undefined') {
             var current_vers = jqueryMinVersion;
@@ -494,16 +491,16 @@ var FibOS = (function(
         }
     }
 
-    function fiboClone(e,spacer,$clone){
+    function fiboClone(pos,spacer,$clone){
         var spacernum = parseInt(this._components.uiSpacer.getSpacerType(spacer));
         var newspacer = this._components.uiSpacer.addNewSpacer(spacernum);
         if(!newspacer) return true;
 
-        var mzero = {top:newspacer.position().top-e.pageY,left:newspacer.position().left-e.pageX};
+        var mzero = {top:newspacer.position().top-pos.top,left:newspacer.position().left-pos.left};
         mzero.top  += $(document).scrollTop()  + $clone.position().top + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
         mzero.left += $(document).scrollLeft() + $clone.position().left + parseInt($clone.css('padding-left'));
 
-        newspacer.offset({top:parseInt(e.pageY+mzero.top), left:parseInt(e.pageX+mzero.left)});
+        newspacer.offset({top:parseInt(pos.top+mzero.top), left:parseInt(pos.left+mzero.left)});
         this._components.uiSpacer.setMouseZero(mzero);
         this._components.uiSpacer.dragSpacer(newspacer);
 
@@ -523,8 +520,12 @@ var FibOS = (function(
         }
     }
 
+    function toggleElement($e,toggle){
+        if($e.show && $e.hide) $e[toggle ? 'show' : 'hide']();
+    }
+
     return FibOS;
 
-}(jQuery,
+}(jQuery, images,
    UIMarkerWidget, UIRulerWidget, UISliderWidget, UISpacerWidget, UISpriterWidget,
    UISpacerPanel, UIOffsetPanel, UIGroupPanel, UIStoragePanel, UIInputPanel, UISpritePanel, UISelectPanel, UITogglesPanel));
