@@ -170,7 +170,7 @@ var FibOS = (function(
             this._panels.groupPanel.on('group_remove', function(data,event){});
             this._panels.groupPanel.on('group_rename', function(data,event){});
             this._panels.groupPanel.on('group_select', function(data){
-                data && this._components.uiSpacer.newUsedGroup(data);
+                this._components.uiSpacer.selectGroup(data);
                 this._panels.offsetPanel.selectGroup(data);
                 this._components.uiSpacer.updateGroups();
             }.bind(this));
