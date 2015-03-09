@@ -15,6 +15,7 @@ var FibOS = (function(
         this._ID = 'fibos';
         this._fibosTitle = 'FibOS';
         this._logEvents = options.logEvents || false;
+        this._logEventId = 0;
         delete options.logEvents;
 
         this._reference = ($(reference).length===0) ? 'body' : reference;

@@ -122,7 +122,7 @@ var UIBasePanel = (function($){
             this._listeners[event] = null;
         },
         trigger: function(event,data){
-            this._gui && this._gui._logEvents && console.log('trigger [%s] -> %s(%s)',this._ID,event,data);
+            this._gui && this._gui._logEvents && console.log('#%d : [%s] -> %s(%o)',++this._gui._logEventId,this._ID,event,data)
 
             var events = this._listeners[event];
             if(!events) return;
