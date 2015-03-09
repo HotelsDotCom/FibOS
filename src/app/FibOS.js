@@ -173,7 +173,6 @@ var FibOS = (function(
             this._panels.groupPanel.on('group_select', function(data){
                 this._components.uiSpacer.selectGroup(data);
                 this._panels.offsetPanel.selectGroup(data);
-                this._components.uiSpacer.updateGroups();
             }.bind(this));
             this._panels.groupPanel.on('group_list_open', function(){
                 this.openPanel('groupPanel');
@@ -505,6 +504,7 @@ var FibOS = (function(
         newspacer.offset({top:parseInt(pos.top+mzero.top), left:parseInt(pos.left+mzero.left)});
         this._components.uiSpacer.setMouseZero(mzero);
         this._components.uiSpacer.dragSpacer(newspacer);
+        this._components.uiSpacer.updateGroups();
 
         return false;
     }
