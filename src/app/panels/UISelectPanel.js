@@ -51,7 +51,7 @@ var UISelectPanel = (function($,UIExtraPanel){
         });
         this.addListener('mousedown', '#'+this._selectors.element+' .fibospacer', function(e){
             this.trigger('clone_spacer', {
-                pos    : {left:e.pageX,top:e.pageY},
+                pos    : {top:e.pageY,left:e.pageX},
                 $clone : $('#'+this._selectors.element),
                 spacer : e.currentTarget
             });
@@ -68,10 +68,7 @@ var UISelectPanel = (function($,UIExtraPanel){
      ********************/
 
     UISelectPanel.prototype.toggleCloneDisplay = function(show) {
-        if(show)
-            $('#'+this._selectors.element).show();
-        else
-            $('#'+this._selectors.element).hide();
+        $('#'+this._selectors.element)[show?'show':'hide']();
     };
 
     /********************

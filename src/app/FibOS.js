@@ -493,13 +493,13 @@ var FibOS = (function(
     }
 
     function fiboClone(pos,spacer,$clone){
+        var mzero = {top:-pos.top,left:-pos.left};
+        mzero.top  += $(document).scrollTop()  + $clone.position().top + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
+        mzero.left += $(document).scrollLeft() + $clone.position().left + parseInt($clone.css('padding-left'));
+
         var spacernum = parseInt(this._components.uiSpacer.getSpacerType(spacer));
         var newspacer = this._components.uiSpacer.addNewSpacer(spacernum);
         if(!newspacer) return true;
-
-        var mzero = {top:newspacer.position().top-pos.top,left:newspacer.position().left-pos.left};
-        mzero.top  += $(document).scrollTop()  + $clone.position().top + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
-        mzero.left += $(document).scrollLeft() + $clone.position().left + parseInt($clone.css('padding-left'));
 
         newspacer.offset({top:parseInt(pos.top+mzero.top), left:parseInt(pos.left+mzero.left)});
         this._components.uiSpacer.setMouseZero(mzero);
