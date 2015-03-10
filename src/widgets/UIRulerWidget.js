@@ -81,7 +81,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
             ruler        :{'z-index':'1',position:'absolute',border:'0 solid #000'},
             ruler_v      :{'border-bottom-width':'1px',left:'0 !important'},
             ruler_h      :{'border-right-width':'1px',top:'0 !important'},
-            ruler_top    :{'z-index':'2',position:'absolute',width:this._options.rulerWidth+'px',height:this._options.rulerWidth+'px',top:'-'+this._options.rulerWidth+'px',left:'-'+this._options.rulerWidth+'px',background:'#fff','border-right':'1px solid #000000','border-bottom':'1px solid #000000'},
+            rulers_top   :{'z-index':'2',position:'absolute',width:this._options.rulerWidth+'px',height:this._options.rulerWidth+'px',top:'-'+this._options.rulerWidth+'px',left:'-'+this._options.rulerWidth+'px',background:'#fff','border-right':'1px solid #000000','border-bottom':'1px solid #000000'},
             ruler_min    :{width:(this._options.rulerMin-1)+'px',height:(this._options.rulerMin-1)+'px'},
             ruler_med    :{width:(this._options.rulerMed-1)+'px',height:(this._options.rulerMed-1)+'px'},
             ruler_max    :{width:(this._options.rulerMax-1)+'px',height:(this._options.rulerMax-1)+'px'},
