@@ -27,7 +27,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
      ********************/
 
     UIRulerWidget.prototype.initOptions = function(options) {
-        this._extendObject(this._options, {
+        this.setOptions({
             guidelinesContainer : '#ruler_guides', //where guidelines will be appended
             showMousePos        : true,            //toggle display of mouse coordinates
             showRulerV          : true,            //toggle display of vertical ruler
@@ -36,8 +36,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
             rulerUnit           : 5,               //minimum unit interval (in pixel)
             rulerStepMin        : 2,               //number of minimum units before medium tick
             rulerStepMed        : 5                //number of medium tick before max tick
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
 
         var op = this._options;
         if(!op.rulerMin) op.rulerMin = op.rulerUnit;

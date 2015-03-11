@@ -30,14 +30,13 @@ var UISliderWidget = (function($,UIBaseWidget) {
      ********************/
 
     UISliderWidget.prototype.initOptions = function(options) {
-        this._extendObject(this._options, {
+        this.setOptions({
             minValue     : 0,     //minimum value accepted
             maxValue     : 100,   //maximum value accepted
             initialValue : 100,   //initial value (between min and max values)
             stepValue    : 1,     //step value for handler dragging
             callback     : null   //callback on slider value change
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
 
         var op = this._options;
         if(op.maxValue<=op.minValue)     op.maxValue = op.minValue+op.stepValue;

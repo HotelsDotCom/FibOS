@@ -36,7 +36,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpriterWidget.prototype.initOptions = function(options) {
-        this._extendObject(this._options, {
+        this.setOptions({
             visible   : true,    // default visibility before and right after sprites loaded
             opacity   : '0.3',   // obscurers opacity
             color     : '#f00',  // obscurers color
@@ -44,8 +44,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
             image     : '',      // sprites background image pattern
             domain    : '',      // domain accepted (will not load images outside domain)
             callback  : null     // callback triggered when all sprites are loaded (after analyze)
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
     };
 
     UISpriterWidget.prototype.initStyles = function(extension) {

@@ -36,7 +36,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpacerWidget.prototype.initOptions = function(options) {
-        this._extendObject(this._options, {
+        this.setOptions({
             localStorage  : 'fibonacciGroups',
             spacerClass   : 'fibospacer',
             spacerMatch   : /fibospacer|fs|_| /g,
@@ -47,8 +47,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
             spacerMin     : 3,
             spacerSymbols : [{s:'•',f:2.8,l:1},{s:'★',f:1,l:1.09}],
             spacerColors  : ['#0071bc','#ed1e79','#8cc63f','#fbb03b']
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
     };
 
     UISpacerWidget.prototype.initStyles = function(extension) {

@@ -27,7 +27,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
      ********************/
 
     UIMarkerWidget.prototype.initOptions = function(options) {
-        this._extendObject(this._options, {
+        this.setOptions({
             checkUseMarker : null,          //if this function returns false the marker won't be applied
             checkUseFont   : null,          //if this function returns false the fontinfo won't be applied
             markerClass    : 'fiboMarker',  //common highlight element class
@@ -40,9 +40,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
                 h1:true,h2:true,h3:true,h4:true,h5:true,h6:true,
                 a:true,input:true,select:true,textfield:true,label:true
             }
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
-        this._extendObject(this._options,{excluded:(this._options.excluded===''?'':this._options.excluded+',')+'.'+this._options.fontClass});
+        },options);
+        this._options.excluded = (this._options.excluded===''?'':this._options.excluded+',')+'.'+this._options.fontClass;
     };
 
     UIMarkerWidget.prototype.initStyles = function(extension) {

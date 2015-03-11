@@ -41,7 +41,9 @@ var UIBaseWidget = (function($){
          ********************/
 
         initOptions: function(options) {
-            if(options) this._extendObject(this._options, options);
+            this.setOptions({
+                // your code here
+            },options);
         },
 
         initStyles: function(extension) {
@@ -69,6 +71,11 @@ var UIBaseWidget = (function($){
 
         show: function(){this.$el.show();},
         hide: function(){this.$el.hide();},
+
+        setOptions: function(options,override) {
+            this._extendObject(this._options, options);
+            this._extendObject(this._options, override);
+        },
 
         /********************
          * INTERNAL METHODS
@@ -125,6 +132,7 @@ var UIBaseWidget = (function($){
 
         //extend each property of the given object with the same property of the given extension
         _extendObject: function(obj,ext) {
+            if(!ext) return;
             for(var p in ext){
                 if(ext.hasOwnProperty(p)){
                     if(obj[p] && (obj[p] instanceof Object) && !(obj[p] instanceof Array)) this._extendObject(obj[p],ext[p]);
