@@ -48,16 +48,12 @@ var UISpriterWidget = (function($,UIBaseWidget){
     };
 
     UISpriterWidget.prototype.initStyles = function(extension) {
-        this._extendObject(this._styles,{
+        var bg = (this._options.image && this._options.image!=='') ? 'url("'+this._options.image+'")' : 'none';
+        this.setStyles({
             main                : {position:'relative',display:this._options.visible?'block':'none'},
-            obscurers_container : {position:'relative',display:'block',top:'0',left:'0','text-align':'left',border:'1px solid '+this._options.border,visibility:'hidden'},
+            obscurers_container : {position:'relative',display:'block',background:bg,top:'0',left:'0','text-align':'left',border:'1px solid '+this._options.border,visibility:'hidden'},
             sprite_obscurer     : {position:'absolute',display:'block',background:this._options.color,opacity:this._options.opacity}
-        });
-
-        if(this._options.image && this._options.image!=='')
-            this._styles.obscurers_container.background = 'url("'+this._options.image+'") repeat scroll 0 0 transparent';
-
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        },extension);
     };
 
     /********************

@@ -57,7 +57,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             fontinfo_p3 : '.'+fclass+' p.fi3'
         };
 
-        this._extendObject(this._styles, {
+        this.setStyles({
             main        :{position:'absolute'},
             marker      :{position:'absolute !important','z-index':'1',background:'#0ff',opacity:'0.5'},
             fontinfo    :{position:'absolute !important','z-index':'2',background:'rgba(34, 34, 34, 0.7)',border:'1px solid #fff',padding:'3px','font-family':'Open Sans',color:'#fff'},
@@ -65,8 +65,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             fontinfo_p1 :{'font-size':'13px','font-weight':'700','margin-top':'-4px'},
             fontinfo_p2 :{'font-size':'10px','font-weight':'400','margin':'-5px 0'},
             fontinfo_p3 :{'font-size':'14px','font-weight':'600','margin-bottom':'-4px'}
-        });
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        },extension);
     };
 
     UIMarkerWidget.prototype.initEvents = function() {

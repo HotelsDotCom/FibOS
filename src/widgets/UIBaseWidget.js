@@ -41,13 +41,13 @@ var UIBaseWidget = (function($){
          ********************/
 
         initOptions: function(options) {
-            this.setOptions({
-                // your code here
-            },options);
+            // does nothing
+            // override this method in order to setup options
         },
 
         initStyles: function(extension) {
-            if(extension) this._extendObject(this._styles, extension);
+            // does nothing
+            // override this method in order to setup styles
         },
 
         initEvents: function() {
@@ -72,9 +72,11 @@ var UIBaseWidget = (function($){
         show: function(){this.$el.show();},
         hide: function(){this.$el.hide();},
 
-        setOptions: function(options,override) {
-            this._extendObject(this._options, options);
-            this._extendObject(this._options, override);
+        setOptions: function(/* option objects */) {
+            for(var i in arguments) if(arguments.hasOwnProperty(i)) this._extendObject(this._options, arguments[i]);
+        },
+        setStyles: function(/* style objects */) {
+            for(var i in arguments) if(arguments.hasOwnProperty(i)) this._extendObject(this._styles, arguments[i]);
         },
 
         /********************

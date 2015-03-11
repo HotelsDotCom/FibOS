@@ -45,13 +45,12 @@ var UISliderWidget = (function($,UIBaseWidget) {
     };
 
     UISliderWidget.prototype.initStyles = function(extension) {
-        this._extendObject(this._styles, {
+        this.setStyles({
             main          :{position:'relative',width:'100px',height:'20px',background:'rgba(100,100,100,.4)'},
             slider_bar    :{position:'absolute',width:'100%', height:'3px', background:'rgb(200,200,200)',top:'9px'},
             slider_handler:{position:'absolute',width:'10px', height:'20px',background:'rgb(100,100,100)',top:'0',left:'0'},
             slider_output :{position:'absolute',width:'34px', height:'20px',background:'#fff',top:'0',right:'-34px','text-indent':'0','text-align':'center','font-size':'12px','line-height':'20px',cursor:'default'}
-        });
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        },extension);
     };
 
     UISliderWidget.prototype.createSubElements = function() {

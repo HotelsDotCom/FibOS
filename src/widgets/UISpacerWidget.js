@@ -63,14 +63,12 @@ var UISpacerWidget = (function($,UIBaseWidget){
             shadow: true,
             after: true
         };
-        this._extendObject(this._styles, {
+
+        this.setStyles({
             main   :{position:'absolute',top:referencePos.call(this).top+'px',left:referencePos.call(this).left+'px',width:'0',height:'0',overflow:'visible'},
             spacer :{position:'absolute',display:'block',cursor:'pointer',overflow:'hidden','font-family':'Arial',outline:'0'},
             shadow :{'-webkit-box-shadow':shad,'-moz-box-shadow':shad,'box-shadow':shad}
-        });
-        this._extendObject(this._styles, generateSpacersStyles.call(this));
-
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        }, generateSpacersStyles.call(this), extension);
     };
 
     UISpacerWidget.prototype.initEvents = function() {
