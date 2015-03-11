@@ -27,7 +27,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
      ********************/
 
     UIRulerWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this._extendObject(this._options, {
             guidelinesContainer : '#ruler_guides', //where guidelines will be appended
             showMousePos        : true,            //toggle display of mouse coordinates
             showRulerV          : true,            //toggle display of vertical ruler
@@ -73,7 +73,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
             rulerh_max   : '.rulers_h .ruler_max'
         };
 
-        this.extendObject(this._styles, {
+        this._extendObject(this._styles, {
             main         :{position:'absolute',top:rulerZero.call(this).top+'px',left:rulerZero.call(this).left+'px'},
             rulers_cont  :{position:'absolute',overflow:'hidden',background:'rgba(255,255,255,.8)'},
             rulers_v     :{width:this._options.rulerWidth+'px',height:rulerH.call(this)+'px',top:'0',left:'-'+this._options.rulerWidth+'px'},
@@ -93,13 +93,13 @@ var UIRulerWidget = (function($,UIBaseWidget){
             guide_v      :{height:rulerH.call(this)+'px',cursor:'ew-resize'},
             guide_h      :{width:rulerW.call(this)+'px',cursor:'ns-resize'}
         });
-        this.extendObject(this._styles,{
+        this._extendObject(this._styles,{
             ruler_labelv :{'-webkit-transform':'rotate(-90deg)','-moz-transform':'rotate(-90deg)','-ms-transform':'rotate(-90deg)','-o-transform':'rotate(-90deg)',filter:'progid:DXImageTransform.Microsoft.BasicImage(rotation=3)'}
         });
 
         UIBaseWidget.prototype.initStyles.call(this, extension);
 
-        this.extendObject(this._styles,{
+        this._extendObject(this._styles,{
             rulerv_min: {width:pxMin+'px !important'},
             rulerv_med: {width:pxMed+'px !important'},
             rulerv_max: {width:pxMax+'px !important'},
@@ -140,10 +140,6 @@ var UIRulerWidget = (function($,UIBaseWidget){
     UIRulerWidget.prototype.afterInit = function() {
         updateRulersPosition.call(this);
     };
-
-    /********************
-     * PUBLIC METHODS
-     ********************/
 
     /********************
      * PRIVATE METHODS

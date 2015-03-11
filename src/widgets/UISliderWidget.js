@@ -30,7 +30,7 @@ var UISliderWidget = (function($,UIBaseWidget) {
      ********************/
 
     UISliderWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this._extendObject(this._options, {
             minValue     : 0,     //minimum value accepted
             maxValue     : 100,   //maximum value accepted
             initialValue : 100,   //initial value (between min and max values)
@@ -46,7 +46,7 @@ var UISliderWidget = (function($,UIBaseWidget) {
     };
 
     UISliderWidget.prototype.initStyles = function(extension) {
-        this.extendObject(this._styles, {
+        this._extendObject(this._styles, {
             main          :{position:'relative',width:'100px',height:'20px',background:'rgba(100,100,100,.4)'},
             slider_bar    :{position:'absolute',width:'100%', height:'3px', background:'rgb(200,200,200)',top:'9px'},
             slider_handler:{position:'absolute',width:'10px', height:'20px',background:'rgb(100,100,100)',top:'0',left:'0'},

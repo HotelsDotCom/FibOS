@@ -36,7 +36,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpacerWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this._extendObject(this._options, {
             localStorage  : 'fibonacciGroups',
             spacerClass   : 'fibospacer',
             spacerMatch   : /fibospacer|fs|_| /g,
@@ -64,12 +64,12 @@ var UISpacerWidget = (function($,UIBaseWidget){
             shadow: true,
             after: true
         };
-        this.extendObject(this._styles, {
+        this._extendObject(this._styles, {
             main   :{position:'absolute',top:referencePos.call(this).top+'px',left:referencePos.call(this).left+'px',width:'0',height:'0',overflow:'visible'},
             spacer :{position:'absolute',display:'block',cursor:'pointer',overflow:'hidden','font-family':'Arial',outline:'0'},
             shadow :{'-webkit-box-shadow':shad,'-moz-box-shadow':shad,'box-shadow':shad}
         });
-        this.extendObject(this._styles, generateSpacersStyles.call(this));
+        this._extendObject(this._styles, generateSpacersStyles.call(this));
 
         UIBaseWidget.prototype.initStyles.call(this, extension);
     };
@@ -90,6 +90,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
     /********************
      * PUBLIC METHODS
      ********************/
+
+    UISpacerWidget.prototype.getFibonacci = function(min,max){
+        fibonacciSequence(min,max)
+    };
 
     UISpacerWidget.prototype.getSpacersList = function(onlyActiveSpacers){
         return spacersFilter.call(this, onlyActiveSpacers ? this._options.spacerMin-1 : 0);

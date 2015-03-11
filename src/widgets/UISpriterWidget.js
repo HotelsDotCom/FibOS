@@ -36,7 +36,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpriterWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this._extendObject(this._options, {
             visible   : true,    // default visibility before and right after sprites loaded
             opacity   : '0.3',   // obscurers opacity
             color     : '#f00',  // obscurers color
@@ -49,7 +49,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
     };
 
     UISpriterWidget.prototype.initStyles = function(extension) {
-        this.extendObject(this._styles,{
+        this._extendObject(this._styles,{
             main                : {position:'relative',display:this._options.visible?'block':'none'},
             obscurers_container : {position:'relative',display:'block',top:'0',left:'0','text-align':'left',border:'1px solid '+this._options.border,visibility:'hidden'},
             sprite_obscurer     : {position:'absolute',display:'block',background:this._options.color,opacity:this._options.opacity}
