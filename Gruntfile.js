@@ -79,6 +79,22 @@ module.exports = function(grunt) {
                 ],
                 dest: 'target/temp/fibos_full.js'
             },
+            
+            // --- --- //
+            
+            test: {
+                options: {
+                    banner: '<%= opt.header %><%= opt.nl %>'+
+                            'var test = (function(){' + '<%= opt.nl %>',
+                    footer: '<%= opt.nl %>'+
+                            'return test;}());'
+                },
+                src: [
+                    'target/temp/UIWidgets.js',
+                    'src/app/init/widgets_test.js'
+                ],
+                dest: 'build/uiWidgets_test-<%= pkg.version %>.js'
+            },
 
             // --- concat FINAL (with initializer for brand) --- //
 
@@ -119,6 +135,13 @@ module.exports = function(grunt) {
             widget: {
                 options: { banner: '<%= opt.wheader %><%= opt.nl %>' },
                 files: {'target/ui<%= widgetName %>-<%= pkg.version %>.min.js': ['target/ui<%= widgetName %>-<%= pkg.version %>.js']}
+            },
+            
+            // --- minify WIDGETS for test purposes --- //
+            
+            test: {
+                options: {},
+                files: {'target/uiWidgets_test-<%= pkg.version %>.min.js': ['target/uiWidgets_test-<%= pkg.version %>.js']}
             }
 
         },
@@ -296,6 +319,15 @@ module.exports = function(grunt) {
         }else{
             grunt.log.error('[ERROR] task WIDGET needs the widget name as argument');
         }
+    });
+    
+    grunt.registerTask('test', '', function(){
+        grunt.task.run(
+            'clean:target',
+            'concat:widgets',
+            'concat:test',
+            'clean:target'
+        );
     });
 
     // --- ALIAS tasks --- //
