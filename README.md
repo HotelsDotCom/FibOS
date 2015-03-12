@@ -1,9 +1,9 @@
 # FibOS
-Bookmarklet UI Tool for easily check layout implementations.
+[Usage](#usage) | 
+[Build](#build) | 
+[Contributing](#contributing)
 
-- [Here](#usage) is how to use the tool.
-- [Here](#build) is how to build and debug the tool.
-- [Here](#contributing) is how to customize the tool and its components.
+Bookmarklet UI Tool for easily check layout implementations.
 
 Use this string as "location" for the bookmarklet:
 
@@ -150,7 +150,7 @@ Once a lineguide is dropped onto the page, it can be moved with the mouse or arr
 Click here to show/hide the Marker feature.
 
 While this toggle is active, the user can click on any text in the page revealing 2 type of informations:
-- a cyano semi-transparent box over the text, highlighting its block
+- a cyan blue semi-transparent box over the text, highlighting its block
 - a small box on top of the text with font-family, font-weight and font-size css properties
 
 Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).
@@ -160,7 +160,7 @@ Disabling this toggle, will hide all Markers already placed as well as disable t
 ---
 
 ## Build
-First of all, NodeJS should be installed.
+First of all, [NodeJS](https://nodejs.org/download/) should be installed.
 
 Once the project is cloned, go into the project's root folder and run:
 
