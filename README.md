@@ -160,7 +160,7 @@ Disabling this toggle, will hide all Markers already placed as well as disable t
 ---
 
 ## Build
-First of all, NodeJS should be installed.
+First of all, [NodeJS](https://nodejs.org/download/) should be installed.
 
 Once the project is cloned, go into the project's root folder and run:
 
