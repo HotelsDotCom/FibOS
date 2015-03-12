@@ -44,7 +44,7 @@ var test = {
     uiSpriter: function(){
         var sw = new UISpriterWidget('TEST');
         $('body').append(sw.$el);
-        sw.getCSSImages(sw.imagesAnalyzed.bind(sw));
+        sw.analyze();
     },
 
     uiSlider: function(){
