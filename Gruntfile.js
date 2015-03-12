@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                 separator: grunt.util.linefeed+';'+grunt.util.linefeed
             },
 
-            // --- concat WIDGETS (for FibOS) --- //
+            // --- concat WIDGETS (for FibOS and uiWidgetsTest) --- //
 
             widgets: {
                 src: [
@@ -80,22 +80,6 @@ module.exports = function(grunt) {
                 dest: 'target/temp/fibos_full.js'
             },
             
-            // --- --- //
-            
-            test: {
-                options: {
-                    banner: '<%= opt.header %><%= opt.nl %>'+
-                            'var test = (function(){' + '<%= opt.nl %>',
-                    footer: '<%= opt.nl %>'+
-                            'return test;}());'
-                },
-                src: [
-                    'target/temp/UIWidgets.js',
-                    'src/app/init/widgets_test.js'
-                ],
-                dest: 'build/uiWidgets_test-<%= pkg.version %>.js'
-            },
-
             // --- concat FINAL (with initializer for brand) --- //
 
             fibos: {
@@ -103,17 +87,28 @@ module.exports = function(grunt) {
                 dest: 'target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.js'
             },
 
-            // --- concat ONLY WIDGETS --- //
+            // --- concat ONLY WIDGET (single task for widget) --- //
 
             widget: {
                 options: {
-                    banner: '<%= opt.header %><%= opt.nl %>'+
+                    banner: '<%= opt.wheader %><%= opt.nl %>'+
                             'var ui<%= widgetName %> = (function(){' + '<%= opt.nl %>',
                     footer: '<%= opt.nl %>'+
                             'return UI<%= widgetName %>Widget;}());'
                 },
                 src: ['src/widgets/UIBaseWidget.js','src/widgets/UI<%= widgetName %>Widget.js'],
                 dest: 'target/ui<%= widgetName %>-<%= pkg.version %>.js'
+            },
+
+            // --- concat TEST INIT (with all minified widgets) --- //
+
+            test: {
+                options: {
+                    banner: 'var test = (function(){' + '<%= opt.nl %>',
+                    footer: '<%= opt.nl %>' + 'return test;}());'
+                },
+                src: ['target/temp/UIWidgets.min.js','src/app/init/widgets_test.js'],
+                dest: 'target/uiWidgetsTest-<%= pkg.version %>.js'
             }
 
         },
@@ -138,10 +133,12 @@ module.exports = function(grunt) {
             },
             
             // --- minify WIDGETS for test purposes --- //
-            
+
+            widgets: {
+                files: {'target/temp/UIWidgets.min.js': ['target/temp/UIWidgets.js']}
+            },
             test: {
-                options: {},
-                files: {'target/uiWidgets_test-<%= pkg.version %>.min.js': ['target/uiWidgets_test-<%= pkg.version %>.js']}
+                files: {'target/uiWidgetsTest-<%= pkg.version %>.min.js': ['target/uiWidgetsTest-<%= pkg.version %>.js']}
             }
 
         },
@@ -325,7 +322,10 @@ module.exports = function(grunt) {
         grunt.task.run(
             'clean:target',
             'concat:widgets',
+            'uglify:widgets',
             'concat:test',
+            'uglify:test',
+            'copy:widget',
             'clean:target'
         );
     });

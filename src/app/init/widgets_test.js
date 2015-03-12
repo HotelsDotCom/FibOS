@@ -8,6 +8,7 @@ var test = {
         var sw = new UISpriterWidget('TEST');
         $('body').append(sw.$el);
         sw.analyze();
+        return sw;
     },
 
     uiSlider: function(){
@@ -38,6 +39,8 @@ var test = {
 
         var slider_b = new UISliderWidget('SliderB',slider_opt_b);
         $('body').append(slider_b.$el);
+
+        return UISliderWidget;
     },
 
     uiRuler: function(){
@@ -60,6 +63,8 @@ var test = {
 
         var myRuler = new UIRulerWidget('myRuler',myOptions);
         $('body').append(myRuler.$el);
+
+        return myRuler;
     },
 
     uiMarker: function(){
@@ -84,7 +89,9 @@ var test = {
         var myMarker = new UIMarkerWidget('myMarker', myOptions);
         $('body').append(myMarker.$el);
         myMarker.initEvents();
-        myMarker.toggleDefaults(true);
+        myMarker.toggleListener(true);
+
+        return myMarker;
     },
 
     uiSpacer: function(){
@@ -95,7 +102,11 @@ var test = {
         };
         var myspacer = new UISpacerWidget('fibo_container',myOptions);
         $('body').append(myspacer.$el);
-        myspacer.addNewSpacer(20);
+        var sp_20 = myspacer.addNewSpacer(20);
+        console.log(sp_20);
+        myspacer.dragSpacer(sp_20);
+
+        return myspacer;
     }
 
 };
