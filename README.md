@@ -150,7 +150,7 @@ Once a lineguide is dropped onto the page, it can be moved with the mouse or arr
 Click here to show/hide the Marker feature.
 
 While this toggle is active, the user can click on any text in the page revealing 2 type of informations:
-- a cyano semi-transparent box over the text, highlighting its block
+- a cyan blue semi-transparent box over the text, highlighting its block
 - a small box on top of the text with font-family, font-weight and font-size css properties
 
 Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).
