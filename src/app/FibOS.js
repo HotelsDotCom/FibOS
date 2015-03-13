@@ -54,7 +54,7 @@ var FibOS = (function(
                     selector = '#'+this._ID;
                     if(s!='main') selector += ' '+s;
 
-                    $styles.append(selector + ' {'+UIBaseWidget.prototype.styleObjectToString(styleObj[s])+'}');
+                    $styles.append(selector + ' {'+UIBaseWidget.prototype._styleObjectToString(styleObj[s])+'}');
                 }
             }
 
