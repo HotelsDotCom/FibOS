@@ -13,8 +13,8 @@ var UISpriterWidget = (function($,UIBaseWidget){
      */
     function UISpriterWidget(ID, options) {
         this.spritesInfo = {};
-        this.spritesLoaded = 0; // updated by didLoadSprite()
         this.spritesTotal = 0;  // updated by getCSSImages()
+        this.spritesLoaded = 0; // updated by didLoadSprite()
 
         UIBaseWidget.call(this, ID, options);
 
@@ -74,18 +74,28 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     UISpriterWidget.prototype.toggleSprite = function(sid) {
         var sprite,$cont;
-        var $sprites = $('#'+this._ID);
         var $sprites_bg = $('#fibo_sprites_bg');
 
-        $sprites.hide();
+        this.$el.hide();
         $sprites_bg.show();
         $('.obscurers_container').hide();
         if(sid!=='hide_sprites'){
             sprite = sid.replace('toggle_sprite_','');
             $cont = $('.obscurers_container#'+sprite);
             $cont.show();
-            $sprites.show();
+            this.$el.show();
         }
+    };
+    
+    UISpriterWidget.prototype.logSpritesList = function() {
+        var log = [],
+            sprites = this.$el.find('.obscurers_container');
+        
+        sprites.each(function(i,e){
+            log.push($(e).attr('id'));
+        });
+        
+        console.log(log);
     };
 
     /********************

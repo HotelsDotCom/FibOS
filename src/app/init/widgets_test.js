@@ -7,6 +7,7 @@ var test = {
         });
         $('body').append(sw.$el);
         sw.analyze();
+        sw.logSpritesList();
         return sw;
     },
 
