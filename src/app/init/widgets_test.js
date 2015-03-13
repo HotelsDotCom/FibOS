@@ -1,11 +1,10 @@
-/**
- * Created by fdimonte on 12/03/2015.
- */
-
 var test = {
 
     uiSpriter: function(){
-        var sw = new UISpriterWidget('TEST');
+        var sw = new UISpriterWidget('TEST',{
+            visible:false,
+            image:'data:image/png;base64,'+images.alpha_pattern
+        });
         $('body').append(sw.$el);
         sw.analyze();
         return sw;
