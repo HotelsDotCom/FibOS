@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 //separator: grunt.util.linefeed+';'+grunt.util.linefeed
             },
 
-            // --- concat WIDGETS (for FibOS and uiWidgetsTest) --- //
+            // --- concat WIDGETS (for FibOS and uiWidgets-test) --- //
 
             uiwidgets: {
                 src: [
@@ -114,7 +114,7 @@ module.exports = function(grunt) {
                     'target/temp/images.js',
                     'src/app/init/widgets_test.js'
                 ],
-                dest: 'target/temp/uiWidgetsTest-<%= pkg.version %>.js'
+                dest: 'target/temp/uiWidgets-test-<%= pkg.version %>.js'
             },
             
             fwp: {
@@ -154,7 +154,7 @@ module.exports = function(grunt) {
             },
             test: {
                 options: { banner: '<%= opt.fwp_header %>/** built for TESTING purposes **/<%= opt.nl %>' },
-                files: {'target/uiWidgetsTest-<%= pkg.version %>.min.js': ['target/temp/uiWidgetsTest-<%= pkg.version %>.js']}
+                files: {'target/uiWidgets-test-<%= pkg.version %>.min.js': ['target/temp/uiWidgets-test-<%= pkg.version %>.js']}
             },
             fwp: {
                 options: { banner: '<%= opt.fwp_header %><%= opt.nl %>' },
