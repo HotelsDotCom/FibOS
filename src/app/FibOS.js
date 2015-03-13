@@ -215,7 +215,7 @@ var FibOS = (function(
         },
 
         addWidget: function(widget) {
-            this.$el.append(widget.$el);
+            widget.appendTo(this.$el);
         },
         addPanel: function(panel) {
             this.addPanelTo(panel,this.$panels);

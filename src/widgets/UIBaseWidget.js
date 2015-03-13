@@ -69,6 +69,12 @@ var UIBaseWidget = (function($){
          * PUBLIC METHODS
          ********************/
 
+        appendTo: function($elem) {
+            if(!$elem) return;
+            if($elem instanceof String) $elem = $($elem);
+            this.$el.appendTo($elem);
+        },
+        
         show: function(){this.$el.show();},
         hide: function(){this.$el.hide();},
 

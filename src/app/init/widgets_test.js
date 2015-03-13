@@ -5,7 +5,7 @@ var test = {
             visible:false,
             image:'data:image/png;base64,'+images.alpha_pattern
         });
-        $('body').append(sw.$el);
+        sw.appendTo('body');
         sw.analyze();
         sw.logSpritesList();
         return sw;
@@ -35,10 +35,10 @@ var test = {
         };
 
         var slider_a = new UISliderWidget('SliderA',slider_opt_a);
-        $('body').append(slider_a.$el);
-
         var slider_b = new UISliderWidget('SliderB',slider_opt_b);
-        $('body').append(slider_b.$el);
+
+        slider_a.appendTo('body');
+        slider_b.appendTo('body');
 
         return UISliderWidget;
     },
@@ -62,7 +62,7 @@ var test = {
         };
 
         var myRuler = new UIRulerWidget('myRuler',myOptions);
-        $('body').append(myRuler.$el);
+        myRuler.appendTo('body');
 
         return myRuler;
     },
@@ -87,7 +87,7 @@ var test = {
         };
 
         var myMarker = new UIMarkerWidget('myMarker', myOptions);
-        $('body').append(myMarker.$el);
+        myMarker.appendTo('body');
         myMarker.initEvents();
         myMarker.toggleListener(true);
 
@@ -100,13 +100,13 @@ var test = {
             spacerMin     : 1,
             spacersList   : [1,5,10,15,20,25,30,35,40,45,50,55,60,65]
         };
-        var myspacer = new UISpacerWidget('fibo_container',myOptions);
-        $('body').append(myspacer.$el);
-        var sp_20 = myspacer.addNewSpacer(20);
+        var mySpacer = new UISpacerWidget('fibo_container',myOptions);
+        mySpacer.appendTo('body');
+        var sp_20 = mySpacer.addNewSpacer(20);
         console.log(sp_20);
-        myspacer.dragSpacer(sp_20);
+        mySpacer.dragSpacer(sp_20);
 
-        return myspacer;
+        return mySpacer;
     }
 
 };
