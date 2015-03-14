@@ -14,6 +14,7 @@ var FibOS = (function(
 
         this._ID = 'fibos';
         this._fibosTitle = 'FibOS';
+        this._fibosVersion = fibosVersion || '';
         this._logEvents = options.logEvents || false;
         this._logEventId = 0;
         delete options.logEvents;
@@ -63,7 +64,7 @@ var FibOS = (function(
         createElement: function() {
             $('#'+this._ID).remove();
 
-            var $fibo_title  = $('<h1/>').text(this._fibosTitle);
+            var $fibo_title  = $('<h1/>').text(this._fibosTitle).append($('<small/>').text(this._fibosVersion));
 
             this.$el         = $('<div/>').attr('id',this._ID);
             this.$background = $('<div/>').attr('id','fibo_bg');
@@ -330,7 +331,7 @@ var FibOS = (function(
                     '#fibo_panels > h1':
                         {'font-size':'18px',margin:'0 0 5px 5px',padding:'0'},
                     '#fibo_panels > h1 > small':
-                        {'font-size':'10px','font-weight':'400'},
+                        {'font-size':'10px','font-weight':'400','margin-left':'3px'},
 
                     // control panel
                     '#fibo_bg':

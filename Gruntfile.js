@@ -69,7 +69,8 @@ module.exports = function(grunt) {
             full: {
                 options: {
                     banner: '<%= opt.fibos_header %><%= brandMsg %><%= opt.nl %>'+
-                            'var FibOS = (function(){' + '<%= opt.nl %>',
+                            'var FibOS = (function(){' + '<%= opt.nl %>'+
+                            'var fibosVersion = "v<%= pkg.version %>";',
                     footer: '<%= opt.nl %>'+
                             'return FibOS;}());'
                 },
