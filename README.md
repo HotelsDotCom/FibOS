@@ -240,16 +240,15 @@ With `grunt deploy` will be created also all *-latest.min.js files per brand int
 ### Custom initializer
 To set up a new initializer (as for venere or hotels already set) please follow these steps:
 
-1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)
-2. create the new init file under `src/app/init/`
-3. for a brand named `newbrand` add the call to `build:newbrand` into `build-all` task or simply run it in command line
-
-Note for 1: the brandMsg will be used in the final minified file as comment in this form:  
+1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)  
+_note: the brandMsg will be used in the final minified file as comment in this form:_  
 `/** built for <%= brandMsg %> **/`
 
-Note for 2: the initializer file serves as options overrider for each widget that needs to be customized. The `FibOS()` constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if `null` the tool will work for `body` selector).
+2. create the new init file under `src/app/init/`  
+_note: the initializer file serves as options overrider for each widget that needs to be customized. The `FibOS()` constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if `null` the tool will work for `body` selector)._
 
-Note for 3: enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended). If the brand "_newbrand_" is intended to be added, add the `build` task with the new brand as parameter, so that Grunt can append the correct initializer found in `src/app/init/fibos_newbrand.js`, or simply run `grunt build:newbrand` in command line.
+3. enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended)  
+_note: if the brand "newbrand" is intended to be added, add the `build` task with the new brand as parameter, so that Grunt can append the correct initializer found in `src/app/init/fibos_newbrand.js`, or simply run `grunt build:newbrand` in command line._
 
 eg. for a brand named `newbrand` the file `src/app/init/fibos_newbrand.js` should be created with following content as example:
 ```javascript
