@@ -470,6 +470,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
     }
     function dragSpacer($target) {
         $target.parent().append($target);// move to biggest z-index
+        this.updateGroups();
         this.dragged = null;
         this.dragging = $target;
     }
@@ -490,6 +491,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
         this.dragged.focus();
         if(this.dragging){
             this.dragging = null;
+            this.updateGroups();
             if(this._options.moveCallback) this._options.moveCallback(this.dragged);
         }
     }
