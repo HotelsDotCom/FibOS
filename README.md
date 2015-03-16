@@ -171,24 +171,24 @@ With `npm install` all node packages needed by the compiler will be installed in
 
 With the `grunt deploy` command, all files for the project will be created under the `build/` (both minified and full, for debugging) and all the minified will be also copied into `public/[version]/` folder along with `*-latest.min.js` version in `public/` folder.
 
-Eg. With the version `1.0.7`, running `grunt deploy` will produce this file tree:
+Eg. With the version `1.0.2`, running `grunt deploy` will produce this file tree:
 
 ```
 public/
   |- fibos-latest.min.js
   |- fibos-latest-hotels.min.js
   |- fibos-latest-venere.min.js
-  |- 1.0.7/
-    |- fibos-1.0.7.min.js
-    |- fibos-hotels-1.0.7.min.js
-    |- fibos-venere-1.0.7.min.js
+  |- 1.0.2/
+    |- fibos-1.0.2.min.js
+    |- fibos-hotels-1.0.2.min.js
+    |- fibos-venere-1.0.2.min.js
     |- widgets/
-      |- uiMarker-1.0.7-min.js
-      |- uiRuler-1.0.7-min.js
-      |- uiSlider-1.0.7-min.js
-      |- uiSpacer-1.0.7-min.js
-      |- uiSpriter-1.0.7-min.js
-      |- uiWidgets-1.0.7-min.js
+      |- uiMarker-1.0.2-min.js
+      |- uiRuler-1.0.2-min.js
+      |- uiSlider-1.0.2-min.js
+      |- uiSpacer-1.0.2-min.js
+      |- uiSpriter-1.0.2-min.js
+      |- uiWidgets-1.0.2-min.js
 ```
 
 #### Folder cleaners
