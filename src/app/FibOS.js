@@ -196,11 +196,11 @@ var FibOS = (function(
             // panelInput
             this._panels.inputPanel.on('input_import', function(data){
                 this._components.uiSpacer.loadSpacersFromJson(data,true);
-                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
+                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
                 this._panels.groupPanel.showGroupsList(stJson);
             }.bind(this));
             this._panels.inputPanel.on('input_export', function(){
-                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
+                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
                 console.log(stJson);
                 alert("Open your browser's console and see the export string.");
             }.bind(this));
