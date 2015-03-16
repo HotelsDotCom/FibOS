@@ -12,9 +12,9 @@ var UISpriterWidget = (function($,UIBaseWidget){
      * @constructor
      */
     function UISpriterWidget(ID, options) {
-        this.spritesInfo = {};
-        this.spritesTotal = 0;  // updated by getCSSImages()
-        this.spritesLoaded = 0; // updated by didLoadSprite()
+        this._spritesInfo = {};
+        this._spritesTotal = 0;  // updated by getCSSImages()
+        this._spritesLoaded = 0; // updated by didLoadSprite()
 
         UIBaseWidget.call(this, ID, options);
 
@@ -87,7 +87,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
             this.$el.show();
         }
     };
-    
+
     UISpriterWidget.prototype.logSpritesList = function() {
         var log = [];
         this.$el.find('.obscurers_container').each(function(i,e){
@@ -111,10 +111,10 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     //after loading sprite
     function didLoadSprite(spriteNotLoaded) {
-        if((spriteNotLoaded?this.spritesLoaded:++this.spritesLoaded) < this.spritesTotal) return false;
+        if((spriteNotLoaded?this._spritesLoaded:++this._spritesLoaded) < this._spritesTotal) return false;
 
         if(!this._options.visible) spriterHide(this.$el);
-        if(this._options.callback) this._options.callback(this.spritesInfo);
+        if(this._options.callback) this._options.callback(this._spritesInfo);
         return true;
     }
 
@@ -148,33 +148,33 @@ var UISpriterWidget = (function($,UIBaseWidget){
                     size = {w:offW+$elm.width(),h:offH+$elm.height()};
 
                 if(img && img!=='none'){
-                    if(!this.spritesInfo[img]) this.spritesInfo[img]=[];
-                    this.spritesInfo[img].push({pos:pos,size:size});
+                    if(!this._spritesInfo[img]) this._spritesInfo[img]=[];
+                    this._spritesInfo[img].push({pos:pos,size:size});
                 }
             }
 
         }.bind(this));
         console.log('DONE!');
 
-        this.spritesTotal = spritesInfoLength.call(this);
+        this._spritesTotal = spritesInfoLength.call(this);
         if(cb) {
-            cb(this.spritesInfo,externalCB);
+            cb(this._spritesInfo,externalCB);
             return true;
         }
-        else return this.spritesInfo;
+        else return this._spritesInfo;
     }
-    
+
     function bgNumericPosition($elem) {
         var url = $elem.css('background-image');
         var img = getImageSize(url);
-        
+
         var width = $elem.width(),
             height = $elem.height(),
             pos = $elem.css('background-position').split(' '),
             px = pos[0],
             py = pos[1];
-        
-        px = px=='left'   || px=='0%'   ? 0 : 
+
+        px = px=='left'   || px=='0%'   ? 0 :
              px=='center' || px=='50%'  ? -(img.width-width)/2 :
              px=='right'  || px=='100%' ? -(img.width-width) :
              parseInt(px);
@@ -183,10 +183,10 @@ var UISpriterWidget = (function($,UIBaseWidget){
              py=='center' || py=='50%'  ? -(img.height-height)/2 :
              py=='bottom' || py=='100%' ? -(img.height-height) :
             parseInt(py);
-        
+
         return {x:-px, y:-py};
     }
-    
+
     function getImageSize(img) {
         var url = img.replace(/url\((['"])?(.*?)\1\)/gi, '$2').split(',')[0];
         var $img = $('<img/>').attr('src',url);
@@ -224,11 +224,11 @@ var UISpriterWidget = (function($,UIBaseWidget){
     function spriteImage(cssUrl,$cont) {
 
         willLoadSprite.call(this);
-        
+
         var size = getImageSize(cssUrl);
 
         $cont.css(size);
-        
+
         if(!this._options.visible) spriterHide($cont);
 
         didLoadSprite.call(this);
@@ -262,7 +262,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
     //number of spritesInfo properties (ie. number of sprites)
     function spritesInfoLength() {
         var s,tot = 0;
-        for(s in this.spritesInfo) if(this.spritesInfo.hasOwnProperty(s)) tot++;
+        for(s in this._spritesInfo) if(this._spritesInfo.hasOwnProperty(s)) tot++;
         return tot;
     }
 

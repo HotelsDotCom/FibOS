@@ -152,7 +152,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
                     .on('mousemove.multiselect',this.selectMulti.bind(this))
                     .on('mouseup.multiselect',this.selectEnd.bind(this));
             }else{
-                $('#'+this.id_multipar).find('span').text($('#'+this.fibos._components.uiSpacer.lastUsedGroup).find('div').length);
+                $('#'+this.id_multipar).find('span').text(this.fibos._components.uiSpacer.spacersGroupLength());
                 $('body')
                     .css('cursor','inherit')
                     .off('.multiselect');

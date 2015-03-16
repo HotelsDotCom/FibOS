@@ -12,8 +12,8 @@ var UISliderWidget = (function($,UIBaseWidget) {
      * @constructor
      */
     function UISliderWidget(ID, options) {
-        this.sliding = false;
-        this.mousezero = 0;
+        this._sliding = false;
+        this._mousezero = 0;
 
         UIBaseWidget.call(this, ID, options);
     }
@@ -136,19 +136,19 @@ var UISliderWidget = (function($,UIBaseWidget) {
     }
     //start sliding
     function slideStart(e) {
-        this.mousezero = this.slider_handler.position().left - mouseposInside.call(this,e.pageX);
-        this.sliding = true;
+        this._mousezero = this.slider_handler.position().left - mouseposInside.call(this,e.pageX);
+        this._sliding = true;
         doSlide.call(this,e);
         return false;
     }
     //stop sliding
     function slideStop(e) {
-        this.sliding = false;
+        this._sliding = false;
         return false;
     }
     //sliding... :)
     function doSlide(e) {
-        if(this.sliding) this.setSliderPerc(getPosx.call(this,e) / sliderWidth.call(this));
+        if(this._sliding) this.setSliderPerc(getPosx.call(this,e) / sliderWidth.call(this));
         return false;
     }
 
@@ -165,11 +165,11 @@ var UISliderWidget = (function($,UIBaseWidget) {
 
     //pixel position of mouse inside Slider approximated to stepValue
     function getPosx(e,mzero){
-        if(mzero) this.mousezero = mzero;
+        if(mzero) this._mousezero = mzero;
         var posx,
             wmax = sliderWidth.call(this);
 
-        posx = mouseposInside.call(this,e.pageX) + this.mousezero;
+        posx = mouseposInside.call(this,e.pageX) + this._mousezero;
         posx = posx<0?0 : posx>wmax?wmax : posx;
 
         var pxUnit = this._options.stepValue / (this._options.maxValue-this._options.minValue) * wmax;
