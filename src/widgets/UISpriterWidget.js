@@ -12,9 +12,9 @@ var UISpriterWidget = (function($,UIBaseWidget){
      * @constructor
      */
     function UISpriterWidget(ID, options) {
-        this.spritesInfo = {};
-        this.spritesLoaded = 0; // updated by didLoadSprite()
-        this.spritesTotal = 0;  // updated by getCSSImages()
+        this._spritesInfo = {};
+        this._spritesTotal = 0;  // updated by getCSSImages()
+        this._spritesLoaded = 0; // updated by didLoadSprite()
 
         UIBaseWidget.call(this, ID, options);
 
@@ -36,7 +36,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpriterWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this.setOptions({
             visible   : true,    // default visibility before and right after sprites loaded
             opacity   : '0.3',   // obscurers opacity
             color     : '#f00',  // obscurers color
@@ -44,21 +44,16 @@ var UISpriterWidget = (function($,UIBaseWidget){
             image     : '',      // sprites background image pattern
             domain    : '',      // domain accepted (will not load images outside domain)
             callback  : null     // callback triggered when all sprites are loaded (after analyze)
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
     };
 
     UISpriterWidget.prototype.initStyles = function(extension) {
-        this.extendObject(this._styles,{
+        var bg = (this._options.image && this._options.image!=='') ? 'url("'+this._options.image+'")' : 'none';
+        this.setStyles({
             main                : {position:'relative',display:this._options.visible?'block':'none'},
-            obscurers_container : {position:'relative',display:'block',top:'0',left:'0','text-align':'left',border:'1px solid '+this._options.border,visibility:'hidden'},
+            obscurers_container : {position:'relative',display:'block',background:bg,top:'0',left:'0','text-align':'left',border:'1px solid '+this._options.border,visibility:this._options.visible?'visible':'hidden'},
             sprite_obscurer     : {position:'absolute',display:'block',background:this._options.color,opacity:this._options.opacity}
-        });
-
-        if(this._options.image && this._options.image!=='')
-            this._styles.obscurers_container.background = 'url("'+this._options.image+'") repeat scroll 0 0 transparent';
-
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        },extension);
     };
 
     /********************
@@ -79,18 +74,26 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     UISpriterWidget.prototype.toggleSprite = function(sid) {
         var sprite,$cont;
-        var $sprites = $('#'+this._ID);
         var $sprites_bg = $('#fibo_sprites_bg');
 
-        $sprites.hide();
+        this.$el.hide();
         $sprites_bg.show();
         $('.obscurers_container').hide();
         if(sid!=='hide_sprites'){
             sprite = sid.replace('toggle_sprite_','');
+            sprite = sprite.replace(/[.]/g,'_');
             $cont = $('.obscurers_container#'+sprite);
             $cont.show();
-            $sprites.show();
+            this.$el.show();
         }
+    };
+
+    UISpriterWidget.prototype.logSpritesList = function() {
+        var log = [];
+        this.$el.find('.obscurers_container').each(function(i,e){
+            log.push($(e).attr('id'));
+        });
+        console.log(log);
     };
 
     /********************
@@ -108,20 +111,11 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     //after loading sprite
     function didLoadSprite(spriteNotLoaded) {
-        if((spriteNotLoaded?this.spritesLoaded:++this.spritesLoaded) < this.spritesTotal) return false;
+        if((spriteNotLoaded?this._spritesLoaded:++this._spritesLoaded) < this._spritesTotal) return false;
 
         if(!this._options.visible) spriterHide(this.$el);
-        if(this._options.callback) this._options.callback(this.spritesInfo);
+        if(this._options.callback) this._options.callback(this._spritesInfo);
         return true;
-    }
-
-    //error loading sprite
-    function failLoadSprite(imgurl) {
-        var cssUrl = cssFromUrl(imgurl);
-        delete this.spritesInfo[cssUrl];
-
-        this.spritesTotal = spritesInfoLength.call(this);
-        didLoadSprite.call(this,true);
     }
 
     /*---SPRITES ANALYZE PROCESS---*/
@@ -146,31 +140,57 @@ var UISpriterWidget = (function($,UIBaseWidget){
                 canContinue = false;
 
             if(canContinue){
-                var posStr = $elm.css('background-position'),
-                    posArr = posStr.split(' '),
-                    posX   = numberFromCssProp(posArr[0]) * -1,
-                    posY   = numberFromCssProp(posArr[1]) * -1,
+                var posArr = bgNumericPosition($elm),
                     offW   = numberFromCssProp($elm.css('padding-left')) + numberFromCssProp($elm.css('padding-right')),
                     offH   = numberFromCssProp($elm.css('padding-top'))  + numberFromCssProp($elm.css('padding-bottom'));
 
-                var pos  = {l:posX,t:posY},
+                var pos  = {l:posArr.x,t:posArr.y},
                     size = {w:offW+$elm.width(),h:offH+$elm.height()};
 
                 if(img && img!=='none'){
-                    if(!this.spritesInfo[img]) this.spritesInfo[img]=[];
-                    this.spritesInfo[img].push({pos:pos,size:size});
+                    if(!this._spritesInfo[img]) this._spritesInfo[img]=[];
+                    this._spritesInfo[img].push({pos:pos,size:size});
                 }
             }
 
         }.bind(this));
         console.log('DONE!');
 
-        this.spritesTotal = spritesInfoLength.call(this);
+        this._spritesTotal = spritesInfoLength.call(this);
         if(cb) {
-            cb(this.spritesInfo,externalCB);
+            cb(this._spritesInfo,externalCB);
             return true;
         }
-        else return this.spritesInfo;
+        else return this._spritesInfo;
+    }
+
+    function bgNumericPosition($elem) {
+        var url = $elem.css('background-image');
+        var img = getImageSize(url);
+
+        var width = $elem.width(),
+            height = $elem.height(),
+            pos = $elem.css('background-position').split(' '),
+            px = pos[0],
+            py = pos[1];
+
+        px = px=='left'   || px=='0%'   ? 0 :
+             px=='center' || px=='50%'  ? -(img.width-width)/2 :
+             px=='right'  || px=='100%' ? -(img.width-width) :
+             parseInt(px);
+
+        py = py=='top'    || py=='0%'   ? 0 :
+             py=='center' || py=='50%'  ? -(img.height-height)/2 :
+             py=='bottom' || py=='100%' ? -(img.height-height) :
+            parseInt(py);
+
+        return {x:-px, y:-py};
+    }
+
+    function getImageSize(img) {
+        var url = img.replace(/url\((['"])?(.*?)\1\)/gi, '$2').split(',')[0];
+        var $img = $('<img/>').attr('src',url);
+        return {width:$img.prop('width'), height:$img.prop('height')};
     }
 
     //create and append containers when all dom elements has been analyzed (use it as callback for getCSSImages method)
@@ -181,10 +201,10 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
         for(var i in _spritesInfo){
             if(_spritesInfo.hasOwnProperty(i)){
-                filename = this.filenameFromCss(i,true);
-                arr = spriteObscurerArray(_spritesInfo[i]);
-                $img = spriteImage.call(this,i);
-                $obsCont = $('<div id="'+filename+'" class="obscurers_container"/>');
+                filename = this.filenameFromCss(i,true).replace(/[.]/g,'_');
+                arr = spriteObscurersArray(_spritesInfo[i]);
+                $obsCont = $('<div/>').attr('id',filename).addClass('obscurers_container');
+                $img = spriteImage.call(this,i,$obsCont);
                 $obsCont.append($img);
 
                 for(var s in arr) if(arr.hasOwnProperty(s)) $obsCont.append(arr[s]);
@@ -201,36 +221,19 @@ var UISpriterWidget = (function($,UIBaseWidget){
     function spriterHide($elem) {$elem.css('visibility','visible').hide();}
 
     //load a single sprite and return the img dom element (not appended to body)
-    function spriteImage(cssUrl) {
-        var url = urlFromCss(cssUrl);
-        var fid = this.filenameFromCss(cssUrl,true);
+    function spriteImage(cssUrl,$cont) {
 
         willLoadSprite.call(this);
 
-        var $image = $('<img/>');
-        $image
-            .on('load',imageLoaded.bind(this,fid))
-            .on('error',imageError.bind(this));
-
-        $image.attr('src',url);
-
-        return $image;
-    }
-    function imageLoaded(fid,e){
-        var $cont = $('#'+fid),
-            $img  = $(e.target),
-            size  = {width:$img.width(), height:$img.height()};
+        var size = getImageSize(cssUrl);
 
         $cont.css(size);
 
         if(!this._options.visible) spriterHide($cont);
 
         didLoadSprite.call(this);
-    }
-    function imageError(e){
-        var imgurl = e.target.src;
-        alert('Failed to load the image:\n'+imgurl);
-        failLoadSprite.call(this,imgurl);
+
+        return $('<img/>').attr('src',urlFromCss(cssUrl));
     }
 
     /*---GETTERS---*/
@@ -242,7 +245,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
     }
 
     //array of obscurer for a single sprite
-    function spriteObscurerArray(imageObject) {
+    function spriteObscurersArray(imageObject) {
         var ob,$so,
             arr = [];
 
@@ -259,7 +262,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
     //number of spritesInfo properties (ie. number of sprites)
     function spritesInfoLength() {
         var s,tot = 0;
-        for(s in this.spritesInfo) if(this.spritesInfo.hasOwnProperty(s)) tot++;
+        for(s in this._spritesInfo) if(this._spritesInfo.hasOwnProperty(s)) tot++;
         return tot;
     }
 

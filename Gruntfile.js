@@ -11,10 +11,12 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         opt: {
-            header: '/*! <%= pkg.title %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
-            footer: '',
-            wheader: '/*! ui<%= widgetName %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
-            wfooter: '',
+            fibos_header: '/*! <%= pkg.title %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            fibos_footer: '',
+            widget_header: '/*! ui<%= widgetName %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            widget_footer: '',
+            fwp_header: '/*! Full Widgets Package - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+            fwp_footer: '',
             nl: grunt.util.linefeed,
             brand : function(brand){
                 return '/** built for '+brand+' **/';
@@ -26,12 +28,12 @@ module.exports = function(grunt) {
          ********************/
         concat: {
             options: {
-                separator: grunt.util.linefeed+';'+grunt.util.linefeed
+                //separator: grunt.util.linefeed+';'+grunt.util.linefeed
             },
 
-            // --- concat WIDGETS (for FibOS) --- //
+            // --- concat WIDGETS (for FibOS and uiWidgets-test) --- //
 
-            widgets: {
+            uiwidgets: {
                 src: [
                     'src/widgets/UIBaseWidget.js',
                     'src/widgets/UIMarkerWidget.js',
@@ -45,7 +47,7 @@ module.exports = function(grunt) {
 
             // --- concat PANELS (for FibOS) --- //
 
-            panels: {
+            uipanels: {
                 src: [
                     'src/app/panels/UIBasePanel.js',
                     'src/app/panels/UIExtraPanel.js',
@@ -66,20 +68,21 @@ module.exports = function(grunt) {
 
             full: {
                 options: {
-                    banner: '<%= opt.header %><%= opt.nl %>'+
-                            'var FibOS = (function(){' + '<%= opt.nl %>',
+                    banner: '<%= opt.fibos_header %><%= brandMsg %><%= opt.nl %>'+
+                            'var FibOS = (function(){' + '<%= opt.nl %>'+
+                            'var fibosVersion = "v<%= pkg.version %>";',
                     footer: '<%= opt.nl %>'+
                             'return FibOS;}());'
                 },
                 src: [
-                    'target/temp/UIWidgets.js',//created by concat:widgets
-                    'target/temp/UIPanels.js',//created by concat:panels
+                    'target/temp/UIWidgets.js',//created by concat:uiwidgets
+                    'target/temp/UIPanels.js',//created by concat:uipanels
                     'target/temp/images.js',//created by _create_images_js (called by _concat_images)
                     'src/app/FibOS.js'
                 ],
                 dest: 'target/temp/fibos_full.js'
             },
-
+            
             // --- concat FINAL (with initializer for brand) --- //
 
             fibos: {
@@ -87,17 +90,40 @@ module.exports = function(grunt) {
                 dest: 'target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.js'
             },
 
-            // --- concat ONLY WIDGETS --- //
+            // --- concat ONLY WIDGET (single task for widget) --- //
 
             widget: {
                 options: {
-                    banner: '<%= opt.header %><%= opt.nl %>'+
+                    banner: '<%= opt.widget_header %><%= opt.nl %>'+
                             'var ui<%= widgetName %> = (function(){' + '<%= opt.nl %>',
                     footer: '<%= opt.nl %>'+
                             'return UI<%= widgetName %>Widget;}());'
                 },
                 src: ['src/widgets/UIBaseWidget.js','src/widgets/UI<%= widgetName %>Widget.js'],
                 dest: 'target/ui<%= widgetName %>-<%= pkg.version %>.js'
+            },
+
+            // --- concat TEST INIT (with all minified widgets) --- //
+
+            test: {
+                options: {
+                    banner: 'var test = (function(){' + '<%= opt.nl %>',
+                    footer: '<%= opt.nl %>' + 'return test;}());'
+                },
+                src: [
+                    'target/temp/UIWidgets.min.js',
+                    'target/temp/images.js',
+                    'src/app/init/widgets_test.js'
+                ],
+                dest: 'target/temp/uiWidgets-test-<%= pkg.version %>.js'
+            },
+            
+            fwp: {
+                src: [
+                    'target/temp/UIWidgets.min.js',
+                    'target/temp/images.js'
+                ],
+                dest: 'target/temp/uiWidgets-<%= pkg.version %>.js'
             }
 
         },
@@ -110,15 +136,30 @@ module.exports = function(grunt) {
             // --- minify FIBOS --- //
 
             fibos: {
-                options: { banner: '<%= opt.header %><%= brandMsg %><%= opt.nl %>' },
+                options: { banner: '<%= opt.fibos_header %><%= brandMsg %><%= opt.nl %>' },
                 files: {'target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.min.js': ['target/<%= pkg.name %><%= brandFile %>-<%= pkg.version %>.js']}
             },
 
             // --- minify WIDGETS --- //
 
             widget: {
-                options: { banner: '<%= opt.wheader %><%= opt.nl %>' },
+                options: { banner: '<%= opt.widget_header %><%= opt.nl %>' },
                 files: {'target/ui<%= widgetName %>-<%= pkg.version %>.min.js': ['target/ui<%= widgetName %>-<%= pkg.version %>.js']}
+            },
+            
+            // --- minify WIDGETS for test purposes --- //
+
+            uiwidgets: {
+                options: { banner: '<%= opt.fwp_header %><%= opt.nl %>' },
+                files: {'target/temp/UIWidgets.min.js': ['target/temp/UIWidgets.js']}
+            },
+            test: {
+                options: { banner: '<%= opt.fwp_header %>/** built for TESTING purposes **/<%= opt.nl %>' },
+                files: {'target/uiWidgets-test-<%= pkg.version %>.min.js': ['target/temp/uiWidgets-test-<%= pkg.version %>.js']}
+            },
+            fwp: {
+                options: { banner: '<%= opt.fwp_header %><%= opt.nl %>' },
+                files: {'target/uiWidgets-<%= pkg.version %>.min.js': ['target/temp/uiWidgets-<%= pkg.version %>.js']}
             }
 
         },
@@ -127,10 +168,10 @@ module.exports = function(grunt) {
          * CLEAN
          ********************/
         clean: {
-            all:    ["target","build","public/<%= pkg.version %>"],
-            target: ["target"],
-            build:  ["build"],
-            deploy: ["public/<%= pkg.version %>","public/<%= pkg.name %>-latest*.js"]
+            all:    ['target','build','public/<%= pkg.version %>'],
+            target: ['target'],
+            build:  ['build/<%= pkg.version %>'],
+            deploy: ['public/<%= pkg.version %>','public/<%= pkg.name %>-latest*.js']
         },
 
         /********************
@@ -202,12 +243,12 @@ module.exports = function(grunt) {
         base64: {
             alpha_pattern: {
                 files: {
-                    'target/temp/alpha.b64': 'src/app/img/alpha_pattern.png'
+                    'target/temp/alpha_pattern.b64': 'src/app/img/alpha_pattern.png'
                 }
             },
             sprite_fibos: {
                 files: {
-                    'target/temp/sprite.b64': 'src/app/img/sprite_fibos.png'
+                    'target/temp/sprite_fibos.b64': 'src/app/img/sprite_fibos.png'
                 }
             }
         }
@@ -235,29 +276,33 @@ module.exports = function(grunt) {
     // --- METHOD tasks --- //
 
     // Private tasks
-    grunt.registerTask('_create_images_js', '', function(){
-        var alpha  = grunt.file.read('target/temp/alpha.b64'),
-            sprite = grunt.file.read('target/temp/sprite.b64'),
-            images = [
-                'alpha_pattern:"'+alpha+'"',
-                'sprite_fibos:"'+sprite+'"'
-            ],
-            images_js = 'var images={'+images.join(',')+'};';
+    grunt.registerTask('_create_images_js', '', function(image){
+        var s, sources={}, images=[];
+        
+        if(image) sources[image] = grunt.file.read('target/temp/'+image+'.b64');
+        else {
+            sources = {
+                alpha_pattern: grunt.file.read('target/temp/alpha_pattern.b64'),
+                sprite_fibos: grunt.file.read('target/temp/sprite_fibos.b64')
+            };
+        }
+        for(s in sources) if(sources.hasOwnProperty(s)) images.push(s+':"'+sources[s]+'"');
 
-        grunt.file.write('target/temp/images.js',images_js);
+        grunt.file.write('target/temp/images.js', 'var images={'+images.join(',')+'};');
     });
 
-    grunt.registerTask('_concat_images', '', function(){
+    grunt.registerTask('_concat_images', '', function(image){
+        var task = image?':'+image:'';
         grunt.task.run(
-            'base64',
-            '_create_images_js'
+            'base64'+task,
+            '_create_images_js'+task
         );
     });
 
     grunt.registerTask('_concat_fibos', '', function(){
         grunt.task.run(
-            'concat:widgets',
-            'concat:panels',
+            'concat:uiwidgets',
+            'concat:uipanels',
             '_concat_images',
             'concat:full'
         );
@@ -299,12 +344,16 @@ module.exports = function(grunt) {
     });
 
     // --- ALIAS tasks --- //
+    
+    // Widget-Test task
+    grunt.registerTask('widgets-test', ['clean:target', 'concat:uiwidgets', 'uglify:uiwidgets', '_concat_images:alpha_pattern', 'concat:test', 'uglify:test', 'copy:widget', 'clean:target']);
+    grunt.registerTask('widgets-all', ['clean:target', 'concat:uiwidgets', 'uglify:uiwidgets', '_concat_images:alpha_pattern', 'concat:fwp', 'uglify:fwp','copy:widget', 'clean:target']);
 
     // Full tasks
     grunt.registerTask('deploy', ['build-all', 'clean:deploy', 'copy:deploy']);
     grunt.registerTask('build-all', [
         'clean:build', 'build', 'build:hotels', 'build:venere',
-        'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter'
+        'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter', 'widgets-all'
     ]);
 
     // Default task

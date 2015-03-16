@@ -1,9 +1,9 @@
 # FibOS
-Bookmarklet UI Tool for easily check layout implementations.
+[Usage](#usage) |
+[Build](#build) |
+[Contributing](#contributing)
 
-- [Here](#usage) is how to use the tool.
-- [Here](#build) is how to build and debug the tool.
-- [Here](#contributing) is how to customize the tool and its components.
+Bookmarklet UI Tool for easily check layout implementations.
 
 Use this string as "location" for the bookmarklet:
 
@@ -43,8 +43,7 @@ The 4 toggles on the right side enable features as follows:
 ---
 
 ### Select dropdown
-Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.
-
+Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.  
 Once the spacer is dropped, it still can be dragged around the page.
 
 When a spacer is clicked (or when it's just dropped) it can be moved around using arrow keys:
@@ -125,8 +124,6 @@ This is useful to check for re-usable areas of a sprite, overlapping areas, wron
 ### Spacers
 Click here to show/hide spacers.
 
-NOTE: there is a known issue about dropping new spacers when this toggle is disabled. Please, be aware of this and avoid to drop-in new spacers when this toggle is disabled.
-
 ---
 
 ### Overlay
@@ -137,8 +134,7 @@ Click here to show/hide a dark semi-transparent overlay, in order to see all spa
 ### Rulers
 Click here to show/hide rulers.
 
-Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.
-
+Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.  
 Once a lineguide is dropped onto the page, it can be moved with the mouse or arrow keys:
 - arrows moves it by 1 pixel
 - while SHIFT key is pressed moves it by 10 pixels
@@ -150,17 +146,16 @@ Once a lineguide is dropped onto the page, it can be moved with the mouse or arr
 Click here to show/hide the Marker feature.
 
 While this toggle is active, the user can click on any text in the page revealing 2 type of informations:
-- a cyano semi-transparent box over the text, highlighting its block
+- a cyan blue semi-transparent box over the text, highlighting its block
 - a small box on top of the text with font-family, font-weight and font-size css properties
 
-Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).
-
+Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).  
 Disabling this toggle, will hide all Markers already placed as well as disable the click event.
 
 ---
 
 ## Build
-First of all, NodeJS should be installed.
+First of all, [NodeJS](https://nodejs.org/download/) should be installed.
 
 Once the project is cloned, go into the project's root folder and run:
 
@@ -172,27 +167,28 @@ grunt deploy
 
 `grunt-cli` is the Grunt Command Line Interface needed to run Grunt tasks.
 
-With `npm install` all node packages needed by the tool compiler will be installed into `/node_modules/` folder.
+With `npm install` all node packages needed by the compiler will be installed into `node_modules/` folder.
 
 With the `grunt deploy` command, all files for the project will be created under the `build/` (both minified and full, for debugging) and all the minified will be also copied into `public/[version]/` folder along with `*-latest.min.js` version in `public/` folder.
 
-Eg. With the version `1.0.1`, running `grunt deploy` will produce this file tree:
+Eg. With the version `1.0.2`, running `grunt deploy` will produce this file tree:
 
 ```
 public/
   |- fibos-latest.min.js
   |- fibos-latest-hotels.min.js
   |- fibos-latest-venere.min.js
-  |- 1.0.1/
-    |- fibos-1.0.1.min.js
-    |- fibos-hotels-1.0.1.min.js
-    |- fibos-venere-1.0.1.min.js
+  |- 1.0.2/
+    |- fibos-1.0.2.min.js
+    |- fibos-hotels-1.0.2.min.js
+    |- fibos-venere-1.0.2.min.js
     |- widgets/
-      |- uiMarker-1.0.1-min.js
-      |- uiRuler-1.0.1-min.js
-      |- uiSlider-1.0.1-min.js
-      |- uiSpacer-1.0.1-min.js
-      |- uiSpriter-1.0.1-min.js
+      |- uiMarker-1.0.2-min.js
+      |- uiRuler-1.0.2-min.js
+      |- uiSlider-1.0.2-min.js
+      |- uiSpacer-1.0.2-min.js
+      |- uiSpriter-1.0.2-min.js
+      |- uiWidgets-1.0.2-min.js
 ```
 
 #### Folder cleaners
@@ -212,11 +208,18 @@ Dynamic folders are used as follows:
 
 | command | notes |
 | -------- | -------- |
-| `grunt widget:marker` | build/minify MARKER widget into `build/[version]/` |
-| `grunt widget:ruler` | build/minify RULER widget into `build/[version]/` |
-| `grunt widget:slider` | build/minify SLIDER widget into `build/[version]/` |
-| `grunt widget:spacer` | build/minify SPACER widget into `build/[version]/` |
-| `grunt widget:spriter` | build/minify SPRITER widget into `build/[version]/` |
+| `grunt widget:marker` | build/minify MARKER widget into `build/[version]/widgets/` |
+| `grunt widget:ruler` | build/minify RULER widget into `build/[version]/widgets/` |
+| `grunt widget:slider` | build/minify SLIDER widget into `build/[version]/widgets/` |
+| `grunt widget:spacer` | build/minify SPACER widget into `build/[version]/widgets/` |
+| `grunt widget:spriter` | build/minify SPRITER widget into `build/[version]/widgets/` |
+
+#### All Widgets
+
+| command | notes |
+| -------- | -------- |
+| `grunt widgets-all` | build/minify ALL widgets into `build/[version]/widgets/`
+| `grunt widgets-test` | build/minify ALL widgets with test initializer into `build/[version]/widgets/`
 
 #### Full builders
 
@@ -237,16 +240,28 @@ With `grunt deploy` will be created also all *-latest.min.js files per brand int
 ### Custom initializer
 To set up a new initializer (as for venere or hotels already set) please follow these steps:
 
-1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)
-2. create the new init file under `src/app/init/`
-3. for a brand named `newbrand` add the call to `build:newbrand` into `build-all` task or simply run it in command line
+1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)  
+_note: the brandMsg will be used in the final minified file as comment in this form:_  
+`/** built for <%= brandMsg %> **/`
 
-Note for 1: the brandMsg will be used in the final minified file as comment in this form: `/** built for brandMsg **/`
+2. create the new init file under `src/app/init/`  
+_note: the initializer file serves as options overrider for each widget that needs to be customized. The `FibOS()` constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if `null` the tool will work for `body` selector)._
 
-Note for 2: the initializer file serves as options overrider for each widget that needs to be customized. The `FibOS()` constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if `null` the tool will work for `body` selector).
+3. enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended)  
+_note: if the brand "newbrand" is intended to be added, add the `build` task with the new brand as parameter, so that Grunt can append the correct initializer found in `src/app/init/fibos_newbrand.js`, or simply run `grunt build:newbrand` in command line._
 
 eg. for a brand named `newbrand` the file `src/app/init/fibos_newbrand.js` should be created with following content as example:
 ```javascript
+/* [1] : package.json */
+//...
+"brands": {
+  "hotels":"HOTELS.COM",
+  "venere":"VENERE.COM",
+  "newbrand":"MY PERSONAL COMPANY"
+},
+//...
+
+/* [2] : src/app/init/fibos_newbrand.js */
 var myOptions = {
     logEvents: true,
     uiSpacer:  {spacersList:[5,10,15,20,25,30,35,40],spacerMin:1},
@@ -254,17 +269,15 @@ var myOptions = {
     uiMarker:  {taglist:{a:false,input:false,dfn:true}},
     uiSpriter: {domain:'img.mydomain.com'}
 };
-
 var fibos = new FibOS('#elemId.elemClass', myOptions);
-```
 
-Note for 3: enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended). If the brand `newbrand` is intended to be added, add the `build` task with the new brand as parameter, so that Grunt can append the correct initializer found in `src/app/init/fibos_newbrand.js`, or simply run `grunt build:newbrand` in command line.
-
-```javascript
+/* [3] : Gruntfile.js */
+// ...
 grunt.registerTask('build-all', [
     'clean:build', 'build', 'build:hotels', 'build:venere', 'build:newbrand',
-    'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter'
+    'widget:marker', 'widget:ruler', 'widget:slider', 'widget:spacer', 'widget:spriter', 'widgets-all'
 ]);
+// ...
 ```
 
 ---

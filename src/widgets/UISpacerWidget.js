@@ -12,15 +12,15 @@ var UISpacerWidget = (function($,UIBaseWidget){
      * @constructor
      */
     function UISpacerWidget(ID, options) {
-        this.defaultGroupName = 'spacerGroup_';
-        this.lastUsedGroup = this.defaultGroupName+'1';
-        this.spacersGroups = {};
-        this.mousezero = null;
-        this.dragging = null;
-        this.dragged = null;
+        this._defaultGroupName = 'spacerGroup_';
+        this._lastUsedGroup = this._defaultGroupName+'1';
+        this._mousezero = null;
+        this._dragging = null;
+        this._dragged = null;
 
         UIBaseWidget.call(this, ID, options);
 
+        this.spacersGroups = {};
         this.spacerObjects = getSpacers.call(this);
     }
 
@@ -36,7 +36,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
      ********************/
 
     UISpacerWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this.setOptions({
             localStorage  : 'fibonacciGroups',
             spacerClass   : 'fibospacer',
             spacerMatch   : /fibospacer|fs|_| /g,
@@ -47,8 +47,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
             spacerMin     : 3,
             spacerSymbols : [{s:'•',f:2.8,l:1},{s:'★',f:1,l:1.09}],
             spacerColors  : ['#0071bc','#ed1e79','#8cc63f','#fbb03b']
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
     };
 
     UISpacerWidget.prototype.initStyles = function(extension) {
@@ -64,14 +63,12 @@ var UISpacerWidget = (function($,UIBaseWidget){
             shadow: true,
             after: true
         };
-        this.extendObject(this._styles, {
+
+        this.setStyles({
             main   :{position:'absolute',top:referencePos.call(this).top+'px',left:referencePos.call(this).left+'px',width:'0',height:'0',overflow:'visible'},
             spacer :{position:'absolute',display:'block',cursor:'pointer',overflow:'hidden','font-family':'Arial',outline:'0'},
             shadow :{'-webkit-box-shadow':shad,'-moz-box-shadow':shad,'box-shadow':shad}
-        });
-        this.extendObject(this._styles, generateSpacersStyles.call(this));
-
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        }, generateSpacersStyles.call(this), extension);
     };
 
     UISpacerWidget.prototype.initEvents = function() {
@@ -91,26 +88,32 @@ var UISpacerWidget = (function($,UIBaseWidget){
      * PUBLIC METHODS
      ********************/
 
-    UISpacerWidget.prototype.getSpacersList = function(onlyActiveSpacers){
-        return spacersFilter.call(this, onlyActiveSpacers ? this._options.spacerMin-1 : 0);
+    /*---SPACERS MANAGER---*/
+
+    UISpacerWidget.prototype.addNewSpacer = function(num,group) {
+        if(spacerIndex.call(this,num)==-1) {
+            console.log('WARNING: addSpacer called with unsupported spacer');
+            return null;
+        }
+
+        if(!group) group = this._lastUsedGroup;
+        var spacerStr = ('000'+num).substr(-3);
+        var $spacerObj = this.spacerObjects['f_'+spacerStr].clone();
+        var $parent = this._options.grouping ? getGroup.call(this,group) : this.$el;
+        if($spacerObj) $parent.append($spacerObj);
+        return $spacerObj;
     };
+
+    UISpacerWidget.prototype.dragSpacer = function($target){
+        dragSpacer.call(this,$target);
+    };
+
     UISpacerWidget.prototype.getSpacerType = function(spacer){
         return $(spacer).attr('class').replace(this._options.spacerMatch,'');
     };
-    UISpacerWidget.prototype.updateGroups = function(){
-        htmlToSpacersGroups.call(this);
-    };
-    UISpacerWidget.prototype.selectGroup = function(groupName){
-        this.lastUsedGroup = groupName ? groupName : this.defaultGroupName+(totalGroups.call(this)+1);
-    };
-    UISpacerWidget.prototype.setMouseZero = function(mzero){
-        if((mzero.top || mzero.top===0) && (mzero.left || mzero.left===0))
-            this.mousezero = mzero;
-        else
-            console.log('WARNING: setMouseZero called with wrong parameter');
-    };
-    UISpacerWidget.prototype.dragSpacer = function($target){
-        dragSpacer.call(this,$target);
+
+    UISpacerWidget.prototype.getSpacersList = function(onlyActiveSpacers){
+        return spacersFilter.call(this, onlyActiveSpacers ? this._options.spacerMin-1 : 0);
     };
 
     /*---GROUPS MANAGER---*/
@@ -132,34 +135,6 @@ var UISpacerWidget = (function($,UIBaseWidget){
         return true;
     };
 
-    UISpacerWidget.prototype.offsetGroup = function(offset) {
-        var t,l,
-            spacers = this.spacersGroups[this.lastUsedGroup],
-            $spacers = $('#'+this.lastUsedGroup).find('.'+this._options.spacerClass);
-
-        if(!spacers) return;
-        $spacers.each(function(i,e){
-            var $spacer = $(e);
-            t = Number(spacers[i][1]);
-            l = Number(spacers[i][2]);
-            $spacer.css('top',t+Number(offset.top));
-            $spacer.css('left',l+Number(offset.left));
-        });
-    };
-
-    UISpacerWidget.prototype.saveOffsetGroup = function(offset) {
-        var s,spacers = this.spacersGroups[this.lastUsedGroup];
-
-        if(!spacers) return;
-        for(s in spacers){
-            if(spacers.hasOwnProperty(s)){
-                spacers[s][1] = Number(spacers[s][1]) + Number(offset.top);
-                spacers[s][2] = Number(spacers[s][2]) + Number(offset.left);
-            }
-        }
-        this.spacersGroups[this.lastUsedGroup] = spacers;
-    };
-
     UISpacerWidget.prototype.offsetCustomGroup = function(spacerslist,offset) {
         for(var i=0;i<spacerslist.length;i++){
             var $spacer = $(spacerslist[i]);
@@ -172,37 +147,44 @@ var UISpacerWidget = (function($,UIBaseWidget){
         }
     };
 
-    UISpacerWidget.prototype.addNewSpacer = function(num,group) {
-        if(spacerIndex.call(this,num)==-1) {
-            console.log('WARNING: addSpacer called with unsupported spacer');
-            return null;
-        }
+    UISpacerWidget.prototype.offsetGroup = function(offset) {
+        var t,l,
+            spacers = this.spacersGroups[this._lastUsedGroup],
+            $spacers = $('#'+this._lastUsedGroup).find('.'+this._options.spacerClass);
 
-        if(!group) group = this.lastUsedGroup;
-        var spacerStr = ('000'+num).substr(-3);
-        var $spacerObj = this.spacerObjects['f_'+spacerStr].clone();
-        var $parent = this._options.grouping ? getGroup.call(this,group) : this.$el;
-        if($spacerObj) $parent.append($spacerObj);
-        return $spacerObj;
+        if(!spacers) return;
+        $spacers.each(function(i,e){
+            var $spacer = $(e);
+            t = Number(spacers[i][1]);
+            l = Number(spacers[i][2]);
+            $spacer.css('top',t+Number(offset.top));
+            $spacer.css('left',l+Number(offset.left));
+        });
     };
 
-    /*---SPACERS PARSER---*/
+    UISpacerWidget.prototype.saveOffsetGroup = function(offset) {
+        var s,spacers = this.spacersGroups[this._lastUsedGroup];
 
-    //given json to descriptive string
-    UISpacerWidget.prototype.jsonToString = function(stJson,joinWith) {
-        joinWith || (joinWith='; ');
-        var obj = JSON.parse(stJson);
-        var count = 0;
-        var str = [];
-        for(var s in obj){
-            if(obj.hasOwnProperty(s)){
-                count++;
-                str.push('  group name: '+s);
-                str.push('    spacers count: '+obj[s].length);
+        if(!spacers) return;
+        for(s in spacers){
+            if(spacers.hasOwnProperty(s)){
+                spacers[s][1] = Number(spacers[s][1]) + Number(offset.top);
+                spacers[s][2] = Number(spacers[s][2]) + Number(offset.left);
             }
         }
-        str.unshift('groups count: '+count);
-        return str.join(joinWith);
+        this.spacersGroups[this._lastUsedGroup] = spacers;
+    };
+
+    UISpacerWidget.prototype.selectGroup = function(groupName){
+        this._lastUsedGroup = groupName ? groupName : this._defaultGroupName+(totalGroups.call(this)+1);
+    };
+
+    UISpacerWidget.prototype.updateGroups = function(){
+        htmlToSpacersGroups.call(this);
+    };
+
+    UISpacerWidget.prototype.spacersGroupLength = function(groupName){
+        return $('#'+(groupName || this._lastUsedGroup)).find('div').length;
     };
 
     /*---LOCAL STORAGE---*/
@@ -220,6 +202,19 @@ var UISpacerWidget = (function($,UIBaseWidget){
     UISpacerWidget.prototype.loadSpacersFromJson = function(stJson,hide){
         if (stJson) insertHtmlFromJson.call(this,stJson,true,hide);
         return stJson;
+    };
+
+    /*---SERVICE METHODS---*/
+
+    UISpacerWidget.prototype.getFibonacci = function(min,max){
+        fibonacciSequence(min,max)
+    };
+
+    UISpacerWidget.prototype.setMouseZero = function(mzero){
+        if((mzero.top || mzero.top===0) && (mzero.left || mzero.left===0))
+            this._mousezero = mzero;
+        else
+            console.log('WARNING: setMouseZero called with wrong parameter');
     };
 
     /********************
@@ -243,7 +238,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
         return true;
     }
     function addNewGroup(name,skipAppend,skipEvent) {
-        name || (name=this.lastUsedGroup);
+        name || (name=this._lastUsedGroup);
 
         var newgroup = $('#'+name);
         if(newgroup.length===0){
@@ -251,7 +246,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
             if(!skipAppend) this.$el.append(newgroup);
             if(!skipEvent && this._options.groupCallback) this._options.groupCallback(name);
         }
-        this.lastUsedGroup = name;
+        this._lastUsedGroup = name;
 
         return newgroup;
     }
@@ -303,6 +298,23 @@ var UISpacerWidget = (function($,UIBaseWidget){
             }
         }
         return spacersGroupsToHtml.call(this,hide);
+    }
+
+    //given json to descriptive string
+    function jsonToString(stJson,joinWith) {
+        joinWith || (joinWith='; ');
+        var obj = JSON.parse(stJson);
+        var count = 0;
+        var str = [];
+        for(var s in obj){
+            if(obj.hasOwnProperty(s)){
+                count++;
+                str.push('  group name: '+s);
+                str.push('    spacers count: '+obj[s].length);
+            }
+        }
+        str.unshift('groups count: '+count);
+        return str.join(joinWith);
     }
 
     //convert spacersGroups to appendable HTML or JQuery node objects
@@ -377,7 +389,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
                 };
                 this._globalSelectors[fibocls] = true;
 
-                //dopo il primo ciclo sui colori aggiunge i simboli (ogni ciclo sui colori un simbolo diverso)
+                // after the first color cycle, it adds symbols (every cycle changes symbol)
                 if(fiboidx>=fcLen){
                     fibosObjs[fibocls+':after'] = {
                         'content'     : '"'+d_symbols[fs].s+'"',
@@ -386,12 +398,12 @@ var UISpacerWidget = (function($,UIBaseWidget){
                     };
                     this._globalSelectors[fibocls+':after'] = true;
 
-                    //determina l'inizio del ciclo sull'array spacerColors
+                    //defines the beginning of the color cycle (spacerColors array)
                     if((fiboidx+1)%fcLen===0){
-                        if(++fs>=fsLen)fs=fsLen-1;// incrementa ciclicamente l'indice di symbol
+                        if(++fs>=fsLen)fs=fsLen-1;// cyclically increment the symbol index
                     }
                 }
-                if(++fc>=fcLen)fc=0;// incrementa ciclicamente l'indice di colors
+                if(++fc>=fcLen)fc=0;// cyclically increment the color index
             }
         }
         return fibosObjs;
@@ -429,13 +441,13 @@ var UISpacerWidget = (function($,UIBaseWidget){
     /* Devices Handlers */
     function key_handler(e) {
         var offset = e.shiftKey?10:e.altKey?0.5:1;
-        if(this.dragged){
+        if(this._dragged){
             if(e.keyCode>=37 && e.keyCode<=40){
-                this.dragged.offset({
-                    top  : ( this.dragged.offset().top  + (e.keyCode===38?-offset:e.keyCode===40?offset:0) ),
-                    left : ( this.dragged.offset().left + (e.keyCode===37?-offset:e.keyCode===39?offset:0) )
+                this._dragged.offset({
+                    top  : ( this._dragged.offset().top  + (e.keyCode===38?-offset:e.keyCode===40?offset:0) ),
+                    left : ( this._dragged.offset().left + (e.keyCode===37?-offset:e.keyCode===39?offset:0) )
                 });
-                if(this._options.moveCallback) this._options.moveCallback(this.dragged);
+                if(this._options.moveCallback) this._options.moveCallback(this._dragged);
                 return false;
             }
         }
@@ -460,7 +472,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
     /* Dragging Handlers */
     function startDrag(e) {
         var $target = $(e.target);
-        this.mousezero = {
+        this._mousezero = {
             top  : ($target.position().top  - e.pageY + referencePos.call(this).top),
             left : ($target.position().left - e.pageX + referencePos.call(this).left)
         };
@@ -469,27 +481,29 @@ var UISpacerWidget = (function($,UIBaseWidget){
     }
     function dragSpacer($target) {
         $target.parent().append($target);// move to biggest z-index
-        this.dragged = null;
-        this.dragging = $target;
+        this.updateGroups();
+        this._dragged = null;
+        this._dragging = $target;
     }
     function doDrag(e) {
-        if(this.dragging){
-            this.dragging.offset({
-                top  : (Number(e.pageY+this.mousezero.top)),
-                left : (Number(e.pageX+this.mousezero.left))
+        if(this._dragging){
+            this._dragging.offset({
+                top  : (Number(e.pageY+this._mousezero.top)),
+                left : (Number(e.pageX+this._mousezero.left))
             });
-            normalizeSpacerPosition(this.dragging);
+            normalizeSpacerPosition(this._dragging);
             return false;
         }
         return true;
     }
     function stopDrag(e) {
-        this.dragged = this.dragging;
-        if (!this.dragged) return true;
-        this.dragged.focus();
-        if(this.dragging){
-            this.dragging = null;
-            if(this._options.moveCallback) this._options.moveCallback(this.dragged);
+        this._dragged = this._dragging;
+        if (!this._dragged) return true;
+        this._dragged.focus();
+        if(this._dragging){
+            this._dragging = null;
+            this.updateGroups();
+            if(this._options.moveCallback) this._options.moveCallback(this._dragged);
         }
     }
 

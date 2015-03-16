@@ -14,6 +14,7 @@ var FibOS = (function(
 
         this._ID = 'fibos';
         this._fibosTitle = 'FibOS';
+        this._fibosVersion = fibosVersion || '';
         this._logEvents = options.logEvents || false;
         this._logEventId = 0;
         delete options.logEvents;
@@ -54,7 +55,7 @@ var FibOS = (function(
                     selector = '#'+this._ID;
                     if(s!='main') selector += ' '+s;
 
-                    $styles.append(selector + ' {'+UIBaseWidget.prototype.styleObjectToString(styleObj[s])+'}');
+                    $styles.append(selector + ' {'+UIBaseWidget.prototype._styleObjectToString(styleObj[s])+'}');
                 }
             }
 
@@ -63,7 +64,7 @@ var FibOS = (function(
         createElement: function() {
             $('#'+this._ID).remove();
 
-            var $fibo_title  = $('<h1/>').text(this._fibosTitle);
+            var $fibo_title  = $('<h1/>').text(this._fibosTitle).append($('<small/>').text(this._fibosVersion));
 
             this.$el         = $('<div/>').attr('id',this._ID);
             this.$background = $('<div/>').attr('id','fibo_bg');
@@ -195,11 +196,11 @@ var FibOS = (function(
             // panelInput
             this._panels.inputPanel.on('input_import', function(data){
                 this._components.uiSpacer.loadSpacersFromJson(data,true);
-                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
+                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
                 this._panels.groupPanel.showGroupsList(stJson);
             }.bind(this));
             this._panels.inputPanel.on('input_export', function(){
-                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups.groups);
+                var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
                 console.log(stJson);
                 alert("Open your browser's console and see the export string.");
             }.bind(this));
@@ -215,7 +216,7 @@ var FibOS = (function(
         },
 
         addWidget: function(widget) {
-            this.$el.append(widget.$el);
+            widget.appendTo(this.$el);
         },
         addPanel: function(panel) {
             this.addPanelTo(panel,this.$panels);
@@ -330,7 +331,7 @@ var FibOS = (function(
                     '#fibo_panels > h1':
                         {'font-size':'18px',margin:'0 0 5px 5px',padding:'0'},
                     '#fibo_panels > h1 > small':
-                        {'font-size':'10px','font-weight':'400'},
+                        {'font-size':'10px','font-weight':'400','margin-left':'3px'},
 
                     // control panel
                     '#fibo_bg':

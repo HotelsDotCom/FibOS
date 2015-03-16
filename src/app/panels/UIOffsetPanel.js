@@ -112,10 +112,11 @@ var UIOffsetPanel = (function($,UIBasePanel){
      ********************/
 
     function changeGroupPos(e){
+        var $target = $(e.currentTarget);
         var offset = e.shiftKey ? 10 : e.altKey ? 0.5 : 1;
-        var val = Number($(e.currentTarget).val());
+        var val = Number($target.val());
 
-        $(e.currentTarget).val(val+(e.keyCode===38?offset:e.keyCode===40?-offset:0));
+        $target.val(val+(e.keyCode===38?offset:e.keyCode===40?-offset:0));
         this.applyInfo(e);
 
         return false;
@@ -151,7 +152,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
                     .on('mousemove.multiselect',this.selectMulti.bind(this))
                     .on('mouseup.multiselect',this.selectEnd.bind(this));
             }else{
-                $('#'+this.id_multipar).find('span').text($('#'+this.fibos._components.uiSpacer.lastUsedGroup).find('div').length);
+                $('#'+this.id_multipar).find('span').text(this.fibos._components.uiSpacer.spacersGroupLength());
                 $('body')
                     .css('cursor','inherit')
                     .off('.multiselect');

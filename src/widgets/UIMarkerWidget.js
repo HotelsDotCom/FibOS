@@ -27,7 +27,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
      ********************/
 
     UIMarkerWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this.setOptions({
             checkUseMarker : null,          //if this function returns false the marker won't be applied
             checkUseFont   : null,          //if this function returns false the fontinfo won't be applied
             markerClass    : 'fiboMarker',  //common highlight element class
@@ -40,9 +40,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
                 h1:true,h2:true,h3:true,h4:true,h5:true,h6:true,
                 a:true,input:true,select:true,textfield:true,label:true
             }
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
-        this.extendObject(this._options,{excluded:(this._options.excluded===''?'':this._options.excluded+',')+'.'+this._options.fontClass});
+        },options);
+        this._options.excluded = (this._options.excluded===''?'':this._options.excluded+',')+'.'+this._options.fontClass;
     };
 
     UIMarkerWidget.prototype.initStyles = function(extension) {
@@ -58,7 +57,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             fontinfo_p3 : '.'+fclass+' p.fi3'
         };
 
-        this.extendObject(this._styles, {
+        this.setStyles({
             main        :{position:'absolute'},
             marker      :{position:'absolute !important','z-index':'1',background:'#0ff',opacity:'0.5'},
             fontinfo    :{position:'absolute !important','z-index':'2',background:'rgba(34, 34, 34, 0.7)',border:'1px solid #fff',padding:'3px','font-family':'Open Sans',color:'#fff'},
@@ -66,8 +65,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             fontinfo_p1 :{'font-size':'13px','font-weight':'700','margin-top':'-4px'},
             fontinfo_p2 :{'font-size':'10px','font-weight':'400','margin':'-5px 0'},
             fontinfo_p3 :{'font-size':'14px','font-weight':'600','margin-bottom':'-4px'}
-        });
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        },extension);
     };
 
     UIMarkerWidget.prototype.initEvents = function() {
@@ -87,18 +85,33 @@ var UIMarkerWidget = (function($,UIBaseWidget){
      * PUBLIC METHODS
      ********************/
 
-    /*---SERVICE METHODS---*/
-
     //prevent/restore default behaviors for elements in defaults.taglist
-    UIMarkerWidget.prototype.toggleListener = function(prevent) {
-        if(prevent)
-            preventDefaults.call(this);
-        else
+    UIMarkerWidget.prototype.toggleListener = function(toggle) {
+        toggle ?
+            preventDefaults.call(this):
             restoreDefaults.call(this);
     };
 
+    UIMarkerWidget.prototype.addMarkerToElement = function(DOMelement) {
+        return addTextFontHighlight.call(this,DOMelement);
+    };
+
+    UIMarkerWidget.prototype.markEvent = function(event) {
+        return doHighlight.call(this,event);
+    };
+
+    UIMarkerWidget.prototype.unmarkEvent = function(event) {
+        return undoHighlight.call(this,event);
+    };
+
+    /********************
+     * PRIVATE METHODS
+     ********************/
+
+    /*---SERVICE METHODS---*/
+
     //add both text highlight and font info on given element
-    UIMarkerWidget.prototype.addTextFontHighlight = function(elem) {
+    function addTextFontHighlight(elem) {
         var size;
         var useMarker = this._options.checkUseMarker ? this._options.checkUseMarker() : true;
         var useFont = this._options.checkUseFont ? this._options.checkUseFont() : true;
@@ -113,13 +126,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             addFontInfo.call(this,elem,size);
 
         return true;
-    };
-
-    /********************
-     * PRIVATE METHODS
-     ********************/
-
-    /*---SERVICE METHODS---*/
+    }
 
     //add text highlight around given element
     function addTextHighlight(elem,size) {
@@ -193,13 +200,15 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     //check for callback, check for target, then add highlight on clicked text
     function doHighlight(e) {
         if(isAcceptedTarget.call(this,e.target)){
-            this.addTextFontHighlight(e.target);
+            return !addTextFontHighlight.call(this,e.target);
         }
+        return true;
     }
 
     //remove clicked highlight
     function undoHighlight(e) {
         $(e.currentTarget).remove();
+        return false;
     }
 
     /*---MARKER INFO GETTERS---*/

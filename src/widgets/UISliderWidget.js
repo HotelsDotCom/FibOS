@@ -12,8 +12,8 @@ var UISliderWidget = (function($,UIBaseWidget) {
      * @constructor
      */
     function UISliderWidget(ID, options) {
-        this.sliding = false;
-        this.mousezero = 0;
+        this._sliding = false;
+        this._mousezero = 0;
 
         UIBaseWidget.call(this, ID, options);
     }
@@ -30,14 +30,13 @@ var UISliderWidget = (function($,UIBaseWidget) {
      ********************/
 
     UISliderWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this.setOptions({
             minValue     : 0,     //minimum value accepted
             maxValue     : 100,   //maximum value accepted
             initialValue : 100,   //initial value (between min and max values)
             stepValue    : 1,     //step value for handler dragging
             callback     : null   //callback on slider value change
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
 
         var op = this._options;
         if(op.maxValue<=op.minValue)     op.maxValue = op.minValue+op.stepValue;
@@ -46,13 +45,12 @@ var UISliderWidget = (function($,UIBaseWidget) {
     };
 
     UISliderWidget.prototype.initStyles = function(extension) {
-        this.extendObject(this._styles, {
+        this.setStyles({
             main          :{position:'relative',width:'100px',height:'20px',background:'rgba(100,100,100,.4)'},
             slider_bar    :{position:'absolute',width:'100%', height:'3px', background:'rgb(200,200,200)',top:'9px'},
             slider_handler:{position:'absolute',width:'10px', height:'20px',background:'rgb(100,100,100)',top:'0',left:'0'},
             slider_output :{position:'absolute',width:'34px', height:'20px',background:'#fff',top:'0',right:'-34px','text-indent':'0','text-align':'center','font-size':'12px','line-height':'20px',cursor:'default'}
-        });
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+        },extension);
     };
 
     UISliderWidget.prototype.createSubElements = function() {
@@ -138,19 +136,19 @@ var UISliderWidget = (function($,UIBaseWidget) {
     }
     //start sliding
     function slideStart(e) {
-        this.mousezero = this.slider_handler.position().left - mouseposInside.call(this,e.pageX);
-        this.sliding = true;
+        this._mousezero = this.slider_handler.position().left - mouseposInside.call(this,e.pageX);
+        this._sliding = true;
         doSlide.call(this,e);
         return false;
     }
     //stop sliding
     function slideStop(e) {
-        this.sliding = false;
+        this._sliding = false;
         return false;
     }
     //sliding... :)
     function doSlide(e) {
-        if(this.sliding) this.setSliderPerc(getPosx.call(this,e) / sliderWidth.call(this));
+        if(this._sliding) this.setSliderPerc(getPosx.call(this,e) / sliderWidth.call(this));
         return false;
     }
 
@@ -167,11 +165,11 @@ var UISliderWidget = (function($,UIBaseWidget) {
 
     //pixel position of mouse inside Slider approximated to stepValue
     function getPosx(e,mzero){
-        if(mzero) this.mousezero = mzero;
+        if(mzero) this._mousezero = mzero;
         var posx,
             wmax = sliderWidth.call(this);
 
-        posx = mouseposInside.call(this,e.pageX) + this.mousezero;
+        posx = mouseposInside.call(this,e.pageX) + this._mousezero;
         posx = posx<0?0 : posx>wmax?wmax : posx;
 
         var pxUnit = this._options.stepValue / (this._options.maxValue-this._options.minValue) * wmax;

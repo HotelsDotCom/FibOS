@@ -27,7 +27,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
      ********************/
 
     UIRulerWidget.prototype.initOptions = function(options) {
-        this.extendObject(this._options, {
+        this.setOptions({
             guidelinesContainer : '#ruler_guides', //where guidelines will be appended
             showMousePos        : true,            //toggle display of mouse coordinates
             showRulerV          : true,            //toggle display of vertical ruler
@@ -36,8 +36,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
             rulerUnit           : 5,               //minimum unit interval (in pixel)
             rulerStepMin        : 2,               //number of minimum units before medium tick
             rulerStepMed        : 5                //number of medium tick before max tick
-        });
-        UIBaseWidget.prototype.initOptions.call(this, options);
+        },options);
 
         var op = this._options;
         if(!op.rulerMin) op.rulerMin = op.rulerUnit;
@@ -73,40 +72,43 @@ var UIRulerWidget = (function($,UIBaseWidget){
             rulerh_max   : '.rulers_h .ruler_max'
         };
 
-        this.extendObject(this._styles, {
-            main         :{position:'absolute',top:rulerZero.call(this).top+'px',left:rulerZero.call(this).left+'px'},
-            rulers_cont  :{position:'absolute',overflow:'hidden',background:'rgba(255,255,255,.8)'},
-            rulers_v     :{width:this._options.rulerWidth+'px',height:rulerH.call(this)+'px',top:'0',left:'-'+this._options.rulerWidth+'px'},
-            rulers_h     :{height:this._options.rulerWidth+'px',width:rulerW.call(this)+'px',left:'0',top:'-'+this._options.rulerWidth+'px'},
-            ruler        :{'z-index':'1',position:'absolute',border:'0 solid #000'},
-            ruler_v      :{'border-bottom-width':'1px',left:'0 !important'},
-            ruler_h      :{'border-right-width':'1px',top:'0 !important'},
-            rulers_top   :{'z-index':'2',position:'absolute',width:this._options.rulerWidth+'px',height:this._options.rulerWidth+'px',top:'-'+this._options.rulerWidth+'px',left:'-'+this._options.rulerWidth+'px',background:'#fff','border-right':'1px solid #000000','border-bottom':'1px solid #000000'},
-            ruler_min    :{width:(this._options.rulerMin-1)+'px',height:(this._options.rulerMin-1)+'px'},
-            ruler_med    :{width:(this._options.rulerMed-1)+'px',height:(this._options.rulerMed-1)+'px'},
-            ruler_max    :{width:(this._options.rulerMax-1)+'px',height:(this._options.rulerMax-1)+'px'},
-            ruler_label  :{position:'absolute','font-family':'helvetica','font-size':'8px',cursor:'default'},
-            ruler_labelh :{bottom:'0px',right:'1px'},
-            ruler_labelv :{bottom:'2px',right:'0px',width:'10px',transform:'rotate(-90deg)'},
-            mousepos     :{'z-index':'3',position:'absolute',width:'auto',height:'auto',background:'rgba(200,200,200,.8)',border:'1px solid #fff','font-size':'12px',padding:'1px 5px 3px','white-space':'nowrap'},
-            guideline    :{position:'absolute',background:'#0f0',width:'1px',height:'1px'},
-            guide_v      :{height:rulerH.call(this)+'px',cursor:'ew-resize'},
-            guide_h      :{width:rulerW.call(this)+'px',cursor:'ns-resize'}
-        });
-        this.extendObject(this._styles,{
-            ruler_labelv :{'-webkit-transform':'rotate(-90deg)','-moz-transform':'rotate(-90deg)','-ms-transform':'rotate(-90deg)','-o-transform':'rotate(-90deg)',filter:'progid:DXImageTransform.Microsoft.BasicImage(rotation=3)'}
-        });
+        this.setStyles(
+            {
+                main         :{position:'absolute',top:rulerZero.call(this).top+'px',left:rulerZero.call(this).left+'px'},
+                rulers_cont  :{position:'absolute',overflow:'hidden',background:'rgba(255,255,255,.8)'},
+                rulers_v     :{width:this._options.rulerWidth+'px',height:rulerH.call(this)+'px',top:'0',left:'-'+this._options.rulerWidth+'px'},
+                rulers_h     :{height:this._options.rulerWidth+'px',width:rulerW.call(this)+'px',left:'0',top:'-'+this._options.rulerWidth+'px'},
+                ruler        :{'z-index':'1',position:'absolute',border:'0 solid #000'},
+                ruler_v      :{'border-bottom-width':'1px',left:'0 !important'},
+                ruler_h      :{'border-right-width':'1px',top:'0 !important'},
+                rulers_top   :{'z-index':'2',position:'absolute',width:this._options.rulerWidth+'px',height:this._options.rulerWidth+'px',top:'-'+this._options.rulerWidth+'px',left:'-'+this._options.rulerWidth+'px',background:'#fff','border-right':'1px solid #000000','border-bottom':'1px solid #000000'},
+                ruler_min    :{width:(this._options.rulerMin-1)+'px',height:(this._options.rulerMin-1)+'px'},
+                ruler_med    :{width:(this._options.rulerMed-1)+'px',height:(this._options.rulerMed-1)+'px'},
+                ruler_max    :{width:(this._options.rulerMax-1)+'px',height:(this._options.rulerMax-1)+'px'},
+                ruler_label  :{position:'absolute','font-family':'helvetica','font-size':'8px',cursor:'default'},
+                ruler_labelh :{bottom:'0px',right:'1px'},
+                ruler_labelv :{bottom:'2px',right:'0px',width:'10px',transform:'rotate(-90deg)'},
+                mousepos     :{'z-index':'3',position:'absolute',width:'auto',height:'auto',background:'rgba(200,200,200,.8)',border:'1px solid #fff','font-size':'12px',padding:'1px 5px 3px','white-space':'nowrap'},
+                guideline    :{position:'absolute',background:'#0f0',width:'1px',height:'1px'},
+                guide_v      :{height:rulerH.call(this)+'px',cursor:'ew-resize'},
+                guide_h      :{width:rulerW.call(this)+'px',cursor:'ns-resize'}
+            },
 
-        UIBaseWidget.prototype.initStyles.call(this, extension);
+            {
+                ruler_labelv :{'-webkit-transform':'rotate(-90deg)','-moz-transform':'rotate(-90deg)','-ms-transform':'rotate(-90deg)','-o-transform':'rotate(-90deg)',filter:'progid:DXImageTransform.Microsoft.BasicImage(rotation=3)'}
+            },
 
-        this.extendObject(this._styles,{
-            rulerv_min: {width:pxMin+'px !important'},
-            rulerv_med: {width:pxMed+'px !important'},
-            rulerv_max: {width:pxMax+'px !important'},
-            rulerh_min: {height:pxMin+'px !important'},
-            rulerh_med: {height:pxMed+'px !important'},
-            rulerh_max: {height:pxMax+'px !important'}
-        });
+            extension,
+
+            {
+                rulerv_min: {width:pxMin+'px !important'},
+                rulerv_med: {width:pxMed+'px !important'},
+                rulerv_max: {width:pxMax+'px !important'},
+                rulerh_min: {height:pxMin+'px !important'},
+                rulerh_med: {height:pxMed+'px !important'},
+                rulerh_max: {height:pxMax+'px !important'}
+            }
+        );
     };
 
     UIRulerWidget.prototype.createSubElements = function() {
@@ -140,10 +142,6 @@ var UIRulerWidget = (function($,UIBaseWidget){
     UIRulerWidget.prototype.afterInit = function() {
         updateRulersPosition.call(this);
     };
-
-    /********************
-     * PUBLIC METHODS
-     ********************/
 
     /********************
      * PRIVATE METHODS
