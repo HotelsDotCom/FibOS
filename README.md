@@ -43,7 +43,7 @@ The 4 toggles on the right side enable features as follows:
 ---
 
 ### Select dropdown
-Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.
+Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.  
 Once the spacer is dropped, it still can be dragged around the page.
 
 When a spacer is clicked (or when it's just dropped) it can be moved around using arrow keys:
@@ -134,7 +134,7 @@ Click here to show/hide a dark semi-transparent overlay, in order to see all spa
 ### Rulers
 Click here to show/hide rulers.
 
-Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.
+Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.  
 Once a lineguide is dropped onto the page, it can be moved with the mouse or arrow keys:
 - arrows moves it by 1 pixel
 - while SHIFT key is pressed moves it by 10 pixels
@@ -149,7 +149,7 @@ While this toggle is active, the user can click on any text in the page revealin
 - a cyan blue semi-transparent box over the text, highlighting its block
 - a small box on top of the text with font-family, font-weight and font-size css properties
 
-Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).
+Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).  
 Disabling this toggle, will hide all Markers already placed as well as disable the click event.
 
 ---
@@ -240,14 +240,14 @@ With `grunt deploy` will be created also all *-latest.min.js files per brand int
 ### Custom initializer
 To set up a new initializer (as for venere or hotels already set) please follow these steps:
 
-1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)
-_note: the brandMsg will be used in the final minified file as comment in this form:_
+1. add the new brand under `pkg.brands` into `package.json` file (kay/value pair is brandName/brandMsg)  
+_note: the brandMsg will be used in the final minified file as comment in this form:_  
 `/** built for <%= brandMsg %> **/`
 
-2. create the new init file under `src/app/init/`
+2. create the new init file under `src/app/init/`  
 _note: the initializer file serves as options overrider for each widget that needs to be customized. The `FibOS()` constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if `null` the tool will work for `body` selector)._
 
-3. enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended)
+3. enhance the `build-all` grunt task into the Gruntfile (this is optional though recomended)  
 _note: if the brand "newbrand" is intended to be added, add the `build` task with the new brand as parameter, so that Grunt can append the correct initializer found in `src/app/init/fibos_newbrand.js`, or simply run `grunt build:newbrand` in command line._
 
 eg. for a brand named `newbrand` the file `src/app/init/fibos_newbrand.js` should be created with following content as example:
