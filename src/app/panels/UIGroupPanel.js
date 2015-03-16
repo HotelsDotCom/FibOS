@@ -138,7 +138,7 @@ var UIGroupPanel = (function($,UIBasePanel){
         var oldcheck = $checked.length>0 ? $checked.attr('id').replace(this._selectors.toggle,'') : false;
         if(oldcheck===this._selectors.hideall) oldcheck=false;
 
-        $tree.empty().append(groupItem(this._selectors.hideall, Boolean(oldcheck), 'none'));
+        $tree.empty().append(groupItem(this._selectors.hideall, !oldcheck, 'none'));
 
         var i,name;
         for(i in info_arr){
