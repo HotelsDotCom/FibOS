@@ -12,7 +12,7 @@ In order to load the tool at its **latest** release, use this string as "locatio
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
 
-It's available also the **staging** release, which will be the next _latest_ release but still work in progress.
+If you want to try newest implementations load the **staging** release, which will be the next _latest_ release but still work in progress.
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/staging/public/fibos-latest.min.js");})();
 
