@@ -497,8 +497,8 @@ var FibOS = (function(
     function fiboClone(pos,spacer,$clone){
         var cpos = this.$controls.offset();
         var mzero = {top:cpos.top-pos.top, left:cpos.left-pos.left};
-        mzero.top  += $(document).scrollTop()  + $clone.position().top + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
-        mzero.left += $(document).scrollLeft() + $clone.position().left + parseInt($clone.css('padding-left'));
+        mzero.top  += $clone.position().top  + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
+        mzero.left += $clone.position().left + parseInt($clone.css('padding-left'));
 
         var spacernum = parseInt(this._components.uiSpacer.getSpacerType(spacer));
         var newspacer = this._components.uiSpacer.addNewSpacer(spacernum);
@@ -527,7 +527,8 @@ var FibOS = (function(
 
     function dragHandler(e){
         var cpos = this.$controls.offset();
-        var zero = {top: e.pageY-cpos.top, left: e.pageX-cpos.left};
+        var dpos = {top:$(document).scrollTop(), left:$(document).scrollLeft()};
+        var zero = {top:e.pageY-(cpos.top-dpos.top), left:e.pageX-(cpos.left-dpos.left)};
         $('body').off('.fibos_drag')
             .on('mousemove.fibos_drag',draggingHandler.bind(this,zero))
             .on('mouseup.fibos_drag',function(e){$('body').off('.fibos_drag');return false;});
