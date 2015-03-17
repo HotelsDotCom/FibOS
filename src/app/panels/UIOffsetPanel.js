@@ -43,20 +43,21 @@ var UIOffsetPanel = (function($,UIBasePanel){
     UIOffsetPanel.prototype.createContent = function() {
         var $content = $('<div/>')
             .append($('<p/>')
-                .text('group: ')
+                .append($('<span/>').text('group: '))
                 .append($('<span/>').attr('id',this._selectors.group)))
             .append($('<p/>')
-                .text('offset top: ')
+                .append($('<span/>').text('offset top: '))
                 .append($('<input/>').attr('type','text').attr('id',this._selectors.top)))
             .append($('<p/>')
-                .text('offset left: ')
+                .append($('<span/>').text('offset left: '))
                 .append($('<input/>').attr('type','text').attr('id',this._selectors.left)))
-            .append($('<p/>').attr('id',this._selectors.multi_p)
-                .text('spacers: ')
-                .append($('<span/>').text('0')))
             .append($('<p/>')
-                .text('select inner group'))
-                .append($('<input/>').attr('type','checkbox').attr('id',this._selectors.multi));
+                .append($('<span/>').text('spacers: '))
+                .append($('<span/>').text('0').attr('id',this._selectors.multi_p)))
+            .append($('<p/>')
+                .append($('<input/>').attr('type','checkbox').attr('id',this._selectors.multi))
+                .append($('<label/>').attr('for',this._selectors.multi).text('select inner group')));
+
 
         return $content.children();
     };
@@ -106,7 +107,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
         var $group = $('#'+groupName);
         var amount = $group.length>0 ? $group.find('div').length : 0;
         $('#'+this._selectors.group).text(groupName);
-        $('#'+this._selectors.multi_p).find('span').text(amount);
+        $('#'+this._selectors.multi_p).text(amount);
     };
 
     /********************
@@ -164,7 +165,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
             this.bodyEventsToggle(isActive);
 
             var groupLength = isActive ? '0' : this.fibos._components.uiSpacer.spacersGroupLength();
-            $('#'+this.id_multipar).find('span').text(groupLength);
+            $('#'+this.id_multipar).text(groupLength);
         },
 
         selectStart: function(e){
@@ -227,7 +228,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
             mbox.remove();
 
             this.ctx._groupSelected = this.findSpacersInsideBox(box);
-            $('#'+this.id_multipar).find('span').text(this.ctx._groupSelected.length);
+            $('#'+this.id_multipar).text(this.ctx._groupSelected.length);
         },
 
         findSpacersInsideBox: function(box){
