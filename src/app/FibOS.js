@@ -133,13 +133,18 @@ var FibOS = (function(
                 .off('.fibos_keys')
                 .on('keydown.fibos_keys',keyHandler.bind(this));
 
+            // drag GUI
+            this.$title
+                .off('.fibos_title')
+                .on('mousedown.fibos_title',dragHandler.bind(this));
+
             // panelToggles
             this._panels.togglesPanel.on('toggle_fibos',  function(){
                 var isHidden = this.$controls.hasClass('hidden');
                 if(isHidden)
-                    this.$controls.removeClass('hidden').css('left','0px');
+                    this.$controls.removeClass('hidden').css({left:0,top:0});
                 else
-                    this.$controls.addClass('hidden').css('left',(this.$controls.width()*-1)+'px');
+                    this.$controls.addClass('hidden').css({left:this.$controls.width()*-1,top:0});
 
                 var showClonable = !this.$controls.hasClass('hidden') && this._panels.togglesPanel.getStateOf('spacers');
                 this._panels.selectPanel.toggleCloneDisplay(showClonable);
@@ -325,7 +330,7 @@ var FibOS = (function(
                         {position:'absolute',top:'0',left:'0','font-family':'Arial','text-align':'left',color:'#222','user-select':'none'},
 
                     '#fibo_panels > h1':
-                        {'font-size':'18px',margin:'0 0 5px 5px',padding:'0'},
+                        {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',cursor:'pointer'},
                     '#fibo_panels > h1 > small':
                         {'font-size':'10px','font-weight':'400','margin-left':'3px'},
 
@@ -490,7 +495,8 @@ var FibOS = (function(
     }
 
     function fiboClone(pos,spacer,$clone){
-        var mzero = {top:-pos.top,left:-pos.left};
+        var cpos = this.$controls.offset();
+        var mzero = {top:cpos.top-pos.top, left:cpos.left-pos.left};
         mzero.top  += $(document).scrollTop()  + $clone.position().top + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
         mzero.left += $(document).scrollLeft() + $clone.position().left + parseInt($clone.css('padding-left'));
 
@@ -517,6 +523,20 @@ var FibOS = (function(
                 mod==='a' && this._panels.spacerPanel.deleteSpacer();
                 break;
         }
+    }
+
+    function dragHandler(e){
+        var cpos = this.$controls.offset();
+        var zero = {top: e.pageY-cpos.top, left: e.pageX-cpos.left};
+        $('body').off('.fibos_drag')
+            .on('mousemove.fibos_drag',draggingHandler.bind(this,zero))
+            .on('mouseup.fibos_drag',function(e){$('body').off('.fibos_drag');return false;});
+        return false;
+    }
+    function draggingHandler(zero,e){
+        var pos = {top: e.pageY-zero.top, left: e.pageX-zero.left};
+        this.$controls.css(pos);
+        return false;
     }
 
     function toggleElement($e,toggle){
