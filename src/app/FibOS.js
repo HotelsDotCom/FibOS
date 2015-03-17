@@ -330,7 +330,7 @@ var FibOS = (function(
                         {position:'absolute',top:'0',left:'0','font-family':'Arial','text-align':'left',color:'#222','user-select':'none'},
 
                     '#fibo_panels > h1':
-                        {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',cursor:'pointer'},
+                        {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',cursor:'move'},
                     '#fibo_panels > h1 > small':
                         {'font-size':'10px','font-weight':'400','margin-left':'3px'},
 
