@@ -25,9 +25,12 @@ var FibOS = (function(
         this._components = {};
         this._panels = {};
 
-        this.$el = null;
-        this.$toggles = null;
-        this.$panels = null;
+        this.$el         = null;
+        this.$title      = null;
+        this.$background = null;
+        this.$controls   = null;
+        this.$toggles    = null;
+        this.$panels     = null;
 
         this.init(jqueryMinVersion);
 
@@ -64,13 +67,12 @@ var FibOS = (function(
         createElement: function() {
             $('#'+this._ID).remove();
 
-            var $fibo_title  = $('<h1/>').text(this._fibosTitle).append($('<small/>').text(this._fibosVersion));
-
             this.$el         = $('<div/>').attr('id',this._ID);
+            this.$title      = $('<h1/>').text(this._fibosTitle).append($('<small/>').text(this._fibosVersion));
             this.$background = $('<div/>').attr('id','fibo_bg');
             this.$controls   = $('<div/>').attr('id','fibo_controls');
             this.$toggles    = $('<div/>').attr('id','fibo_toggles');
-            this.$panels     = $('<div/>').attr('id','fibo_panels').append($fibo_title);
+            this.$panels     = $('<div/>').attr('id','fibo_panels').append(this.$title);
 
             this.$el
                 .append(this.$background)
@@ -88,7 +90,6 @@ var FibOS = (function(
         setupComponents: function() {
             this._components.uiMarker  = this.factory.components.uiMarker.call(  this, 'fibos_marker',  this._componentsOptions['uiMarker']  );
             this._components.uiRuler   = this.factory.components.uiRuler.call(   this, 'fibos_ruler',   this._componentsOptions['uiRuler']   );
-            //this._components.uiSlider  = this.factory.components.uiSlider.call(  this, 'fibos_slider',  this._componentsOptions['uiSlider']  );
             this._components.uiSpacer  = this.factory.components.uiSpacer.call(  this, 'fibos_spacers', this._componentsOptions['uiSpacer']  );
             this._components.uiSpriter = this.factory.components.uiSpriter.call( this, 'fibos_spriter', this._componentsOptions['uiSpriter'] );
 
@@ -128,8 +129,9 @@ var FibOS = (function(
         initEvents: function() {
 
             // keyboard shortcuts
-            $('body').off('.fibos')
-                     .on('keydown.fibos',keyHandler.bind(this));
+            $('body')
+                .off('.fibos_keys')
+                .on('keydown.fibos_keys',keyHandler.bind(this));
 
             // panelToggles
             this._panels.togglesPanel.on('toggle_fibos',  function(){
@@ -141,54 +143,46 @@ var FibOS = (function(
 
                 this._panels.selectPanel.toggleCloneDisplay(isHidden);
             }.bind(this));
+
             this._panels.togglesPanel.on('toggle_overlay',function(data){
                 toggleElement(this.$background,data);
             }.bind(this));
+
             this._panels.togglesPanel.on('toggle_spacers',function(data){
                 toggleElement(this._components.uiSpacer,data);
                 this._panels.selectPanel.toggleCloneDisplay(data);
             }.bind(this));
+
             this._panels.togglesPanel.on('toggle_rulers', function(data){
                 toggleElement(this._components.uiRuler,data);
             }.bind(this));
+
             this._panels.togglesPanel.on('toggle_markers', function(data){
                 toggleElement(this._components.uiMarker,data);
                 this._components.uiMarker.toggleListener(data);
             }.bind(this));
 
             // panelSelect
-            this._panels.selectPanel.on('clone_select', function(data,event){});
             this._panels.selectPanel.on('clone_spacer', function(data){
                 fiboClone.call(this,data.pos,data.spacer,data.$clone);
             }.bind(this));
 
-            // panelSpacer
-            this._panels.spacerPanel.on('spacer_changed', function(data,event){});
-            this._panels.spacerPanel.on('spacer_offset', function(data,event){});
-            this._panels.spacerPanel.on('spacer_delete', function(data,event){});
-            this._panels.spacerPanel.on('spacer_duplicate', function(data,event){});
-
             // panelGroups
-            this._panels.groupPanel.on('group_remove', function(data,event){});
-            this._panels.groupPanel.on('group_rename', function(data,event){});
             this._panels.groupPanel.on('group_select', function(data){
                 this._components.uiSpacer.selectGroup(data);
                 this._panels.offsetPanel.selectGroup(data);
             }.bind(this));
+
             this._panels.groupPanel.on('group_list_open', function(){
                 this.openPanel('groupPanel');
             }.bind(this));
-
-            // panelOffset
-            this._panels.offsetPanel.on('group_offset_apply', function(data,event){});
-            this._panels.offsetPanel.on('group_offset_save', function(data,event){});
-            this._panels.offsetPanel.on('group_toggle_multiple', function(data,event){});
 
             // panelStorage
             this._panels.storagePanel.on('history_restore', function(){
                 var stJson = this._components.uiSpacer.getLocalStorage(true);
                 this._panels.groupPanel.showGroupsList(stJson);
             }.bind(this));
+
             this._panels.storagePanel.on('history_save', function(){
                 this._components.uiSpacer.setLocalStorage();
             }.bind(this));
@@ -199,6 +193,7 @@ var FibOS = (function(
                 var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
                 this._panels.groupPanel.showGroupsList(stJson);
             }.bind(this));
+
             this._panels.inputPanel.on('input_export', function(){
                 var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
                 console.log(stJson);
@@ -209,6 +204,7 @@ var FibOS = (function(
             this._panels.spritePanel.on('sprites_analyze', function(){
                 this._components.uiSpriter.analyze();
             }.bind(this));
+
             this._panels.spritePanel.on('sprites_toggle', function(data){
                 this._components.uiSpriter.toggleSprite(data);
             }.bind(this));
@@ -263,8 +259,6 @@ var FibOS = (function(
                     return $('#fibo_toggle_markers').find('.fibo_checkbox').is(':checked');
                 }
             },
-            uiRuler : {},
-            uiSlider : {},
             uiSpacer : {
                 moveCallback: function(moved){
                     this._panels.spacerPanel.moveCallback(moved);
