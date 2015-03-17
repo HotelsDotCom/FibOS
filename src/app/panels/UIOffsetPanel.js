@@ -176,7 +176,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
             if(!this.groupSelecting) return true;
 
             var toX,toY;
-            var pos = this.zero;
+            var pos = {left:this.zero.left, top:this.zero.top};
             var pX = e.pageX;
             var pY = e.pageY;
             if(pX<this.zero.left){
