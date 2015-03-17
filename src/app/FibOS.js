@@ -141,7 +141,8 @@ var FibOS = (function(
                 else
                     this.$controls.addClass('hidden').css('left',(this.$controls.width()*-1)+'px');
 
-                this._panels.selectPanel.toggleCloneDisplay(isHidden);
+                var showClonable = !this.$controls.hasClass('hidden') && this._panels.togglesPanel.getStateOf('spacers');
+                this._panels.selectPanel.toggleCloneDisplay(showClonable);
             }.bind(this));
 
             this._panels.togglesPanel.on('toggle_overlay',function(data){
@@ -150,7 +151,8 @@ var FibOS = (function(
 
             this._panels.togglesPanel.on('toggle_spacers',function(data){
                 toggleElement(this._components.uiSpacer,data);
-                this._panels.selectPanel.toggleCloneDisplay(data);
+                var showClonable = !this.$controls.hasClass('hidden') && data;
+                this._panels.selectPanel.toggleCloneDisplay(showClonable);
             }.bind(this));
 
             this._panels.togglesPanel.on('toggle_rulers', function(data){
@@ -253,10 +255,10 @@ var FibOS = (function(
         callbacks: {
             uiMarker : {
                 highlightCheck : function(){
-                    return $('#fibo_toggle_markers').find('.fibo_checkbox').is(':checked');
+                    return this._panels.togglesPanel.getStateOf('markers');
                 },
                 fontinfoCheck : function(){
-                    return $('#fibo_toggle_markers').find('.fibo_checkbox').is(':checked');
+                    return this._panels.togglesPanel.getStateOf('markers');
                 }
             },
             uiSpacer : {
