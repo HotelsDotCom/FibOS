@@ -76,6 +76,8 @@ var UIOffsetPanel = (function($,UIBasePanel){
             multiSpacerManager.toggle($(e.currentTarget).is(':checked'),this);
         });
 
+        multiSpacerManager.bodyEventsToggle(false);
+
     };
 
     UIOffsetPanel.prototype.getStyles = function() {
@@ -133,6 +135,21 @@ var UIOffsetPanel = (function($,UIBasePanel){
 
     var multiSpacerManager = {
 
+        bodyEventsToggle: function(toggle){
+            var $body = $('body');
+            if(toggle){
+                $body
+                    .css('cssText','cursor: crosshair !important;')
+                    .on('mousedown.multiselect',this.selectStart.bind(this))
+                    .on('mousemove.multiselect',this.selectMulti.bind(this))
+                    .on('mouseup.multiselect',this.selectEnd.bind(this));
+            }else{
+                $body
+                    .css('cursor','inherit')
+                    .off('.multiselect');
+            }
+        },
+
         toggle: function(isActive,ctx){
             this.ctx = ctx;
             this.fibos = ctx._gui;
@@ -144,19 +161,10 @@ var UIOffsetPanel = (function($,UIBasePanel){
             this.groupSelecting = false;
             this.ctx._groupSelected = [];
 
-            if(isActive){
-                $('#'+this.id_multipar).find('span').text('0');
-                $('body')
-                    .css('cursor','crosshair')
-                    .on('mousedown.multiselect',this.selectStart.bind(this))
-                    .on('mousemove.multiselect',this.selectMulti.bind(this))
-                    .on('mouseup.multiselect',this.selectEnd.bind(this));
-            }else{
-                $('#'+this.id_multipar).find('span').text(this.fibos._components.uiSpacer.spacersGroupLength());
-                $('body')
-                    .css('cursor','inherit')
-                    .off('.multiselect');
-            }
+            this.bodyEventsToggle(isActive);
+
+            var groupLength = isActive ? '0' : this.fibos._components.uiSpacer.spacersGroupLength();
+            $('#'+this.id_multipar).find('span').text(groupLength);
         },
 
         selectStart: function(e){
@@ -175,29 +183,31 @@ var UIOffsetPanel = (function($,UIBasePanel){
         selectMulti: function(e){
             if(!this.groupSelecting) return true;
 
-            var toX,toY;
-            var pos = {left:this.zero.left, top:this.zero.top};
-            var pX = e.pageX;
-            var pY = e.pageY;
-            if(pX<this.zero.left){
-                pos.left = pX;
+            var toX,toY,
+                mpos = {top:e.pageY, left: e.pageX},
+                zpos = {top:this.zero.top, left:this.zero.left};
+
+            if(mpos.left < this.zero.left){
+                zpos.left = mpos.left;
                 toX = this.zero.left;
-            }else{
-                toX = pX;
             }
-            if(pY<this.zero.top){
-                pos.top = pY;
+            else toX = mpos.left;
+
+            if(mpos.top < this.zero.top){
+                zpos.top = mpos.top;
                 toY = this.zero.top;
-            }else{
-                toY = pY;
             }
-            var w = toX - pos.left;
-            var h = toY - pos.top;
+            else toY = mpos.top;
+
+            var size = {
+                width  : Math.abs(toX - zpos.left),
+                height : Math.abs(toY - zpos.top)
+            };
 
             $('#'+this.id_multibox)
-                .offset(pos)
-                .width(w)
-                .height(h);
+                .offset(zpos)
+                .width(size.width)
+                .height(size.height);
         },
 
         selectEnd: function(e){
