@@ -31,36 +31,24 @@
           <h1>
 <a id="fibos" class="anchor" href="#fibos" aria-hidden="true"><span class="octicon octicon-link"></span></a>FibOS</h1>
 
+<p><a href="#usage">Usage</a> |
+<a href="#build">Build</a> |
+<a href="#contributing">Contributing</a></p>
+
 <p>Bookmarklet UI Tool for easily check layout implementations.</p>
-
-<ul>
-<li>
-<a href="#usage">Here</a> is how to use the tool.</li>
-<li>
-<a href="#build">Here</a> is how to build and debug the tool.</li>
-<li>
-<a href="#contributing">Here</a> is how to customize the tool and its components.</li>
-</ul>
-
-<p>Use this string as "location" for the bookmarklet:</p>
-
-<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
-</code></pre>
-
-<p>For Hotels.com use this one:</p>
-
-<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-hotels.min.js");})();
-</code></pre>
-
-<p>For Venere.com use this one:</p>
-
-<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest-venere.min.js");})();
-</code></pre>
 
 <hr>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>In order to load the tool at its latest release, use this string as "location" for the bookmarklet:</p>
+
+<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
+</code></pre>
+
+<p>For brands specific builds, like <strong>hotels.com</strong> or <strong>venere.com</strong>, please use the correct file:<br>
+<code>fibos-latest-hotels.min.js</code> or <code>fibos-latest-venere.min.js</code>.</p>
 
 <p>Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page.</p>
 
@@ -93,9 +81,8 @@
 <h3>
 <a id="select-dropdown" class="anchor" href="#select-dropdown" aria-hidden="true"><span class="octicon octicon-link"></span></a>Select dropdown</h3>
 
-<p>Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.</p>
-
-<p>Once the spacer is dropped, it still can be dragged around the page.</p>
+<p>Using the dropdown, a spacer can be chosen and then dragged/dropped onto the page.<br>
+Once the spacer is dropped, it still can be dragged around the page.</p>
 
 <p>When a spacer is clicked (or when it's just dropped) it can be moved around using arrow keys:</p>
 
@@ -197,8 +184,6 @@
 
 <p>Click here to show/hide spacers.</p>
 
-<p>NOTE: there is a known issue about dropping new spacers when this toggle is disabled. Please, be aware of this and avoid to drop-in new spacers when this toggle is disabled.</p>
-
 <hr>
 
 <h3>
@@ -213,9 +198,8 @@
 
 <p>Click here to show/hide rulers.</p>
 
-<p>Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.</p>
-
-<p>Once a lineguide is dropped onto the page, it can be moved with the mouse or arrow keys:</p>
+<p>Once the rulers are shown, from both the horizontal or vertical ruler it can be dragged-in a new lineguide.<br>
+Once a lineguide is dropped onto the page, it can be moved with the mouse or arrow keys:</p>
 
 <ul>
 <li>arrows moves it by 1 pixel</li>
@@ -233,20 +217,19 @@
 <p>While this toggle is active, the user can click on any text in the page revealing 2 type of informations:</p>
 
 <ul>
-<li>a cyano semi-transparent box over the text, highlighting its block</li>
+<li>a cyan blue semi-transparent box over the text, highlighting its block</li>
 <li>a small box on top of the text with font-family, font-weight and font-size css properties</li>
 </ul>
 
-<p>Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).</p>
-
-<p>Disabling this toggle, will hide all Markers already placed as well as disable the click event.</p>
+<p>Enabling this toggle, will show all Markers alrady placed as well as enable the click event (which will prevent defaults, eg. for links).<br>
+Disabling this toggle, will hide all Markers already placed as well as disable the click event.</p>
 
 <hr>
 
 <h2>
 <a id="build" class="anchor" href="#build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build</h2>
 
-<p>First of all, NodeJS should be installed.</p>
+<p>First of all, <a href="https://nodejs.org/download/">NodeJS</a> should be installed.</p>
 
 <p>Once the project is cloned, go into the project's root folder and run:</p>
 
@@ -257,26 +240,27 @@ grunt deploy
 
 <p><code>grunt-cli</code> is the Grunt Command Line Interface needed to run Grunt tasks.</p>
 
-<p>With <code>npm install</code> all node packages needed by the tool compiler will be installed into <code>/node_modules/</code> folder.</p>
+<p>With <code>npm install</code> all node packages needed by the compiler will be installed into <code>node_modules/</code> folder.</p>
 
 <p>With the <code>grunt deploy</code> command, all files for the project will be created under the <code>build/</code> (both minified and full, for debugging) and all the minified will be also copied into <code>public/[version]/</code> folder along with <code>*-latest.min.js</code> version in <code>public/</code> folder.</p>
 
-<p>Eg. With the version <code>1.1.2</code>, running <code>grunt deploy</code> will produce this file tree:</p>
+<p>Eg. With the version <code>1.0.2</code>, running <code>grunt deploy</code> will produce this file tree:</p>
 
 <pre><code>public/
   |- fibos-latest.min.js
   |- fibos-latest-hotels.min.js
   |- fibos-latest-venere.min.js
-  |- 1.1.2/
-    |- fibos-1.1.2.min.js
-    |- fibos-hotels-1.1.2.min.js
-    |- fibos-venere-1.1.2.min.js
+  |- 1.0.2/
+    |- fibos-1.0.2.min.js
+    |- fibos-hotels-1.0.2.min.js
+    |- fibos-venere-1.0.2.min.js
     |- widgets/
-      |- uiMarker-1.1.2-min.js
-      |- uiRuler-1.1.2-min.js
-      |- uiSlider-1.1.2-min.js
-      |- uiSpacer-1.1.2-min.js
-      |- uiSpriter-1.1.2-min.js
+      |- uiMarker-1.0.2-min.js
+      |- uiRuler-1.0.2-min.js
+      |- uiSlider-1.0.2-min.js
+      |- uiSpacer-1.0.2-min.js
+      |- uiSpriter-1.0.2-min.js
+      |- uiWidgets-1.0.2-min.js
 </code></pre>
 
 <h4>
@@ -330,27 +314,51 @@ grunt deploy
 <tbody>
 <tr>
 <td><code>grunt widget:marker</code></td>
-<td>build/minify MARKER widget into <code>build/[version]/</code>
+<td>build/minify MARKER widget into <code>build/[version]/widgets/</code>
 </td>
 </tr>
 <tr>
 <td><code>grunt widget:ruler</code></td>
-<td>build/minify RULER widget into <code>build/[version]/</code>
+<td>build/minify RULER widget into <code>build/[version]/widgets/</code>
 </td>
 </tr>
 <tr>
 <td><code>grunt widget:slider</code></td>
-<td>build/minify SLIDER widget into <code>build/[version]/</code>
+<td>build/minify SLIDER widget into <code>build/[version]/widgets/</code>
 </td>
 </tr>
 <tr>
 <td><code>grunt widget:spacer</code></td>
-<td>build/minify SPACER widget into <code>build/[version]/</code>
+<td>build/minify SPACER widget into <code>build/[version]/widgets/</code>
 </td>
 </tr>
 <tr>
 <td><code>grunt widget:spriter</code></td>
-<td>build/minify SPRITER widget into <code>build/[version]/</code>
+<td>build/minify SPRITER widget into <code>build/[version]/widgets/</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="all-widgets" class="anchor" href="#all-widgets" aria-hidden="true"><span class="octicon octicon-link"></span></a>All Widgets</h4>
+
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grunt widgets-all</code></td>
+<td>build/minify ALL widgets into <code>build/[version]/widgets/</code>
+</td>
+</tr>
+<tr>
+<td><code>grunt widgets-test</code></td>
+<td>build/minify ALL widgets with test initializer into <code>build/[version]/widgets/</code>
 </td>
 </tr>
 </tbody>
@@ -408,34 +416,43 @@ grunt deploy
 <p>To set up a new initializer (as for venere or hotels already set) please follow these steps:</p>
 
 <ol>
-<li>add the new brand under <code>pkg.brands</code> into <code>package.json</code> file (kay/value pair is brandName/brandMsg)</li>
-<li>create the new init file under <code>src/app/init/</code>
-</li>
-<li>for a brand named <code>newbrand</code> add the call to <code>build:newbrand</code> into <code>build-all</code> task or simply run it in command line</li>
+<li><p>add the new brand under <code>pkg.brands</code> into <code>package.json</code> file (kay/value pair is brandName/brandMsg)<br>
+<em>note: the brandMsg will be used in the final minified file as comment in this form:</em><br>
+<code>/** built for &lt;%= brandMsg %&gt; **/</code></p></li>
+<li><p>create the new init file under <code>src/app/init/</code><br>
+<em>note: the initializer file serves as options overrider for each widget that needs to be customized. The <code>FibOS()</code> constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if <code>null</code> the tool will work for <code>body</code> selector).</em></p></li>
+<li><p>enhance the <code>build-all</code> grunt task into the Gruntfile (this is optional though recomended)<br>
+<em>note: if the brand "newbrand" is intended to be added, add the <code>build</code> task with the new brand as parameter, so that Grunt can append the correct initializer found in <code>src/app/init/fibos_newbrand.js</code>, or simply run <code>grunt build:newbrand</code> in command line.</em></p></li>
 </ol>
-
-<p>Note for 1: the brandMsg will be used in the final minified file as comment in this form: <code>/** built for brandMsg **/</code></p>
-
-<p>Note for 2: the initializer file serves as options overrider for each widget that needs to be customized. The <code>FibOS()</code> constructor accept a selector as first parameter so that the whole tool works only inside of it (should be the main website wrapper element selector, if <code>null</code> the tool will work for <code>body</code> selector).</p>
 
 <p>eg. for a brand named <code>newbrand</code> the file <code>src/app/init/fibos_newbrand.js</code> should be created with following content as example:</p>
 
-<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> myOptions <span class="pl-k">=</span> {
+<div class="highlight highlight-javascript"><pre><span class="pl-c">/* [1] : package.json */</span>
+<span class="pl-c">//...</span>
+<span class="pl-s1"><span class="pl-pds">"</span>brands<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+  <span class="pl-s1"><span class="pl-pds">"</span>hotels<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">"</span>HOTELS.COM<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>venere<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">"</span>VENERE.COM<span class="pl-pds">"</span></span>,
+  <span class="pl-s1"><span class="pl-pds">"</span>newbrand<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">"</span>MY PERSONAL COMPANY<span class="pl-pds">"</span></span>
+},
+<span class="pl-c">//...</span>
+
+<span class="pl-c">/* [2] : src/app/init/fibos_newbrand.js */</span>
+<span class="pl-s">var</span> myOptions <span class="pl-k">=</span> {
     logEvents<span class="pl-k">:</span> <span class="pl-c1">true</span>,
     uiSpacer<span class="pl-k">:</span>  {spacersList<span class="pl-k">:</span>[<span class="pl-c1">5</span>,<span class="pl-c1">10</span>,<span class="pl-c1">15</span>,<span class="pl-c1">20</span>,<span class="pl-c1">25</span>,<span class="pl-c1">30</span>,<span class="pl-c1">35</span>,<span class="pl-c1">40</span>],spacerMin<span class="pl-k">:</span><span class="pl-c1">1</span>},
     uiRuler<span class="pl-k">:</span>   {rulerWidth<span class="pl-k">:</span><span class="pl-c1">8</span>},
     uiMarker<span class="pl-k">:</span>  {taglist<span class="pl-k">:</span>{a<span class="pl-k">:</span><span class="pl-c1">false</span>,input<span class="pl-k">:</span><span class="pl-c1">false</span>,dfn<span class="pl-k">:</span><span class="pl-c1">true</span>}},
     uiSpriter<span class="pl-k">:</span> {domain<span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">'</span>img.mydomain.com<span class="pl-pds">'</span></span>}
 };
+<span class="pl-s">var</span> fibos <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FibOS</span>(<span class="pl-s1"><span class="pl-pds">'</span>#elemId.elemClass<span class="pl-pds">'</span></span>, myOptions);
 
-<span class="pl-s">var</span> fibos <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FibOS</span>(<span class="pl-s1"><span class="pl-pds">'</span>#elemId.elemClass<span class="pl-pds">'</span></span>, myOptions);</pre></div>
-
-<p>Note for 3: enhance the <code>build-all</code> grunt task into the Gruntfile (this is optional though recomended). If the brand <code>newbrand</code> is intended to be added, add the <code>build</code> task with the new brand as parameter, so that Grunt can append the correct initializer found in <code>src/app/init/fibos_newbrand.js</code>, or simply run <code>grunt build:newbrand</code> in command line.</p>
-
-<div class="highlight highlight-javascript"><pre>grunt.registerTask(<span class="pl-s1"><span class="pl-pds">'</span>build-all<span class="pl-pds">'</span></span>, [
+<span class="pl-c">/* [3] : Gruntfile.js */</span>
+<span class="pl-c">// ...</span>
+grunt.registerTask(<span class="pl-s1"><span class="pl-pds">'</span>build-all<span class="pl-pds">'</span></span>, [
     <span class="pl-s1"><span class="pl-pds">'</span>clean:build<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:hotels<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:venere<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:newbrand<span class="pl-pds">'</span></span>,
-    <span class="pl-s1"><span class="pl-pds">'</span>widget:marker<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:ruler<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:slider<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spacer<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spriter<span class="pl-pds">'</span></span>
-]);</pre></div>
+    <span class="pl-s1"><span class="pl-pds">'</span>widget:marker<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:ruler<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:slider<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spacer<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spriter<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widgets-all<span class="pl-pds">'</span></span>
+]);
+<span class="pl-c">// ...</span></pre></div>
 
 <hr>
 
