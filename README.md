@@ -8,14 +8,18 @@ Bookmarklet UI Tool for easily check layout implementations.
 ---
 
 ## Usage
-In order to load the tool at its latest release, use this string as "location" for the bookmarklet:
+In order to load the tool at its **latest** release, use this string as "location" for the bookmarklet:
 
     javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
+
+To try the newest implementations load the **staging** release: will be the next _latest_ release, but still work in progress.
+
+    javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/staging/public/fibos-latest.min.js");})();
 
 For brands specific builds, like **hotels.com** or **venere.com**, please use the correct file:  
 `fibos-latest-hotels.min.js` or `fibos-latest-venere.min.js`.
 
-Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page.
+Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page. Starting from `v1.0.3+` it can also be dragged around the page clicking on the title.
 
 ![FibOS closed](readme/fibos-panel-closed.jpg)
 
