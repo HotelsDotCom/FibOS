@@ -349,6 +349,8 @@ var FibOS = (function(
                         {background:'rgba(100,100,100,1)'},
                     '#fibo_toggle_main:after':
                         {content:'"«"',left:'2px',top:'5px',position:'absolute',color:'#fff'},
+                    '#fibo_controls.hidden':
+                        {display:'block',visibility:'visible'},
                     '#fibo_controls.hidden #fibo_toggle_main:after':
                         {content:'"»"'},
 
