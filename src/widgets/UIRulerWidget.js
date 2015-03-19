@@ -126,7 +126,7 @@ var UIRulerWidget = (function($,UIBaseWidget){
     };
 
     UIRulerWidget.prototype.initEvents = function() {
-        $(this.$el).off('.guidesevent')
+        this.$el.off('.guidesevent')
             .on('mousedown.guidesevent','.rulers_container',appendLineGuide.bind(this))
             .on('mousedown.guidesevent','.ruler_guideline',startGuideDrag.bind(this));
 
