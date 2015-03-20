@@ -245,15 +245,23 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     function markerHeight(elem) {
         var $el = $(elem),
             loginfo = true,
-            fw = $el.css('font-weight'),
-            fs = $el.css('font-size').replace('px',''),
+            fw = parseInt($el.css('font-weight')),
+            fs = Math.round(parseFloat($el.css('font-size'))),
             ff = $el.css('font-family').split(',')[0].replace(/\"|\'| /g,'').toLowerCase();
 
         var sizes = {'arial':sizesDefault(),'open sans':sizesDefault()};
         sizes['arial']['8']      = fo(0,0);
+        sizes['arial']['10']     = fo(0,0);
+        sizes['arial']['11']     = fo(0,0);//TODO
         sizes['arial']['12']     = fo(3,1);
+        sizes['arial']['13']     = fo(0,0);//TODO
+        sizes['arial']['14']     = fo(0,0);//TODO
+        sizes['arial']['15']     = fo(0,0);//TODO
+        sizes['arial']['16']     = fo(2,0);
         sizes['arial']['18']     = fo(2,-1);
         sizes['arial']['20']     = fo(6,3);
+        sizes['arial']['24']     = fo(5,3);
+        sizes['arial']['26']     = fo(8,3);
         sizes['open sans']['12'] = fo(1,-1);
         sizes['open sans']['21'] = fo(5,1);
         sizes['open sans']['26'] = fo(11,5);
