@@ -87,6 +87,7 @@ var UIWidgetExample = (function($, UIBaseWidget){
 
     UIWidgetExample.prototype.createSubElements = function() {
 
+        // create this.$el's sub-elements
         this.$el.addClass('myClass');
         this.$subElement = $('<div/>').addClass('sub');
 
