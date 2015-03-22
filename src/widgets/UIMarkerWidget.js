@@ -12,6 +12,22 @@ var UIMarkerWidget = (function($,UIBaseWidget){
      * @constructor
      */
     function UIMarkerWidget(ID, options) {
+
+        // TODO: improve multipliers
+        this.multipliers = {
+            'default':{
+                top    : 0.19230769230769232,
+                bottom : 0.19230769230769232,
+                height : 0.15384615384615385
+            },
+            'opensans':{
+                top    :    0.1920,//30769230769232
+                bottom :      0.20,//3076923076923078
+                height : 0.2222222222//(use with line-height)
+                //height : 0.3076920 //3076923077 (use with font-size)
+            }
+        };
+
         UIBaseWidget.call(this, ID, options);
     }
 
@@ -28,6 +44,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     UIMarkerWidget.prototype.initOptions = function(options) {
         this.setOptions({
+            markerOffset   : 2,             //how many offset in pixel around text
             checkUseMarker : null,          //if this function returns false the marker won't be applied
             checkUseFont   : null,          //if this function returns false the fontinfo won't be applied
             markerClass    : 'fiboMarker',  //common highlight element class
@@ -116,7 +133,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         var useMarker = this._options.checkUseMarker ? this._options.checkUseMarker() : true;
         var useFont = this._options.checkUseFont ? this._options.checkUseFont() : true;
         if(useMarker||useFont)
-            size = markerSize(elem);
+            size = markerHeight.call(this,elem);
         else
             return false;
 
@@ -133,7 +150,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         var dataName = this._options.markerData;
         if($(elem).data(dataName)===true) return true;
 
-        size || (size=markerSize(elem));
+        size || (size=markerHeight.call(this,elem));
         var thl = $('<div class="'+this._options.markerClass+'"/>')
             .width(size.width)
             .height(size.height)
@@ -148,7 +165,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         var dataName = this._options.fontData;
         if($(elem).data(dataName)===true) return true;
 
-        size || (size=markerSize(elem));
+        size || (size=markerHeight.call(this,elem));
         var info = markerFont(elem);
         var p1 = $('<p class="fi1"/>').text(info[0]),
             p2 = $('<p class="fi2"/>').text(info[1]),
@@ -218,7 +235,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         var $el = $(elem),
             fw = $el.css('font-weight'),
             fs = $el.css('font-size').replace('px',''),
-            ff = $el.css('font-family').split(',')[0].replace(/\"|'/g,'');
+            ff = $el.css('font-family').split(',')[0].replace(/\"|\'/g,'');
 
         var lett1 = ff.split(' ')[0].substr(0,1).toUpperCase(),
             lett2 = (ff.split(' ')[1]?ff.split(' ')[1].substr(0,1).toUpperCase():ff.substr(1,1).toLowerCase()),
@@ -227,73 +244,37 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         return [name,fw,fs];
     }
 
-    //marker size object {width:Number,height:Number,offset:{left:Number,top:Number}}
-    function markerSize(elem) {
-        var fontOffset = markerHeight(elem);
-        var $el = $(elem);
-        return {
-            width  : $el.width(),
-            height : $el.height()-(fontOffset.t + fontOffset.b),
-            offset : {
-                left: $el.offset().left + parseInt($el.css('padding-left')),
-                top : $el.offset().top  + parseInt($el.css('padding-top')) + fontOffset.t
-            }
-        };
-    }
-
     //offset info on given elemenet's fontFamily and fontSize css properties
     function markerHeight(elem) {
-        var $el = $(elem),
-            loginfo = true,
-            fw = parseInt($el.css('font-weight')),
-            fs = Math.round(parseFloat($el.css('font-size'))),
-            ff = $el.css('font-family').split(',')[0].replace(/\"|\'| /g,'').toLowerCase();
+        var $elem = $(elem),
+            ff = $elem.css('font-family').split(',')[0].replace(/\"|\'| /g,'').toLowerCase(),
+//            dp = $elem.css('display'),
+            fs = parseFloat($elem.css('font-size')),
+//            fw = parseInt($elem.css('font-weight')),
+            lh = parseFloat($elem.css('line-height')),
+//            eh = $elem.height(),
+            ew = $elem.width(),
+            ey = $elem.offset().top + parseFloat($elem.css('padding-top')),
+            ex = $elem.offset().left + parseFloat($elem.css('padding-left'));
 
-        var sizes = {'arial':sizesDefault(),'open sans':sizesDefault()};
-        sizes['arial']['8']      = fo(0,0);
-        sizes['arial']['10']     = fo(0,0);
-        sizes['arial']['11']     = fo(0,0);//TODO
-        sizes['arial']['12']     = fo(3,1);
-        sizes['arial']['13']     = fo(0,0);//TODO
-        sizes['arial']['14']     = fo(0,0);//TODO
-        sizes['arial']['15']     = fo(0,0);//TODO
-        sizes['arial']['16']     = fo(2,0);
-        sizes['arial']['18']     = fo(2,-1);
-        sizes['arial']['20']     = fo(6,3);
-        sizes['arial']['24']     = fo(5,3);
-        sizes['arial']['26']     = fo(8,3);
-        sizes['open sans']['12'] = fo(1,-1);
-        sizes['open sans']['21'] = fo(5,1);
-        sizes['open sans']['26'] = fo(11,5);
+        var multi = this.multipliers[ff] || this.multipliers.default;
 
-        if(loginfo){
-            var textlog=[];
-            textlog.push('family:"'+ff+'" - size:'+fs+' - weight:'+fw);
+        // TODO: this works nicely with 'normal' line-heights.. fix logic for different line-heights
 
-            if(!sizes[ff])
-                textlog.push('fontFAMILY not used.. we\'ll implement it soon!');
-            if(sizes[ff] && (!sizes[ff][fs] || (sizes[ff][fs]['t']===0&&sizes[ff][fs]['b']===0)))
-                textlog.push('fontSIZE not used.. we\'ll implement it soon!');
+        // distance between upper and lower letters
+        var delta_top    = fs * multi.top - this._options.markerOffset,
+            delta_bottom = fs * multi.bottom - this._options.markerOffset;
+        // distance between line-height and font height
+        var delta_height = lh * multi.height;
 
-            textlog.push('-----------------');
-            console.log(textlog.join('\n'));
-        }
-
-        var finalSize;
-        finalSize = sizes[ff] ? sizes[ff] : sizesDefault();
-        finalSize = finalSize[fs] ? finalSize[fs] : finalSize['8'];
-        return finalSize;
-    }
-    function fo(t,b){
         return {
-            t : (t&&t!==0) ? t : 0,
-            b : (b&&b!==0) ? b : 0
+            width  : ew,
+            height : fs - delta_top - delta_bottom,
+            offset : {
+                top  : ey + delta_top + delta_height,
+                left : ex
+            }
         };
-    }
-    function sizesDefault(){
-        return {8:fo(),9:fo(),
-            10:fo(),11:fo(),12:fo(),13:fo(),14:fo(),15:fo(),16:fo(),17:fo(),18:fo(),19:fo(),
-            20:fo(),21:fo(),22:fo(),23:fo(),24:fo(),25:fo(),26:fo(),27:fo(),28:fo(),29:fo()};
     }
 
     /*---SERVICE GETTERS---*/
