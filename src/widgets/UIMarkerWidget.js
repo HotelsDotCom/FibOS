@@ -44,6 +44,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     UIMarkerWidget.prototype.initOptions = function(options) {
         this.setOptions({
+            marker_line    : '',
             markerOffset   : 2,             //how many offset in pixel around text
             checkUseMarker : null,          //if this function returns false the marker won't be applied
             checkUseFont   : null,          //if this function returns false the fontinfo won't be applied
@@ -259,6 +260,9 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
         var multi = this.multipliers[ff] || this.multipliers.default;
 
+        console.log('calcolo x height...');
+        console.log(xHeight.call(this,$elem));
+
         // TODO: this works nicely with 'normal' line-heights.. fix logic for different line-heights
 
         // distance between upper and lower letters
@@ -315,6 +319,94 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         }
 
         return false;
+    }
+
+    /*---X-HEIGHT---*/
+    // credits to http://brunildo.org/test/xheight.pl
+    function xHeight($elem) {
+        var family = $elem.css('font-family');
+        var size = parseFloat($elem.css('font-size'));
+
+        var xObj = xHeightElements.call(this,family,size);
+
+        var thres = 0.005;
+        if (Math.abs(xObj.xh - xObj.yh) > thres || Math.abs(xObj.xt - xObj.yh) > thres || Math.abs(xObj.yt - xObj.yh) > thres)
+            alert('inconsistent values: ' + xObj.xh + ' ' + xObj.xt + ' ' + xObj.yh + ' ' + xObj.yt);
+
+        return drawxline($elem[0], xObj.xx, this._options.marker_line);
+    }
+
+    function drawxline(o, x, img) {
+        var w = document.createElement('IMG');
+        w.src = img;
+        $(w).css({
+            'width'  : '1px',
+            'height' : '1px',
+            'vertical-align' : 'baseline'
+        });
+        o.appendChild(w);
+
+        var base = w.offsetTop;
+        var xpos = base - x;
+        var chi = [base, xpos];
+
+        for (var i in chi) {
+            if(chi.hasOwnProperty(i)){
+                w = document.createElement('DIV');
+                $(w).css({
+                    'background-color'  : '#f00',
+                    'font-size'         : '1px',
+                    'height'            : '1px',
+                    'left'              : 0,
+                    'line-height'       : '1px',
+                    'overflow'          : 'hidden',
+                    'position'          : 'absolute',
+                    'top'               : chi[i] + 'px',
+                    'width'             : '100%',
+                    'z-index'           : -1
+                });
+                o.appendChild(w);
+            }
+        }
+        return chi;
+    }
+
+    function xHeightElements(ffamily,fsize){
+        var $txh = $('<div/>').attr('id','txh').css({ 'font-family':ffamily , 'font-size':'200px' , width:'10em'  }),
+            $tmh = $('<div/>').attr('id','tmh').css({ 'font-family':ffamily , 'font-size':'200px' , width:'10ex'  }),
+            $txt = $('<div/>').attr('id','txt').css({ 'font-family':ffamily , 'font-size':'200px' , width:'1em'   }),
+            $tmt = $('<div/>').attr('id','tmt').css({ 'font-family':ffamily , 'font-size':'200px' , width:'1ex'   }),
+            $tyh = $('<div/>').attr('id','tyh').css({ 'font-family':ffamily , 'font-size':'400px' , width:'10em'  }),
+            $tnh = $('<div/>').attr('id','tnh').css({ 'font-family':ffamily , 'font-size':'400px' , width:'10ex'  }),
+            $tyt = $('<div/>').attr('id','tyt').css({ 'font-family':ffamily , 'font-size':'400px' , width:'1em'   }),
+            $tnt = $('<div/>').attr('id','tnt').css({ 'font-family':ffamily , 'font-size':'400px' , width:'1ex'   }),
+            $tfs = $('<div/>').attr('id','tfs').css({ 'font-family':ffamily , 'font-size':fsize   , width:'100em' });
+
+        var $xh_cont = $('<div/>').attr('id','xh_cont')
+            .append($txh)
+            .append($tmh)
+            .append($txt)
+            .append($tmt)
+            .append($tyh)
+            .append($tnh)
+            .append($tyt)
+            .append($tnt)
+            .append($tfs);
+
+        $('body').append($xh_cont);
+
+        var xh = $txh[0].offsetWidth / $tmh[0].offsetWidth,
+            xt = $txt[0].offsetWidth / $tmt[0].offsetWidth,
+            yh = $tyh[0].offsetWidth / $tnh[0].offsetWidth,
+            yt = $tyt[0].offsetWidth / $tnt[0].offsetWidth,
+            fs = $tfs[0].offsetWidth / 100;
+
+        var xs = yh.toPrecision(3),
+            xx = Math.round(yh * fs);
+
+        //$xh_cont.empty().remove();
+
+        return {xh:xh,xt:xt,yh:yh,yt:yt,xs:xs,xx:xx};
     }
 
     return UIMarkerWidget;

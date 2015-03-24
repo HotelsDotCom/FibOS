@@ -292,6 +292,7 @@ var FibOS = (function(
                     opt.checkUseMarker = this.callbacks.uiMarker.highlightCheck.bind(this);
                     opt.checkUseFont = this.callbacks.uiMarker.fontinfoCheck.bind(this);
                     opt.excluded = '#'+this._ID;
+                    opt.marker_line = getImage('marker_line');
                     return new uiMarker( id, opt );
                 },
                 uiRuler : function(id,opt){
@@ -468,7 +469,7 @@ var FibOS = (function(
     };
 
     function getImage(name){
-        if(images && images[name])
+        if(images && (images[name] || images[name]===''))
             return 'data:image/png;base64,'+images[name];
         else
             return null;
