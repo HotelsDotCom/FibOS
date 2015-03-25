@@ -111,6 +111,13 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     /*---SERVICE METHODS---*/
 
+    //checks for options "check" values
+    function checkValue(value) {
+        if(value===null) return false;
+        if(typeof(value) === 'boolean')  return value;
+        if(typeof(value) === 'function') return value();
+    }
+
     //add both text highlight and font info on given element
     function addTextFontHighlight(elem) {
         var size;
@@ -136,18 +143,25 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
         size || (size=markerHeight.call(this,elem));
 
-        // x-height lines (depending on this._options.checkShowLines value or return value)
-        var lines = xhLines.call(this,size);
+        var thl,lines;
+        var tl = getTotalLines(elem);
 
-        // TODO: enhance text-highlight with multiple line logic
-        // highlight element
-        var thl = $('<div/>').addClass(this._options.markerClass)
-            .width(size.width)
-            .height(size.height)
-            .offset(size.offset)
-            .click(function(e){removeFromMarker($(e.currentTarget),dataName);lines&&lines.remove();});
+        var cont_m = $('<div/>').addClass('fibo-markers').on('click',function(e){
+            removeFromMarker($(e.currentTarget),dataName);
+        });
+        var cont_l = $('<div/>').addClass('fibo-lines').appendTo(cont_m);
 
-        appendToMarker.call(this,elem,thl,dataName);
+        for(var i=0;i<tl.tot;i++){
+            // x-height lines (depending on this._options.checkShowLines value or return value)
+            lines = xhLines.call(this,size,-(i * tl.lh));
+
+            // text-highlight element
+            thl = textHighlight.call(this,size,-(i * tl.lh));
+
+            cont_l.append(lines);
+            cont_m.append(thl);
+        }
+        appendToMarker.call(this,elem,cont_m,dataName);
     }
 
     //add font info above given element
@@ -156,20 +170,20 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         if($(elem).data(dataName)===true) return true;
 
         size || (size=markerHeight.call(this,elem));
-        var info = markerFont(elem);
-        var p1 = $('<p/>').addClass('fi1').text(info[0]),
-            p2 = $('<p/>').addClass('fi2').text(info[1]),
-            p3 = $('<p/>').addClass('fi3').text(info[2]);
 
-        var tfi = $('<div/>').addClass(this._options.fontClass)
-            .append(p1,p2,p3)
-            .offset({
-                top  : size.offset.top - 45,
-                left : size.offset.left + 10
-            })
-            .click(function(e){removeFromMarker($(e.currentTarget),dataName);});
+        var tfi,info;
+        var tl = getTotalLines(elem);
 
-        appendToMarker.call(this,elem,tfi,dataName);
+        var cont_f = $('<div/>').addClass('fibo-fontinfo').on('click',function(e){
+            removeFromMarker($(e.currentTarget),dataName);
+        });
+
+        info = markerFont(elem);
+        tfi = fontInfo.call(this,size,info,-tl.height);
+
+        cont_f.append(tfi);
+
+        appendToMarker.call(this,elem,cont_f,dataName);
     }
 
     //append markerElement to marker and set data for both markerElement and its reference (the text node parent)
@@ -183,13 +197,6 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     function removeFromMarker(markerElem,dataName) {
         $($(markerElem).data('ref')).data(dataName,false);
         $(markerElem).remove();
-    }
-
-    //checks for options "check" values
-    function checkValue(value) {
-        if(value===null) return false;
-        if(typeof(value) === 'boolean')  return value;
-        if(typeof(value) === 'function') return value();
     }
 
     /*---EVENTS HANDLERS---*/
@@ -287,6 +294,13 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         return false;
     }
 
+    function getTotalLines(elem) {
+        var lh = parseFloat($(elem).css('line-height'));
+        var eh = $(elem).height();
+        var tot = Math.round(eh/lh);
+        return {tot:tot,lh:lh,height:lh*(tot-1)};
+    }
+
     /*---X-HEIGHT---*/
     // credits to http://brunildo.org/test/xheight.pl
     function xHeight($elem) {
@@ -350,12 +364,17 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         return xx;
     }
 
-    function xhLines(size) {
+    /*---MARKER ELEMENTS---*/
+    function xhLines(size,topOffset) {
         if(!checkValue(this._options.checkShowLines)) return null;
 
+        var offset = {
+            top  : size.offset.top + (topOffset || 0),
+            left : size.offset.left
+        };
         var xh = {
-            top: size.offset.top,
-            base: size.offset.top + size.height
+            top: offset.top,
+            base: offset.top + size.height
         };
         xh.base -= this._options.markerOffset+1;
         xh.top += this._options.markerOffset;
@@ -370,7 +389,33 @@ var UIMarkerWidget = (function($,UIBaseWidget){
                 }).appendTo($lines);
             }
         }
-        return $lines.children().appendTo(this.$el);
+        return $lines.children();
+    }
+
+    function textHighlight(size,topOffset) {
+        var offset = {
+            top  : size.offset.top + (topOffset || 0),
+            left : size.offset.left
+        };
+
+        return $('<div/>').addClass(this._options.markerClass)
+            .width(size.width)
+            .height(size.height)
+            .offset(offset);
+    }
+
+    function fontInfo(size,info,topOffset) {
+        var offset = {
+            top  : size.offset.top - 45 + (topOffset || 0),
+            left : size.offset.left + 10
+        };
+        var p1 = $('<p/>').addClass('fi1').text(info[0]),
+            p2 = $('<p/>').addClass('fi2').text(info[1]),
+            p3 = $('<p/>').addClass('fi3').text(info[2]);
+
+        return $('<div/>').addClass(this._options.fontClass)
+            .append(p1,p2,p3)
+            .offset(offset);
     }
 
     return UIMarkerWidget;
