@@ -289,10 +289,11 @@ var FibOS = (function(
                 uiMarker : function(id,opt){
                     opt || (opt={});
                     opt.reference = this._reference;
+                    opt.checkShowLines = false;
                     opt.checkUseMarker = this.callbacks.uiMarker.highlightCheck.bind(this);
                     opt.checkUseFont = this.callbacks.uiMarker.fontinfoCheck.bind(this);
                     opt.excluded = '#'+this._ID;
-                    opt.marker_line = getImage('marker_line');
+                    opt.markerLine = getImage('marker_line');
                     return new uiMarker( id, opt );
                 },
                 uiRuler : function(id,opt){

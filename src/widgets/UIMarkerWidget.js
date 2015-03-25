@@ -12,22 +12,6 @@ var UIMarkerWidget = (function($,UIBaseWidget){
      * @constructor
      */
     function UIMarkerWidget(ID, options) {
-
-        // TODO: improve multipliers
-        this.multipliers = {
-            'default':{
-                top    : 0.19230769230769232,
-                bottom : 0.19230769230769232,
-                height : 0.15384615384615385
-            },
-            'opensans':{
-                top    :    0.1920,//30769230769232
-                bottom :      0.20,//3076923076923078
-                height : 0.2222222222//(use with line-height)
-                //height : 0.3076920 //3076923077 (use with font-size)
-            }
-        };
-
         UIBaseWidget.call(this, ID, options);
     }
 
@@ -44,11 +28,13 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     UIMarkerWidget.prototype.initOptions = function(options) {
         this.setOptions({
-            marker_line    : '',
+            markerLine     : '',
             markerOffset   : 2,             //how many offset in pixel around text
-            checkUseMarker : null,          //if this function returns false the marker won't be applied
-            checkUseFont   : null,          //if this function returns false the fontinfo won't be applied
+            checkUseMarker : true,          //if this function returns false the marker won't be applied
+            checkShowLines : true,          //if this function returns false the marker won't show xHeight lines
+            checkUseFont   : true,          //if this function returns false the fontinfo won't be applied
             markerClass    : 'fiboMarker',  //common highlight element class
+            linesClass     : 'fiboLine',    //common marker lines elemet class
             fontClass      : 'fiboFontinfo',//common fontinfo element class
             markerData     : 'markerHL',    //data name for marker elements
             fontData       : 'markerFI',    //data name for fontinfo elements
@@ -64,10 +50,12 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     UIMarkerWidget.prototype.initStyles = function(extension) {
         var mclass = this._options.markerClass,
+            lclass = this._options.linesClass,
             fclass = this._options.fontClass;
 
         this._selectorsMapping = {
             marker      : '.'+mclass,
+            line        : '.'+lclass,
             fontinfo    : '.'+fclass,
             fontinfo_p  : '.'+fclass+' p',
             fontinfo_p1 : '.'+fclass+' p.fi1',
@@ -78,7 +66,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         this.setStyles({
             main        :{position:'absolute'},
             marker      :{position:'absolute !important','z-index':'1',background:'#0ff',opacity:'0.5'},
-            fontinfo    :{position:'absolute !important','z-index':'2',background:'rgba(34, 34, 34, 0.7)',border:'1px solid #fff',padding:'3px','font-family':'Open Sans',color:'#fff'},
+            line        :{position:'absolute !important','z-index':'2',background:'#f00',left:0,'font-size':'1px','line-height':'1px',height:'1px',width:'100%',overflow:'hidden'},
+            fontinfo    :{position:'absolute !important','z-index':'3',background:'rgba(34, 34, 34, 0.7)',border:'1px solid #fff',padding:'3px','font-family':'Open Sans',color:'#fff'},
             fontinfo_p  :{margin:'0',cursor:'default','text-algin':'center'},
             fontinfo_p1 :{'font-size':'13px','font-weight':'700','margin-top':'-4px'},
             fontinfo_p2 :{'font-size':'10px','font-weight':'400','margin':'-5px 0'},
@@ -103,6 +92,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
      * PUBLIC METHODS
      ********************/
 
+    // TODO: enhance preventDefaults logic with event.stopPropagation()
     //prevent/restore default behaviors for elements in defaults.taglist
     UIMarkerWidget.prototype.toggleListener = function(toggle) {
         toggle ?
@@ -131,8 +121,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     //add both text highlight and font info on given element
     function addTextFontHighlight(elem) {
         var size;
-        var useMarker = this._options.checkUseMarker ? this._options.checkUseMarker() : true;
-        var useFont = this._options.checkUseFont ? this._options.checkUseFont() : true;
+        var useMarker = checkValue(this._options.checkUseMarker);//this._options.checkUseMarker ? this._options.checkUseMarker() : true;
+        var useFont = checkValue(this._options.checkUseFont);//this._options.checkUseFont ? this._options.checkUseFont() : true;
         if(useMarker||useFont)
             size = markerHeight.call(this,elem);
         else
@@ -152,11 +142,17 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         if($(elem).data(dataName)===true) return true;
 
         size || (size=markerHeight.call(this,elem));
-        var thl = $('<div class="'+this._options.markerClass+'"/>')
+
+        // x-height lines (depending on this._options.checkShowLines value or return value)
+        var lines = xhLines.call(this,size);
+
+        // TODO: enhance text-highlight with multiple line logic
+        // highlight element
+        var thl = $('<div/>').addClass(this._options.markerClass)
             .width(size.width)
             .height(size.height)
             .offset(size.offset)
-            .click(function(e){removeFromMarker.call(this,$(e.currentTarget),dataName);}.bind(this));
+            .click(function(e){removeFromMarker($(e.currentTarget),dataName);lines&&lines.remove();});
 
         appendToMarker.call(this,elem,thl,dataName);
     }
@@ -168,16 +164,17 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
         size || (size=markerHeight.call(this,elem));
         var info = markerFont(elem);
-        var p1 = $('<p class="fi1"/>').text(info[0]),
-            p2 = $('<p class="fi2"/>').text(info[1]),
-            p3 = $('<p class="fi3"/>').text(info[2]);
-        var tfi = $('<div class="'+this._options.fontClass+'"/>')
+        var p1 = $('<p/>').addClass('fi1').text(info[0]),
+            p2 = $('<p/>').addClass('fi2').text(info[1]),
+            p3 = $('<p/>').addClass('fi3').text(info[2]);
+
+        var tfi = $('<div/>').addClass(this._options.fontClass)
             .append(p1,p2,p3)
             .offset({
                 top  : size.offset.top - 45,
                 left : size.offset.left + 10
             })
-            .click(function(e){removeFromMarker.call(this,$(e.currentTarget),dataName);}.bind(this));
+            .click(function(e){removeFromMarker($(e.currentTarget),dataName);});
 
         appendToMarker.call(this,elem,tfi,dataName);
     }
@@ -193,6 +190,13 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     function removeFromMarker(markerElem,dataName) {
         $($(markerElem).data('ref')).data(dataName,false);
         $(markerElem).remove();
+    }
+
+    //checks for options "check" values
+    function checkValue(value) {
+        if(value===null) return false;
+        if(typeof(value) === 'boolean')  return value;
+        if(typeof(value) === 'function') return value();
     }
 
     /*---PREVENT DEFAULTS---*/
@@ -248,34 +252,18 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     //offset info on given elemenet's fontFamily and fontSize css properties
     function markerHeight(elem) {
         var $elem = $(elem),
-            ff = $elem.css('font-family').split(',')[0].replace(/\"|\'| /g,'').toLowerCase(),
-//            dp = $elem.css('display'),
-            fs = parseFloat($elem.css('font-size')),
-//            fw = parseInt($elem.css('font-weight')),
-            lh = parseFloat($elem.css('line-height')),
-//            eh = $elem.height(),
             ew = $elem.width(),
-            ey = $elem.offset().top + parseFloat($elem.css('padding-top')),
-            ex = $elem.offset().left + parseFloat($elem.css('padding-left'));
+            ex = $elem.offset().left + parseFloat($elem.css('padding-left')),
+            xh = xHeight.call(this,$elem);
 
-        var multi = this.multipliers[ff] || this.multipliers.default;
-
-        console.log('calcolo x height...');
-        console.log(xHeight.call(this,$elem));
-
-        // TODO: this works nicely with 'normal' line-heights.. fix logic for different line-heights
-
-        // distance between upper and lower letters
-        var delta_top    = fs * multi.top - this._options.markerOffset,
-            delta_bottom = fs * multi.bottom - this._options.markerOffset;
-        // distance between line-height and font height
-        var delta_height = lh * multi.height;
+        xh.base += this._options.markerOffset;
+        xh.top -= this._options.markerOffset;
 
         return {
             width  : ew,
-            height : fs - delta_top - delta_bottom,
+            height : xh.base-xh.top,
             offset : {
-                top  : ey + delta_top + delta_height,
+                top  : xh.top,
                 left : ex
             }
         };
@@ -327,59 +315,30 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         var family = $elem.css('font-family');
         var size = parseFloat($elem.css('font-size'));
 
-        var xObj = xHeightElements.call(this,family,size);
-
-        var thres = 0.005;
-        if (Math.abs(xObj.xh - xObj.yh) > thres || Math.abs(xObj.xt - xObj.yh) > thres || Math.abs(xObj.yt - xObj.yh) > thres)
-            alert('inconsistent values: ' + xObj.xh + ' ' + xObj.xt + ' ' + xObj.yh + ' ' + xObj.yt);
-
-        return drawxline($elem[0], xObj.xx, this._options.marker_line);
-    }
-
-    function drawxline(o, x, img) {
-        var w = document.createElement('IMG');
-        w.src = img;
-        $(w).css({
+        var $img = $('<img/>').attr('src',this._options.markerLine).css({
             'width'  : '1px',
             'height' : '1px',
             'vertical-align' : 'baseline'
         });
-        o.appendChild(w);
+        $img.appendTo($elem);
 
-        var base = w.offsetTop;
-        var xpos = base - x;
-        var chi = [base, xpos];
+        var base = $img[0].offsetTop;
+        var top = base - xhTop.call(this,family,size);
 
-        for (var i in chi) {
-            if(chi.hasOwnProperty(i)){
-                w = document.createElement('DIV');
-                $(w).css({
-                    'background-color'  : '#f00',
-                    'font-size'         : '1px',
-                    'height'            : '1px',
-                    'left'              : 0,
-                    'line-height'       : '1px',
-                    'overflow'          : 'hidden',
-                    'position'          : 'absolute',
-                    'top'               : chi[i] + 'px',
-                    'width'             : '100%',
-                    'z-index'           : -1
-                });
-                o.appendChild(w);
-            }
-        }
-        return chi;
+        $img.remove();
+
+        return {base:base+1,top:top};
     }
 
-    function xHeightElements(ffamily,fsize){
-        var $txh = $('<div/>').attr('id','txh').css({ 'font-family':ffamily , 'font-size':'200px' , width:'10em'  }),
-            $tmh = $('<div/>').attr('id','tmh').css({ 'font-family':ffamily , 'font-size':'200px' , width:'10ex'  }),
-            $txt = $('<div/>').attr('id','txt').css({ 'font-family':ffamily , 'font-size':'200px' , width:'1em'   }),
-            $tmt = $('<div/>').attr('id','tmt').css({ 'font-family':ffamily , 'font-size':'200px' , width:'1ex'   }),
-            $tyh = $('<div/>').attr('id','tyh').css({ 'font-family':ffamily , 'font-size':'400px' , width:'10em'  }),
-            $tnh = $('<div/>').attr('id','tnh').css({ 'font-family':ffamily , 'font-size':'400px' , width:'10ex'  }),
-            $tyt = $('<div/>').attr('id','tyt').css({ 'font-family':ffamily , 'font-size':'400px' , width:'1em'   }),
-            $tnt = $('<div/>').attr('id','tnt').css({ 'font-family':ffamily , 'font-size':'400px' , width:'1ex'   }),
+    function xhTop(ffamily,fsize){
+        var $txh = $('<div/>').attr('id','txh').css({ 'font-family':ffamily , 'font-size':'200px' , width:'10ex'  }),
+            $tmh = $('<div/>').attr('id','tmh').css({ 'font-family':ffamily , 'font-size':'200px' , width:'10em'  }),
+            $txt = $('<div/>').attr('id','txt').css({ 'font-family':ffamily , 'font-size':'200px' , width:'1ex'   }),
+            $tmt = $('<div/>').attr('id','tmt').css({ 'font-family':ffamily , 'font-size':'200px' , width:'1em'   }),
+            $tyh = $('<div/>').attr('id','tyh').css({ 'font-family':ffamily , 'font-size':'400px' , width:'10ex'  }),
+            $tnh = $('<div/>').attr('id','tnh').css({ 'font-family':ffamily , 'font-size':'400px' , width:'10em'  }),
+            $tyt = $('<div/>').attr('id','tyt').css({ 'font-family':ffamily , 'font-size':'400px' , width:'1ex'   }),
+            $tnt = $('<div/>').attr('id','tnt').css({ 'font-family':ffamily , 'font-size':'400px' , width:'1em'   }),
             $tfs = $('<div/>').attr('id','tfs').css({ 'font-family':ffamily , 'font-size':fsize   , width:'100em' });
 
         var $xh_cont = $('<div/>').attr('id','xh_cont')
@@ -401,12 +360,39 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             yt = $tyt[0].offsetWidth / $tnt[0].offsetWidth,
             fs = $tfs[0].offsetWidth / 100;
 
-        var xs = yh.toPrecision(3),
-            xx = Math.round(yh * fs);
+        var xx = Math.round(yh * fs),
+            xs = yh.toPrecision(3);// font-size-adjust value (not used here)
 
-        //$xh_cont.empty().remove();
+        $xh_cont.empty().remove();
 
-        return {xh:xh,xt:xt,yh:yh,yt:yt,xs:xs,xx:xx};
+        var thres = 0.005;
+        if (Math.abs(xh - yh) > thres || Math.abs(xt - yh) > thres || Math.abs(yt - yh) > thres)
+            alert('inconsistent values: ' + xh + ' ' + xt + ' ' + yh + ' ' + yt);
+
+        return xx;
+    }
+
+    function xhLines(size) {
+        if(!checkValue(this._options.checkShowLines)) return null;
+
+        var xh = {
+            top: size.offset.top,
+            base: size.offset.top + size.height
+        };
+        xh.base -= this._options.markerOffset+1;
+        xh.top += this._options.markerOffset;
+
+        var $lines = $('<div/>');
+        for (var i in xh) {
+            if(xh.hasOwnProperty(i)){
+                $('<div/>').addClass(this._options.linesClass).css({
+                    top  : xh[i],
+                    left : size.offset.left,
+                    width: size.width
+                }).appendTo($lines);
+            }
+        }
+        return $lines.children().appendTo(this.$el);
     }
 
     return UIMarkerWidget;
