@@ -18,10 +18,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
         this._dragging = null;
         this._dragged = null;
 
-        UIBaseWidget.call(this, ID, options);
+        this.spacersGroups = null;
+        this.spacerObjects = null;
 
-        this.spacersGroups = {};
-        this.spacerObjects = getSpacers.call(this);
+        UIBaseWidget.call(this, ID, options);
     }
 
     /**
@@ -82,6 +82,11 @@ var UISpacerWidget = (function($,UIBaseWidget){
 
         $(window).off('.spacerevent')
             .on('scroll.spacerevent resize.spacerevent',scroll_handler.bind(this));
+    };
+
+    UISpacerWidget.prototype.afterInit = function() {
+        this.spacersGroups = {};
+        this.spacerObjects = getSpacers.call(this);
     };
 
     /********************

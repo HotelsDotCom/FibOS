@@ -82,7 +82,7 @@ module.exports = function(grunt) {
                 ],
                 dest: 'target/temp/fibos_full.js'
             },
-            
+
             // --- concat FINAL (with initializer for brand) --- //
 
             fibos: {
@@ -117,7 +117,7 @@ module.exports = function(grunt) {
                 ],
                 dest: 'target/temp/uiWidgets-test-<%= pkg.version %>.js'
             },
-            
+
             fwp: {
                 src: [
                     'target/temp/UIWidgets.min.js',
@@ -146,7 +146,7 @@ module.exports = function(grunt) {
                 options: { banner: '<%= opt.widget_header %><%= opt.nl %>' },
                 files: {'target/ui<%= widgetName %>-<%= pkg.version %>.min.js': ['target/ui<%= widgetName %>-<%= pkg.version %>.js']}
             },
-            
+
             // --- minify WIDGETS for test purposes --- //
 
             uiwidgets: {
@@ -250,6 +250,11 @@ module.exports = function(grunt) {
                 files: {
                     'target/temp/sprite_fibos.b64': 'src/app/img/sprite_fibos.png'
                 }
+            },
+            marker_line: {
+                files: {
+                    'target/temp/marker_line.b64': 'src/app/img/marker_line.png'
+                }
             }
         }
 
@@ -278,12 +283,13 @@ module.exports = function(grunt) {
     // Private tasks
     grunt.registerTask('_create_images_js', '', function(image){
         var s, sources={}, images=[];
-        
+
         if(image) sources[image] = grunt.file.read('target/temp/'+image+'.b64');
         else {
             sources = {
                 alpha_pattern: grunt.file.read('target/temp/alpha_pattern.b64'),
-                sprite_fibos: grunt.file.read('target/temp/sprite_fibos.b64')
+                sprite_fibos: grunt.file.read('target/temp/sprite_fibos.b64'),
+                marker_line: grunt.file.read('target/temp/marker_line.b64')
             };
         }
         for(s in sources) if(sources.hasOwnProperty(s)) images.push(s+':"'+sources[s]+'"');
@@ -344,7 +350,7 @@ module.exports = function(grunt) {
     });
 
     // --- ALIAS tasks --- //
-    
+
     // Widget-Test task
     grunt.registerTask('widgets-test', ['clean:target', 'concat:uiwidgets', 'uglify:uiwidgets', '_concat_images:alpha_pattern', 'concat:test', 'uglify:test', 'copy:widget', 'clean:target']);
     grunt.registerTask('widgets-all', ['clean:target', 'concat:uiwidgets', 'uglify:uiwidgets', '_concat_images:alpha_pattern', 'concat:fwp', 'uglify:fwp','copy:widget', 'clean:target']);

@@ -166,7 +166,6 @@ var FibOS = (function(
 
             this._panels.togglesPanel.on('toggle_markers', function(data){
                 toggleElement(this._components.uiMarker,data);
-                this._components.uiMarker.toggleListener(data);
             }.bind(this));
 
             // panelSelect
@@ -289,9 +288,11 @@ var FibOS = (function(
                 uiMarker : function(id,opt){
                     opt || (opt={});
                     opt.reference = this._reference;
+                    opt.checkShowLines = false;
                     opt.checkUseMarker = this.callbacks.uiMarker.highlightCheck.bind(this);
                     opt.checkUseFont = this.callbacks.uiMarker.fontinfoCheck.bind(this);
                     opt.excluded = '#'+this._ID;
+                    opt.markerLine = getImage('marker_line');
                     return new uiMarker( id, opt );
                 },
                 uiRuler : function(id,opt){
@@ -349,6 +350,8 @@ var FibOS = (function(
                         {background:'rgba(100,100,100,1)'},
                     '#fibo_toggle_main:after':
                         {content:'"«"',left:'2px',top:'5px',position:'absolute',color:'#fff'},
+                    '#fibo_controls.hidden':
+                        {display:'block',visibility:'visible'},
                     '#fibo_controls.hidden #fibo_toggle_main:after':
                         {content:'"»"'},
 
@@ -466,7 +469,7 @@ var FibOS = (function(
     };
 
     function getImage(name){
-        if(images && images[name])
+        if(images && (images[name] || images[name]===''))
             return 'data:image/png;base64,'+images[name];
         else
             return null;
