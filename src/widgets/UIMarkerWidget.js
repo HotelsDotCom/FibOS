@@ -81,24 +81,17 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         var tag = taglistToString(this._options.taglist);
 
         $(ref).off('.markerevent')
-            .on('click.markerevent',doHighlight.bind(this))
             .on('click.markerevent',cls,undoHighlight.bind(this));
 
-        $(tag).data(this._options.markerData,null);
-        $(tag).data(this._options.fontData,null);
+        $(tag).off('.markerevent')
+            .on('click.markerevent',doHighlight.bind(this))
+            .data(this._options.markerData,null)
+            .data(this._options.fontData,null);
     };
 
     /********************
      * PUBLIC METHODS
      ********************/
-
-    // TODO: enhance preventDefaults logic with event.stopPropagation()
-    //prevent/restore default behaviors for elements in defaults.taglist
-    UIMarkerWidget.prototype.toggleListener = function(toggle) {
-        toggle ?
-            preventDefaults.call(this):
-            restoreDefaults.call(this);
-    };
 
     UIMarkerWidget.prototype.addMarkerToElement = function(DOMelement) {
         return addTextFontHighlight.call(this,DOMelement);
@@ -199,29 +192,13 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         if(typeof(value) === 'function') return value();
     }
 
-    /*---PREVENT DEFAULTS---*/
-
-    //prevent default behavior for not excluded tags
-    function preventDefaults() {
-        var tl = taglistToString(this._options.taglist);
-        $(tl).off('.prevent')
-            .on('click.prevent',function(e){
-                if($(e.target).is(tl) && $(e.target).closest(this._options.excluded).length===0)
-                    e.preventDefault();
-            }.bind(this));
-    }
-
-    //restore all default behaviors
-    function restoreDefaults() {
-        var tl = taglistToString(this._options.taglist);
-        $(tl).off('.prevent');
-    }
-
     /*---EVENTS HANDLERS---*/
 
     //check for callback, check for target, then add highlight on clicked text
     function doHighlight(e) {
         if(isAcceptedTarget.call(this,e.target)){
+            e.preventDefault();
+            e.stopPropagation();
             return !addTextFontHighlight.call(this,e.target);
         }
         return true;
@@ -322,7 +299,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         });
         $img.appendTo($elem);
 
-        var base = $img[0].offsetTop;
+        var base = $img.offset().top;
         var top = base - xhTop.call(this,family,size);
 
         $img.remove();
