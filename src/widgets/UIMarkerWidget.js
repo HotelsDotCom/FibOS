@@ -197,9 +197,10 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     //check for callback, check for target, then add highlight on clicked text
     function doHighlight(e) {
         if(isAcceptedTarget.call(this,e.target)){
-            e.preventDefault();
-            e.stopPropagation();
-            return !addTextFontHighlight.call(this,e.target);
+            var canContinue = addTextFontHighlight.call(this,e.target);
+                canContinue && e.preventDefault();
+                canContinue && e.stopPropagation();
+            return !canContinue;
         }
         return true;
     }

@@ -166,7 +166,6 @@ var FibOS = (function(
 
             this._panels.togglesPanel.on('toggle_markers', function(data){
                 toggleElement(this._components.uiMarker,data);
-                this._components.uiMarker.toggleListener(data);
             }.bind(this));
 
             // panelSelect
