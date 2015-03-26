@@ -128,30 +128,32 @@ var UISpriterWidget = (function($,UIBaseWidget){
         console.log('calculating... (please, wait until done!)');
         $nodes.each(function(i,e){
             var $elm = $(e),
-                img = $elm.css('background-image');
+                imgs = $elm.css('background-image').split(',');
 
-            var canContinue = (this._options.domain==='');
+            imgs.forEach(function(img){
+                var canContinue = (this._options.domain==='');
 
-            if(!canContinue && img.indexOf(this._options.domain)>-1)
-                canContinue = true;
-            if(canContinue && img.substr(0,3)!=='url')
-                canContinue = false;
-            if(canContinue && img.indexOf('http')===-1)
-                canContinue = false;
+                if(!canContinue && img.indexOf(this._options.domain)>-1)
+                    canContinue = true;
+                if(canContinue && img.substr(0,3)!=='url')
+                    canContinue = false;
+                if(canContinue && img.indexOf('http')===-1)
+                    canContinue = false;
 
-            if(canContinue){
-                var posArr = bgNumericPosition($elm),
-                    offW   = numberFromCssProp($elm.css('padding-left')) + numberFromCssProp($elm.css('padding-right')),
-                    offH   = numberFromCssProp($elm.css('padding-top'))  + numberFromCssProp($elm.css('padding-bottom'));
+                if(canContinue){
+                    var posArr = bgNumericPosition($elm),
+                        offW   = numberFromCssProp($elm.css('padding-left')) + numberFromCssProp($elm.css('padding-right')),
+                        offH   = numberFromCssProp($elm.css('padding-top'))  + numberFromCssProp($elm.css('padding-bottom'));
 
-                var pos  = {l:posArr.x,t:posArr.y},
-                    size = {w:offW+$elm.width(),h:offH+$elm.height()};
+                    var pos  = {l:posArr.x,t:posArr.y},
+                        size = {w:offW+$elm.width(),h:offH+$elm.height()};
 
-                if(img && img!=='none'){
-                    if(!this._spritesInfo[img]) this._spritesInfo[img]=[];
-                    this._spritesInfo[img].push({pos:pos,size:size});
+                    if(img && img!=='none'){
+                        if(!this._spritesInfo[img]) this._spritesInfo[img]=[];
+                        this._spritesInfo[img].push({pos:pos,size:size});
+                    }
                 }
-            }
+            }.bind(this));
 
         }.bind(this));
         console.log('DONE!');
