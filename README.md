@@ -19,6 +19,12 @@ To try the newest implementations load the **staging** release: will be the next
 For brands specific builds, like **hotels.com** or **venere.com**, please use the correct file:  
 `fibos-latest-hotels.min.js` or `fibos-latest-venere.min.js`.
 
+Alternatively, it can be loaded with a customizable loader:
+```javascript
+javascript:(function(a,b){a||(a=prompt("Choose brand: [hotels | venere]\n\n(leave it blank for 'hotels')")||"hotels"),b||(b=prompt("Choose tag: [latest | staging]\n\n(leave it blank for 'latest')")||"latest");var c=["VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),d="https://rawgit.com/"+c,e=document.createElement("script");e.type="text/javascript",e.src=d,document.getElementsByTagName("head")[0].appendChild(e)}(null,null));
+```
+If parameters are passed instead of `null`, first or second or both questions will be skipped.
+
 Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page. Starting from `v1.0.3+` it can also be dragged around the page clicking on the title.
 
 ![FibOS closed](readme/fibos-panel-closed.jpg)
