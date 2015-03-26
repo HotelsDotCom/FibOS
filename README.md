@@ -21,7 +21,7 @@ For brands specific builds, like **hotels.com** or **venere.com**, please use th
 
 Alternatively, it can be loaded with a customizable loader:
 ```javascript
-javascript:(function(a,b){a||(a=prompt("Choose brand: [hotels | venere]\n\n(leave it blank for 'hotels')")||"hotels"),b||(b=prompt("Choose tag: [latest | staging]\n\n(leave it blank for 'latest')")||"latest");var c=["VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),d="https://rawgit.com/"+c,e=document.createElement("script");e.type="text/javascript",e.src=d,document.getElementsByTagName("head")[0].appendChild(e)}(null,null));
+javascript:(function(e,n){function t(e,n){for(var t,a={},o=0;o<e.length;o++)if(t=[],n.forEach(function(n){a[n]||(a[n]=0),e[o]==n[o]&&a[n]++,t.push({name:n,val:a[n]})}),t.sort(function(e,n){return n.val-e.val}),t[0].val>t[1].val)return t[0].name;return null}var a=["hotels","venere"],o=["latest","staging"];e||(e=prompt("Choose brand: ["+a.join(" | ")+"]\n\n(leave it blank for '"+a[0]+"')")||a[0]),n||(n=prompt("Choose tag: ["+o.join(" | ")+"]\n\n(leave it blank for '"+o[0]+"')")||o[0]),-1===a.indexOf(e)&&(e=t(e,a)||e),-1===o.indexOf(n)&&(n=t(n,o)||n);var l=["VenereDotCom/FibOS/",n,"/public/fibos-latest-",e,".min.js"].join(""),r="https://rawgit.com/"+l,i=document.createElement("script");i.type="text/javascript",i.src=r,document.getElementsByTagName("head")[0].appendChild(i),console.log("loaded",r)}(null,null));
 ```
 If parameters are passed instead of `null`, first or second or both questions will be skipped.
 
