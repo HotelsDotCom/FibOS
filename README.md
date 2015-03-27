@@ -21,9 +21,10 @@ For brands specific builds, like **hotels.com** or **venere.com**, please use th
 
 Alternatively, it can be loaded with a customizable loader:
 ```javascript
-javascript:(function(e,n){function t(e,n){for(var t,a={},o=0;o<e.length;o++)if(t=[],n.forEach(function(n){a[n]||(a[n]=0),e[o]==n[o]&&a[n]++,t.push({name:n,val:a[n]})}),t.sort(function(e,n){return n.val-e.val}),t[0].val>t[1].val)return t[0].name;return null}var a=["hotels","venere"],o=["latest","staging"];e||(e=prompt("Choose brand: ["+a.join(" | ")+"]\n\n(leave it blank for '"+a[0]+"')")||a[0]),n||(n=prompt("Choose tag: ["+o.join(" | ")+"]\n\n(leave it blank for '"+o[0]+"')")||o[0]),-1===a.indexOf(e)&&(e=t(e,a)||e),-1===o.indexOf(n)&&(n=t(n,o)||n);var l=["VenereDotCom/FibOS/",n,"/public/fibos-latest-",e,".min.js"].join(""),r="https://rawgit.com/"+l,i=document.createElement("script");i.type="text/javascript",i.src=r,document.getElementsByTagName("head")[0].appendChild(i),console.log("loaded",r)}(null,null));
+javascript:(function(brands,tags,brand,tag){!function(a,b){function c(a,b){for(var c,d={},e=0;e<a.length;e++)if(c=[],b.forEach(function(b){d[b]||(d[b]=0),a[e]==b[e]&&d[b]++,c.push({name:b,val:d[b]})}),c.sort(function(a,b){return b.val-a.val}),c[0].val>c[1].val)return c[0].name;return null}a||(a=prompt("Choose brand\n[ "+brands.join(" | ")+" ]\n\n(leave it blank for '"+brands[0]+"')")||brands[0]),b||(b=prompt("Choose tag\n[ "+tags.join(" | ")+" ]\n\n(leave it blank for '"+tags[0]+"')")||tags[0]),-1===brands.indexOf(a)&&(a=c(a,brands)||a),-1===tags.indexOf(b)&&(b=c(b,tags)||b);var d=["VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),e="https://rawgit.com/"+d,f=document.createElement("script");f.type="text/javascript",f.src=e,document.getElementsByTagName("head")[0].appendChild(f),console.log("loaded",e)}(brand,tag);}(["hotels","venere"],["latest","staging"],null,null));
 ```
-If parameters are passed instead of `null`, first or second or both questions will be skipped.
+If parameters are passed instead of `null`, first or second or both questions will be skipped.  
+This minified version of [`prompt.js`](https://github.com/VenereDotCom/FibOS/blob/release_1.0.5/src/prompt.js) can be obtained using the `grunt prompt` command.
 
 Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page. Starting from `v1.0.3+` it can also be dragged around the page clicking on the title.
 
@@ -196,6 +197,18 @@ public/
       |- uiWidgets-1.0.2-min.js
 ```
 
+#### Loader prompt version
+
+| command | notes |
+| ------- | ----- |
+| `grunt prompt` | minifies the bookmarklet with custom params (ie. `prompt:[brand]:[tag]`) |
+
+eg:  
+`grunt prompt:venere` will have the loader to ask only for tag and assuming the brand to be `venere`.  
+`grunt prompt::latest` will have the loader to ask only for brand and assuming the tag to be `latest`.  
+`grunt prompt:hotels:staging` will have the loader to ask nothing, assuming the brand to be `hotels` and the tag `staging`.  
+..and so on..
+
 #### Folder cleaners
 Dynamic folders are used as follows:
 - target: (git ignores it) temporary folder to host processing files
@@ -203,7 +216,7 @@ Dynamic folders are used as follows:
 - public: (git stages it) final folder only for minified files
 
 | command | notes |
-| -------- | -------- |
+| ------- | ----- |
 | `grunt clean:target` | remove `target/` folder |
 | `grunt clean:build` | remove `build/` folder |
 | `grunt clean:deploy` | remove `public/[version]/` folder (and all the `public/*-latest.min.js` files) |
@@ -212,7 +225,7 @@ Dynamic folders are used as follows:
 #### Single Widget builders
 
 | command | notes |
-| -------- | -------- |
+| ------- | ----- |
 | `grunt widget:marker` | build/minify MARKER widget into `build/[version]/widgets/` |
 | `grunt widget:ruler` | build/minify RULER widget into `build/[version]/widgets/` |
 | `grunt widget:slider` | build/minify SLIDER widget into `build/[version]/widgets/` |
@@ -222,14 +235,14 @@ Dynamic folders are used as follows:
 #### All Widgets
 
 | command | notes |
-| -------- | -------- |
+| ------- | ----- |
 | `grunt widgets-all` | build/minify ALL widgets into `build/[version]/widgets/`
 | `grunt widgets-test` | build/minify ALL widgets with test initializer into `build/[version]/widgets/`
 
 #### Full builders
 
 | command | notes |
-| -------- | -------- |
+| ------- | ----- |
 | `grunt build` | build/minify FibOS with default initializer into `build/[version]/` |
 | `grunt build:venere` | build/minify FibOS with VENERE initializer into `build/[version]/` |
 | `grunt build:hotels` | build/minify FibOS with HOTELS initializer into `build/[version]/` |
