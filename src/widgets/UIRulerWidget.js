@@ -320,16 +320,28 @@ var UIRulerWidget = (function($,UIBaseWidget){
 
     //width of reference element (default: 'body')
     function rulerW() {
-        return $(this._options.reference).width()
-            + Number($(this._options.reference).css('padding-left').replace('px',''))
-            + Number($(this._options.reference).css('padding-right').replace('px',''));
+        var sel = this._options.reference=='body' ? document : this._options.reference,
+            $ref = $(sel),
+            bs = sel==document ? null : $ref.css('box-sizing');
+
+        return $ref.width() + (bs &&
+            Number((bs.indexOf('-box')===-1 || bs.indexOf('content')===0) && (
+                parseInt($ref.css('padding-left')) +
+                parseInt($ref.css('padding-right')))
+            ));
     }
 
     //height of reference element (default: 'body')
     function rulerH() {
-        return $(this._options.reference).height()
-            + Number($(this._options.reference).css('padding-top').replace('px',''))
-            + Number($(this._options.reference).css('padding-bottom').replace('px',''));
+        var sel = this._options.reference=='body' ? document : this._options.reference,
+            $ref = $(sel),
+            bs = sel==document ? null : $ref.css('box-sizing');
+
+        return $ref.height() + (bs &&
+            Number((bs.indexOf('-box')===-1 || bs.indexOf('content')===0) && (
+                parseInt($ref.css('padding-top')) +
+                parseInt($ref.css('padding-left')))
+            ));
     }
 
     //css object of a single ruler position

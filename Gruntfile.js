@@ -160,6 +160,18 @@ module.exports = function(grunt) {
             fwp: {
                 options: { banner: '<%= opt.fwp_header %><%= opt.nl %>' },
                 files: {'target/uiWidgets-<%= pkg.version %>.min.js': ['target/temp/uiWidgets-<%= pkg.version %>.js']}
+            },
+
+            // --- minify LOADER with prompt version --- //
+
+            prompt: {
+                options: {
+                    //banner: 'javascript:(function(brand,tag){var brands=[<%= prompt_brands %>],tags=[<%= prompt_tags %>];',
+                    //footer: '}(<%= prompt_def1 %>,<%= prompt_def2 %>));'
+                    banner: 'javascript:(function(brands,tags,brand,tag){',
+                    footer: '}([<%= prompt_brands %>],[<%= prompt_tags %>],<%= prompt_def1 %>,<%= prompt_def2 %>));'
+                },
+                files: {'src/prompt.min.js': ['src/prompt.js']}
             }
 
         },
@@ -347,6 +359,25 @@ module.exports = function(grunt) {
         }else{
             grunt.log.error('[ERROR] task WIDGET needs the widget name as argument');
         }
+    });
+
+    // Prompt task
+    grunt.registerTask('prompt', 'minifies prompt loader with custom default values', function(def1,def2){
+        var arrBrands = [],
+            arrTags = ['"latest"','"staging"'],
+            pkgBrands = grunt.config.get('pkg').brands;
+
+        for(var b in pkgBrands) if(pkgBrands.hasOwnProperty(b)) arrBrands.push('"'+b+'"');
+
+        if(arrBrands.indexOf('"'+def1+'"')===-1) def1=null;
+        if(arrTags.indexOf('"'+def2+'"')===-1) def2=null;
+
+        grunt.config.set('prompt_brands', arrBrands.join(','));
+        grunt.config.set('prompt_tags', arrTags.join(','));
+        grunt.config.set('prompt_def1', def1?'"'+def1+'"' : 'null');
+        grunt.config.set('prompt_def2', def2?'"'+def2+'"' : 'null');
+
+        grunt.task.run('uglify:prompt');
     });
 
     // --- ALIAS tasks --- //
