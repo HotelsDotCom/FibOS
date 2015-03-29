@@ -191,6 +191,8 @@ var FibOS = (function(
 
             this._panels.storagePanel.on('history_save', function(){
                 this._components.uiSpacer.setLocalStorage();
+                alert('spacers saved');
+                this.openPanel('groupPanel');
             }.bind(this));
 
             // panelInput
