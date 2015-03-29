@@ -416,6 +416,8 @@ var FibOS = (function(
                         {position:'fixed',width:'100%',height:'100%','z-index':'-1',background:'#000',opacity:'0.5'},
                     '#sprites_tree':
                         {'list-style':'none outside none',margin:'5px 0',padding:'0'},
+                    '#sprites_tree span':
+                        {'max-width':'180px'},
                     '#sprites_tree li label':
                         {'font-size':'12px'},
                     '#groups_tree':
@@ -438,6 +440,11 @@ var FibOS = (function(
 
                 var transitions = {
                     '#fibo_panels>div': {transition: 'background-color 0.3s ease-in-out 0s'}
+                };
+
+                var ellipsis_rule = {display:'inline-block',overflow:'hidden','text-overflow':'ellipsis','white-space':'nowrap'};
+                var ellipsis = {
+                    '#sprites_tree span': ellipsis_rule
                 };
 
                 var initialDisplay = {

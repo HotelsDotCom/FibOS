@@ -87,6 +87,7 @@ var UISpritePanel = (function($,UIBasePanel){
         var $li    = $('<li/>'),
             $label = $('<label/>'),
             $span  = $('<span/>')
+                .attr('title',spanText)
                 .text(spanText),
             $input = $('<input/>')
                 .attr('type','radio')
