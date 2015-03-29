@@ -39,7 +39,7 @@ var UIGroupPanel = (function($,UIBasePanel){
 
     UIGroupPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<ul/>').attr('id',this._selectors.tree))
+            .append($('<ul/>').attr('id',this._selectors.tree).append(groupItemNone.call(this,true)))
             .append($('<p/>')
                 .text('name: ')
                 .append($('<input/>').attr('type','text').attr('id',this._selectors.name)))
@@ -76,9 +76,6 @@ var UIGroupPanel = (function($,UIBasePanel){
     UIGroupPanel.prototype.newGroupAdded = function(groupName){
         var $tree = $('#'+this._selectors.tree);
         var $li = $tree.find('li');
-
-        if($li.length===0)
-            $tree.append(groupItem(this._selectors.hideall,false,'none'));
 
         $tree.append(groupItem(this._selectors.toggle+groupName, true, groupName));
 
@@ -138,7 +135,7 @@ var UIGroupPanel = (function($,UIBasePanel){
         var oldcheck = $checked.length>0 ? $checked.attr('id').replace(this._selectors.toggle,'') : false;
         if(oldcheck===this._selectors.hideall) oldcheck=false;
 
-        $tree.empty().append(groupItem(this._selectors.hideall, !oldcheck, 'none'));
+        $tree.empty().append(groupItemNone.call(this,!oldcheck));
 
         var i,name;
         for(i in info_arr){
@@ -199,6 +196,10 @@ var UIGroupPanel = (function($,UIBasePanel){
         $li.append($label.append($input).append($span));
 
         return $li;
+    }
+
+    function groupItemNone(checked){
+        return groupItem(this._selectors.hideall,checked,'none');
     }
 
     return UIGroupPanel;
