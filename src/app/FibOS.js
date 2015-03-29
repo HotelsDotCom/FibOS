@@ -472,7 +472,7 @@ var FibOS = (function(
                     main: {'-webkit-touch-callout':'none','-webkit-user-select':'none','-khtml-user-select':'none','-moz-user-select':'none','-ms-user-select':'none'}
                 };
 
-                $.extend(true,styleObject,transitions,initialDisplay,zIndexes,prefixes);
+                $.extend(true,styleObject,transitions,ellipsis,initialDisplay,zIndexes,prefixes);
 
                 return styleObject;
             }
