@@ -436,6 +436,10 @@ var FibOS = (function(
                     '.vui-content': {}
                 };
 
+                var transitions = {
+                    '#fibo_panels>div': {transition: 'background-color 0.3s ease-in-out 0s'}
+                };
+
                 var initialDisplay = {
                     '#fibo_bg': {display:'none'},
                     '#fibos_ruler': {display:'none'},
@@ -459,7 +463,7 @@ var FibOS = (function(
                     main: {'-webkit-touch-callout':'none','-webkit-user-select':'none','-khtml-user-select':'none','-moz-user-select':'none','-ms-user-select':'none'}
                 };
 
-                $.extend(true,styleObject,initialDisplay,zIndexes,prefixes);
+                $.extend(true,styleObject,transitions,initialDisplay,zIndexes,prefixes);
 
                 return styleObject;
             }
