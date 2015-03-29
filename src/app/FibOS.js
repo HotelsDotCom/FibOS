@@ -202,8 +202,8 @@ var FibOS = (function(
 
             this._panels.inputPanel.on('input_export', function(){
                 var stJson = JSON.stringify(this._components.uiSpacer.spacersGroups);
+                this._panels.inputPanel.setJson(stJson);
                 console.log(stJson);
-                alert("Open your browser's console and see the export string.");
             }.bind(this));
 
             // panelSprite

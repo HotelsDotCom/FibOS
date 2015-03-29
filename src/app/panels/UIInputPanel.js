@@ -62,6 +62,9 @@ var UIInputPanel = (function($,UIBasePanel){
      * PUBLIC METHODS
      ********************/
 
+    UIInputPanel.prototype.setJson = function(json) {
+        this.$el.find('#'+this._selectors.input).val(json);
+    };
 
     /********************
      * PRIVATE METHODS
