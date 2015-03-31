@@ -419,7 +419,7 @@ var FibOS = (function(
                     '#sprites_tree':
                         {'list-style':'none outside none',margin:'5px 0',padding:'0'},
                     '#sprites_tree span':
-                        {'max-width':'180px'},
+                        {'vertical-align':'bottom','max-width':'180px'},
                     '#sprites_tree li label':
                         {'font-size':'12px'},
                     '#groups_tree':
