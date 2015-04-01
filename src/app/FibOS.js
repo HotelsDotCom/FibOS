@@ -51,18 +51,22 @@ var FibOS = (function(
 
             var $styles = $('<style/>').attr('id',this._ID+'-styles');
             var styleObj = this.factory.styles.call(this);
+            var styleRows = [];
 
-            var s,selector;
+            var s,selector,selectorMain = '#'+this._ID+' ';
             for(s in styleObj){
                 if(styleObj.hasOwnProperty(s)){
-                    selector = '#'+this._ID;
-                    if(s!='main') selector += ' '+s;
+                    selector = selectorMain;
+                    //if(s!='main') selector += ' '+s;
+                    if(s!='main') selector += s.split(',').map(function(v){return v.trim();}).join(','+selectorMain);
 
-                    $styles.append(selector + ' {'+UIBaseWidget.prototype._styleObjectToString(styleObj[s])+'}');
+                    styleRows.push(selector + '{'+UIBaseWidget.prototype._styleObjectToString(styleObj[s])+'}');
                 }
             }
 
-            $('head').append($styles);
+            console.log(styleObj);
+            console.log(styleRows);
+            $('head').append($styles.append(styleRows.join(' ')));
         },
         createElement: function() {
             $('#'+this._ID).remove();
@@ -327,13 +331,82 @@ var FibOS = (function(
 
             styles: function() {
                 var img_sprite = getImage('sprite_fibos') || '';
-                var styleObject = {
 
+                var result = {};
+
+                var main = {
                     main:
-                        {position:'absolute',top:'0',left:'0','font-family':'Arial','text-align':'left',color:'#222','user-select':'none'},
+                        {position:'absolute',top:'0',left:'0','font-family':'Arial','font-size':'12px','text-align':'left',color:'#222','user-select':'none'}
+                };
+
+                var reset = {
+                    'input[type=checkbox]':
+                        {margin:'3px'},
+                    select:
+                        {margin:'0'}
+                };
+
+                var elements = {
+                    //common input
+                    '.fib-text,.fib-textarea':
+                        {overflow:'hidden',background:'transparent',border:'1px solid #777',padding:'3px','font-size':'10px','border-radius':'3px','box-shadow':'0 1px #eee','box-sizing':'content-box'},
+
+                    //selects
+                    '.fib-select':
+                        {'background-color':'rgba(255, 255, 255, 0.3)',border:'1px solid #666','border-radius':'3px','box-shadow':'none','box-sizing':'content-box','font-size':'12px',padding:'0 3px','text-align':'center'},
+
+                    //lists
+                    '.fib-list':
+                        {'list-style':'none outside none',margin:'5px 0',padding:'0'},
+
+                    //inputs
+                    '.fib-text':
+                        {height:'auto',margin:'0'},
+                    '.fib-text-small':
+                        {display:'inline-block',width:'30px'},
+                    '.fib-text-full':
+                        {display:'block',width:'92%',margin:'2px auto'},
+
+                    //textareas
+                    '.fib-textarea':
+                        {display:'block',height:'55px',margin:'2px auto 5px',resize:'none',width:'92%'},
+
+                    //buttons
+                    '.fib-button':
+                        {background:'url("'+img_sprite+'") repeat-x scroll 0 0 transparent',border:'1px solid #777','border-radius':'3px',padding:'2px 5px 1px',margin:'2px','font-size':'9px','font-weight':'700','text-transform':'uppercase'},
+                    '.fib-button:hover,.fib-button:focus':
+                        {border:'1px solid #eee'},
+
+                    //radios
+                    '.fib-radio':
+                        {width:'12px',height:'12px'},
+                    '.fib-radio + span':
+                        {'vertical-align':'bottom'},
+
+                    //checkboxes
+                    '.fib-checkbox':
+                        {border:'0 none',clip:'rect(0px, 0px, 0px, 0px)',height:'1px',margin:'-1px',overflow:'hidden',padding:'0',position:'absolute',width:'1px'},
+                    '.fib-checkbox + label':
+                        {background:'url("'+img_sprite+'") no-repeat scroll 0 0 transparent',display:'block','font-size':'14px','padding-left':'16px',width:'0',margin:'2px'},
+                    '.fib-checkbox-circle + label':
+                        {'background-position':'-1px -73px'},
+                    '.fib-checkbox-circle:checked + label':
+                        {'background-position':'-1px -56px'},
+                    '.fib-checkbox-arrow + label':
+                        {'background-position':'-1px -21px',width:'auto',margin:'0'},
+                    '.fib-checkbox-arrow:checked + label':
+                        {'background-position':'-1px -38px'},
+
+                    //panel elements
+                    '.fib-panel': {},
+                    '.fib-label-cont': {},
+                    '.fib-content': {}
+                };
+
+                var styles = {
 
                     '#fibo_panels > h1':
-                        {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',cursor:'move'},
+                        {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',color:'#222','line-height':'1em',cursor:'move'},
                     '#fibo_panels > h1 > small':
                         {'font-size':'10px','font-weight':'400','margin-left':'3px'},
 
@@ -363,20 +436,6 @@ var FibOS = (function(
                     '#fibo_toggle_rulers': {top:'76px'},
                     '#fibo_toggle_markers': {top:'97px'},
 
-                    // checkboxes
-                    '.fibo_checkbox':
-                        {border:'0 none',clip:'rect(0px, 0px, 0px, 0px)',height:'1px',margin:'-1px',overflow:'hidden',padding:'0',position:'absolute',width:'1px'},
-                    '.fibo_checkbox + label':
-                        {background:'url("'+img_sprite+'") no-repeat scroll -1px -73px transparent',display:'block','font-size':'14px','padding-left':'16px',width:'0',margin:'2px'},
-                    '.fibo_checkbox:checked + label':
-                        {'background-position':'-1px -56px'},
-                    '#fibo_panels .fibo_checkbox + label':
-                        {'background-position':'-1px -21px',width:'auto',margin:'0'},
-                    '#fibo_panels .fibo_checkbox:checked + label':
-                        {'background-position':'-1px -38px'},
-                    '#fibo_panels .fibo_radio':
-                        {width:'12px',height:'12px'},
-
                     // fibo form
                     '#fibo_panels':
                         {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px'},
@@ -390,20 +449,14 @@ var FibOS = (function(
                         {position:'absolute',padding:'8px','margin-top':'9px',left:'0'},
 
                     // fibo panel - INPUT
-                    '#fibo_input_text':
-                        {display:'block',height:'55px',margin:'2px auto 5px',resize:'none',width:'92%'},
                     // fibo panel - SELECTED
                     '#fibo_panel_selected p':
                         {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
-                    '#fibo_sel_left, #fibo_sel_top':
-                        {display:'inline-block',width:'50px',height:'auto'},
                     '#fibo_sel_slider_container':
                         {margin:'3px 0 6px 8px'},
                     // fibo panel - OFFSET
                     '#fibo_panel_offset p':
                         {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
-                    '#fibo_grp_sel_left, #fibo_grp_sel_top':
-                        {display:'inline-block',width:'50px',height:'auto'},
                     '#fibo_grp_sel_multiple':
                         {'margin-left':'0'},
                     '#fibo_grp_sel_multiple_box':
@@ -411,33 +464,16 @@ var FibOS = (function(
                     // fibo panel - GROUPS
                     '#fibo_panel_groups p':
                         {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
-                    '#fibo_group_name':
-                        {display:'block',width:'160px',height:'auto'},
                     // fibo panel - SPRITES
                     '#fibo_sprites_bg':
                         {position:'fixed',width:'100%',height:'100%','z-index':'-1',background:'#000',opacity:'0.5'},
-                    '#sprites_tree':
-                        {'list-style':'none outside none',margin:'5px 0',padding:'0'},
                     '#sprites_tree span':
-                        {'vertical-align':'bottom','max-width':'180px'},
+                        {'max-width':'180px'},
                     '#sprites_tree li label':
                         {'font-size':'12px'},
-                    '#groups_tree':
-                        {'list-style':'none outside none',margin:'5px 0',padding:'0'},
                     '#groups_tree li label':
-                        {'font-size':'12px'},
+                        {'font-size':'12px'}
 
-                    // common input styles
-                    '#fibo_input_text,#fibo_sel_left,#fibo_sel_top,#fibo_group_name,#fibo_grp_sel_left,#fibo_grp_sel_top':
-                        {overflow:'hidden',background:'transparent',border:'1px solid #777','font-size':'10px'},
-
-                    // venere ui styles
-                    '.vui-btn':
-                        {background:'url("'+img_sprite+'") repeat-x scroll 0 0 transparent',border:'1px solid #777',padding:'2px 5px 1px',margin:'2px','font-size':'9px','font-weight':'700','text-transform':'uppercase'},
-                    '.vui-btn:hover,.vui-btn:focus':
-                        {border:'1px solid #eee'},
-                    '.vui-label': {},
-                    '.vui-content': {}
                 };
 
                 var transitions = {
@@ -454,7 +490,7 @@ var FibOS = (function(
                     '#fibos_ruler': {display:'none'},
                     '#fibos_spriter': {display:'none'},
                     '#fibo_sel_spacer_multiple_p':{display:'none'},
-                    '.vui-content': {display:'none'}
+                    '.fib-content': {display:'none'}
                 };
 
                 var zIndexes = {
@@ -469,12 +505,13 @@ var FibOS = (function(
                 };
 
                 var prefixes = {
-                    main: {'-webkit-touch-callout':'none','-webkit-user-select':'none','-khtml-user-select':'none','-moz-user-select':'none','-ms-user-select':'none'}
+                    main: {'-webkit-touch-callout':'none','-webkit-user-select':'none','-khtml-user-select':'none','-moz-user-select':'none','-ms-user-select':'none'},
+                    '.fibos-select': {'-webkit-border-radius':'0','-moz-border-radius':'0'}
                 };
 
-                $.extend(true,styleObject,transitions,ellipsis,initialDisplay,zIndexes,prefixes);
+                $.extend(true,result,main,reset,elements,styles,transitions,ellipsis,initialDisplay,zIndexes,prefixes);
 
-                return styleObject;
+                return result;
             }
 
         }

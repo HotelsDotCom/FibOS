@@ -62,17 +62,17 @@ var UIBasePanel = (function($){
             if(!content) return false;
             var label_id = this._ID+'_checkbox';
 
-            var $module  = $('<div/>').addClass('vui-panel').attr('id',this._ID),
-                $label   = $('<div/>').addClass('vui-label'),
-                $content = $('<div/>').addClass('vui-content');
+            var $module  = $('<div/>').addClass('fib-panel').attr('id',this._ID),
+                $label   = $('<div/>').addClass('fib-label-cont'),
+                $content = $('<div/>').addClass('fib-content');
 
-            $label.append($('<input/>').attr('id',label_id).addClass('fibo_checkbox').attr('type','checkbox'));
+            $label.append(this.getBaseElement('checkbox','arrow').attr('id',label_id));
             $label.append($('<label/>').attr('for',label_id).html(this._label));
 
             $content.append(content);
 
             this.$el = $module.append($label).append($content);
-            this.$el.find('.fibo_checkbox').on('change',function(e){
+            this.$el.find('.fib-checkbox-arrow').on('change',function(e){
                 this.trigger( 'toggle_panel', {target:this, toggle:$(e.currentTarget).is(':checked')} );
             }.bind(this));
 
@@ -89,13 +89,13 @@ var UIBasePanel = (function($){
         // open/close panel management
         open: function() {
             this.$el.addClass('fibo_panel_open');
-            this.$el.find('.vui-label').find('.fibo_checkbox').prop('checked',true);
-            this.$el.find('.vui-content').slideDown();
+            this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',true);
+            this.$el.find('.fib-content').slideDown();
         },
         close: function() {
             this.$el.removeClass('fibo_panel_open');
-            this.$el.find('.vui-label').find('.fibo_checkbox').prop('checked',false);
-            this.$el.find('.vui-content').slideUp();
+            this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',false);
+            this.$el.find('.fib-content').slideUp();
         },
         toggle: function() {
             if(isPanelOpen(this))
@@ -131,13 +131,13 @@ var UIBasePanel = (function($){
 
         /*---FACTORY METHODS---*/
 
-        fiboSelect : function(list,id,skipFirst) {
+        fiboSelect : function(list,id,firstValue) {
             if(!list && !id) return null;
 
-            var $select = $('<select/>').attr('id',id);
+            var $select = this.getBaseElement('select').attr('id',id);
 
-            if(!skipFirst)
-                $select.append($('<option/>').attr('disabled',true).attr('selected',true).val('none').text('chose a spacer'));
+            if(firstValue)
+                $select.append($('<option/>').attr('disabled',true).attr('selected',true).val('none').text(firstValue));
 
             for(var f=0;f<list.length;f++)
                 $select.append($('<option/>').val(('00'+list[f]).substr(-3)).text(list[f]));
@@ -148,9 +148,30 @@ var UIBasePanel = (function($){
         panelCheckbox : function(cont_id,title,checked) {
             var labid = cont_id+'_checkbox';
             var $container = $('<div/>').attr('id',cont_id).addClass('fibo_toggle');
-            var $checkbox = $('<input/>').attr('id',labid).addClass('fibo_checkbox').attr('type','checkbox').attr('checked',checked);
+            var $checkbox = this.getBaseElement('checkbox','circle').attr('id',labid).prop('checked',checked);
             var $label = $('<label/>').attr('for',labid).attr('title',title).html('&nbsp;');
             return $container.append($checkbox).append($label);
+        },
+
+        getBaseElement: function(tag,suffix){
+            if(!tag) return null;
+
+            var prefix = 'fib';
+            var tags = {
+                list     : 'ul',
+                checkbox : 'input',
+                button   : 'input',
+                radio    : 'input',
+                text     : 'input'
+            };
+
+            var $tag = $('<'+(tags[tag]||tag)+'/>');
+            $tag.addClass([prefix,tag].join('-'));
+
+            suffix    != null    && $tag.addClass([prefix,tag,suffix].join('-'));
+            tags[tag] == 'input' && $tag.attr('type',tag);
+
+            return $tag;
         }
 
     };
@@ -160,7 +181,7 @@ var UIBasePanel = (function($){
      ********************/
 
     function isPanelOpen(panel){
-        return panel.$el.find('.vui-content').css('display')!=='none';
+        return panel.$el.find('.fib-content').css('display')!=='none';
     }
 
     return UIBasePanel;

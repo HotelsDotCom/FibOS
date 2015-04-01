@@ -36,9 +36,9 @@ var UIInputPanel = (function($,UIBasePanel){
 
     UIInputPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<textarea/>').attr('id',this._selectors.input))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.load).val('import'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.share).val('export'));
+            .append(this.getBaseElement('textarea').attr('id',this._selectors.input))
+            .append(this.getBaseElement('button').attr('id',this._selectors.load).val('import'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.share).val('export'));
 
         return $content.children();
     };

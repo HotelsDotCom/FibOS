@@ -35,8 +35,8 @@ var UIStoragePanel = (function($,UIBasePanel){
 
     UIStoragePanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.restore).val('restore'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.save).val('save'));
+            .append(this.getBaseElement('button').attr('id',this._selectors.restore).val('restore'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.save).val('save'));
 
         return $content.children();
     };

@@ -39,12 +39,12 @@ var UIGroupPanel = (function($,UIBasePanel){
 
     UIGroupPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<ul/>').attr('id',this._selectors.tree).append(groupItemNone.call(this,true)))
+            .append(this.getBaseElement('list').attr('id',this._selectors.tree).append(groupItemNone.call(this,true)))
             .append($('<p/>')
                 .text('name: ')
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.name)))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.rename).val('rename'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.remove).val('delete'));
+                .append(this.getBaseElement('text','full').attr('id',this._selectors.name)))
+            .append(this.getBaseElement('button').attr('id',this._selectors.rename).val('rename'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.remove).val('delete'));
 
         return $content.children();
     };
@@ -77,7 +77,7 @@ var UIGroupPanel = (function($,UIBasePanel){
         var $tree = $('#'+this._selectors.tree);
         var $li = $tree.find('li');
 
-        $tree.append(groupItem(this._selectors.toggle+groupName, true, groupName));
+        $tree.append(groupItem.call(this,this._selectors.toggle+groupName, true, groupName));
 
         this.showhideGroups({currentTarget:$('#'+this._selectors.toggle+groupName)});
     };
@@ -141,7 +141,7 @@ var UIGroupPanel = (function($,UIBasePanel){
         for(i in info_arr){
             if(info_arr.hasOwnProperty(i)){
                 name = info_arr[i];
-                $tree.append(groupItem(this._selectors.toggle+name, oldcheck===name, name));
+                $tree.append(groupItem.call(this,this._selectors.toggle+name, oldcheck===name, name));
             }
         }
 
@@ -186,11 +186,9 @@ var UIGroupPanel = (function($,UIBasePanel){
             $label = $('<label/>'),
             $span  = $('<span/>')
                 .text(spanText),
-            $input = $('<input/>')
-                .attr('type','radio')
-                .attr('name','groups')
-                .addClass('fibo_radio')
+            $input = this.getBaseElement('radio')
                 .attr('id',id)
+                .attr('name','groups')
                 .attr('checked',checked);
 
         $li.append($label.append($input).append($span));
@@ -199,7 +197,7 @@ var UIGroupPanel = (function($,UIBasePanel){
     }
 
     function groupItemNone(checked){
-        return groupItem(this._selectors.hideall,checked,'none');
+        return groupItem.call(this,this._selectors.hideall,checked,'none');
     }
 
     return UIGroupPanel;

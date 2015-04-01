@@ -35,8 +35,8 @@ var UISpritePanel = (function($,UIBasePanel){
 
     UISpritePanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<ul/>').attr('id',this._selectors.tree))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.analyze).val('analyze'));
+            .append(this.getBaseElement('list').attr('id',this._selectors.tree))
+            .append(this.getBaseElement('button').attr('id',this._selectors.analyze).val('analyze'));
 
         return $content.children();
     };
@@ -63,14 +63,14 @@ var UISpritePanel = (function($,UIBasePanel){
 
     UISpritePanel.prototype.didAnalyze = function(info) {
         var $tree = $('#'+this._selectors.tree).empty();
-        $tree.append(spriteItem('hide_sprites',true,'none'));
+        $tree.append(spriteItem.call(this,'hide_sprites',true,'none'));
 
         var name,file,fid;
         for(name in info){
             if(info.hasOwnProperty(name)){
                 file = this._gui._components.uiSpriter.filenameFromCss(name);
                 fid = this._gui._components.uiSpriter.filenameFromCss(name,true);
-                $tree.append(spriteItem('toggle_sprite_'+fid,false,file));
+                $tree.append(spriteItem.call(this,'toggle_sprite_'+fid,false,file));
             }
         }
 
@@ -89,11 +89,9 @@ var UISpritePanel = (function($,UIBasePanel){
             $span  = $('<span/>')
                 .attr('title',spanText)
                 .text(spanText),
-            $input = $('<input/>')
-                .attr('type','radio')
-                .attr('name','sprites')
-                .addClass('fibo_radio')
+            $input = this.getBaseElement('radio')
                 .attr('id',id)
+                .attr('name','sprites')
                 .attr('checked',checked);
 
         $li.append($label.append($input).append($span));

@@ -49,19 +49,19 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
         var $content = $('<div/>')
             .append($('<p/>')
                 .text('spacer: ')
-                .append(this.fiboSelect(this._spacersList,this._selectors.spacer,true)))
+                .append(this.fiboSelect(this._spacersList,this._selectors.spacer)))
             .append($('<p/>')
                 .text('left: ')
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.left)))
+                .append(this.getBaseElement('text','small').attr('id',this._selectors.left)))
             .append($('<p/>')
                 .text('top: ')
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.top)))
+                .append(this.getBaseElement('text','small').attr('id',this._selectors.top)))
             .append($('<p/>')
                 .text('opacity: ')
                 .append($('<div/>').attr('id',this._selectors.slider)
                     .append(this.uiSlider.$el)))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.remove).val('remove'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.duplicate).val('duplicate'));
+            .append(this.getBaseElement('button').attr('id',this._selectors.remove).val('remove'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.duplicate).val('duplicate'));
 
         return $content.children();
     };

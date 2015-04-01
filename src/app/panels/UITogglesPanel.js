@@ -50,10 +50,10 @@ var UITogglesPanel = (function($,UIExtraPanel){
 
         this.addListener('click',  '#'+this._selectors.main, function(e){this.trigger('toggle_fibos');});
 
-        this.addListener('change', '#'+this._selectors.spacers+' .fibo_checkbox', checkbox_handler.call(this,'toggle_spacers'));
-        this.addListener('change', '#'+this._selectors.overlay+' .fibo_checkbox', checkbox_handler.call(this,'toggle_overlay'));
-        this.addListener('change', '#'+this._selectors.rulers +' .fibo_checkbox', checkbox_handler.call(this,'toggle_rulers') );
-        this.addListener('change', '#'+this._selectors.markers+' .fibo_checkbox', checkbox_handler.call(this,'toggle_markers'));
+        this.addListener('change', '#'+this._selectors.spacers+' .fib-checkbox', checkbox_handler.call(this,'toggle_spacers'));
+        this.addListener('change', '#'+this._selectors.overlay+' .fib-checkbox', checkbox_handler.call(this,'toggle_overlay'));
+        this.addListener('change', '#'+this._selectors.rulers +' .fib-checkbox', checkbox_handler.call(this,'toggle_rulers') );
+        this.addListener('change', '#'+this._selectors.markers+' .fib-checkbox', checkbox_handler.call(this,'toggle_markers'));
 
     };
 

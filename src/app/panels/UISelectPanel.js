@@ -37,7 +37,7 @@ var UISelectPanel = (function($,UIExtraPanel){
 
     UISelectPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append(this.fiboSelect(this._spacersList,this._selectors.choose))
+            .append(this.fiboSelect(this._spacersList,this._selectors.choose,'choose'))
             .append($('<div/>').attr('id',this._selectors.element));
 
         return $content.children();
