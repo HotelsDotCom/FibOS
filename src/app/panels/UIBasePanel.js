@@ -88,12 +88,12 @@ var UIBasePanel = (function($){
 
         // open/close panel management
         open: function() {
-            this.$el.addClass('fibo_panel_open');
+            this.$el.addClass('fib-panel-open');
             this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',true);
             this.$el.find('.fib-content').slideDown();
         },
         close: function() {
-            this.$el.removeClass('fibo_panel_open');
+            this.$el.removeClass('fib-panel-open');
             this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',false);
             this.$el.find('.fib-content').slideUp();
         },

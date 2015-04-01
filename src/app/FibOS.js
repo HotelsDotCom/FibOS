@@ -358,6 +358,8 @@ var FibOS = (function(
                     //lists
                     '.fib-list':
                         {'list-style':'none outside none',margin:'5px 0',padding:'0'},
+                    '.fib-list label':
+                        {'font-size':'12px'},
 
                     //inputs
                     '.fib-text':
@@ -398,9 +400,14 @@ var FibOS = (function(
                         {'background-position':'-1px -38px'},
 
                     //panel elements
-                    '.fib-panel': {},
+                    '.fib-panel':
+                        {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)',margin:'0',padding:'3px'},
+                    '.fib-panel-open':
+                        {background:'rgb(200,200,200)'},
                     '.fib-label-cont': {},
-                    '.fib-content': {}
+                    '.fib-content': {},
+                    '.fib-content p':
+                        {'font-size':'12px','text-indent':'8px',margin:'3px 0'}
                 };
 
                 var styles = {
@@ -439,40 +446,26 @@ var FibOS = (function(
                     // fibo form
                     '#fibo_panels':
                         {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px'},
-                    '#fibo_panels>div':
-                        {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)',margin:'0',padding:'3px'},
-                    '#fibo_panels>div.fibo_panel_open':
-                        {background:'rgb(200,200,200)'},
+                    '#fibo_extrapanel_select':
+                        {'padding-top':'5px'},
                     '#fibo_clone_select':
-                        {display:'block','margin-left':'2px'},
+                        {display:'block','margin':'0 auto'},
                     '#fibo_clone_element':
                         {position:'absolute',padding:'8px','margin-top':'9px',left:'0'},
 
-                    // fibo panel - INPUT
                     // fibo panel - SELECTED
-                    '#fibo_panel_selected p':
-                        {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
                     '#fibo_sel_slider_container':
                         {margin:'3px 0 6px 8px'},
                     // fibo panel - OFFSET
-                    '#fibo_panel_offset p':
-                        {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
                     '#fibo_grp_sel_multiple':
                         {'margin-left':'0'},
                     '#fibo_grp_sel_multiple_box':
                         {position:'absolute',border:'1px solid #777','background-color':'rgba(100,100,100,.5)'},
-                    // fibo panel - GROUPS
-                    '#fibo_panel_groups p':
-                        {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
                     // fibo panel - SPRITES
                     '#fibo_sprites_bg':
                         {position:'fixed',width:'100%',height:'100%','z-index':'-1',background:'#000',opacity:'0.5'},
                     '#sprites_tree span':
-                        {'max-width':'180px'},
-                    '#sprites_tree li label':
-                        {'font-size':'12px'},
-                    '#groups_tree li label':
-                        {'font-size':'12px'}
+                        {'max-width':'180px'}
 
                 };
 
