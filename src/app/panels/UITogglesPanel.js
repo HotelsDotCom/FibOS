@@ -38,10 +38,10 @@ var UITogglesPanel = (function($,UIExtraPanel){
     UITogglesPanel.prototype.createContent = function() {
         var $content = $('<div/>')
             .append($('<div/>').attr('id',this._selectors.main))
-            .append(this.panelCheckbox(this._selectors.spacers,'toggle spacers',true))
-            .append(this.panelCheckbox(this._selectors.overlay,'toggle overlay',false))
-            .append(this.panelCheckbox(this._selectors.rulers, 'toggle rulers',false))
-            .append(this.panelCheckbox(this._selectors.markers,'toggle marker tool',false));
+            .append(toggleCheckbox.call(this,this._selectors.spacers,'toggle spacers',true))
+            .append(toggleCheckbox.call(this,this._selectors.overlay,'toggle overlay',false))
+            .append(toggleCheckbox.call(this,this._selectors.rulers, 'toggle rulers',false))
+            .append(toggleCheckbox.call(this,this._selectors.markers,'toggle marker tool',false));
 
         return $content.children();
     };
@@ -78,6 +78,23 @@ var UITogglesPanel = (function($,UIExtraPanel){
         return function(e){
             this.trigger(event, $(e.currentTarget).is(':checked'));
         }.bind(this);
+    }
+
+    function toggleCheckbox(cont_id,title,checked) {
+        var labid = cont_id+'-checkbox',
+
+            $checkbox = this.getBaseElement('checkbox','circle').attr('id',labid).prop('checked',checked),
+
+            $container = $('<div/>')
+                .attr('id',cont_id)
+                .addClass(this._selectors.base),
+
+            $label = $('<label/>')
+                .attr('for',labid)
+                .attr('title',title)
+                .html('&nbsp;');
+
+        return $container.append($checkbox).append($label);
     }
 
     return UITogglesPanel;

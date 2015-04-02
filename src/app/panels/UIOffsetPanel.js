@@ -58,7 +58,6 @@ var UIOffsetPanel = (function($,UIBasePanel){
                 .append($('<input/>').attr('type','checkbox').attr('id',this._selectors.multi))
                 .append($('<label/>').attr('for',this._selectors.multi).text('select inner group')));
 
-
         return $content.children();
     };
 

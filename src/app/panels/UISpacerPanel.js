@@ -121,9 +121,9 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
         var attr = {f:'',t:'',l:'',o:''};
         if(this._spacerSelected){
             attr.f = (this._gui._components.uiSpacer.getSpacerType(this._spacerSelected));
-            attr.t = ($(this._spacerSelected).css('top').replace('px',''));
-            attr.l = ($(this._spacerSelected).css('left').replace('px',''));
-            attr.o = ($(this._spacerSelected).css('opacity'));
+            attr.t = parseFloat($(this._spacerSelected).css('top'));
+            attr.l = parseFloat($(this._spacerSelected).css('left'));
+            attr.o = parseFloat($(this._spacerSelected).css('opacity'));
         }
         return attr;
     };
@@ -148,6 +148,7 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
     function changeSpacerPos(e){
         var offset = e.shiftKey ? 10 : e.altKey ? 0.5 : 1;
         var val = Number($(e.currentTarget).val());
+        if(isNaN(val)) return false;
 
         $(e.currentTarget).val(val+(e.keyCode===38?offset:e.keyCode===40?-offset:0));
         this.applyInfo();

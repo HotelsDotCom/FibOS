@@ -33,7 +33,7 @@ var UIBasePanel = (function($){
     /**
      * UIBasePanel prototype
      *
-     * @type {{setEvents: Function, getStyles: Function, createContent: Function, init: Function, createElement: Function, addTo: Function, open: Function, close: Function, toggle: Function, addListener: Function, on: Function, off: Function, trigger: Function, fiboSelect: Function, panelCheckbox: Function}}
+     * @type {{setEvents: Function, getStyles: Function, createContent: Function, init: Function, createElement: Function, addTo: Function, open: Function, close: Function, toggle: Function, addListener: Function, on: Function, off: Function, trigger: Function, fiboSelect: Function}}
      */
     UIBasePanel.prototype = {
 
@@ -143,14 +143,6 @@ var UIBasePanel = (function($){
                 $select.append($('<option/>').val(('00'+list[f]).substr(-3)).text(list[f]));
 
             return $select;
-        },
-
-        panelCheckbox : function(cont_id,title,checked) {
-            var labid = cont_id+'_checkbox';
-            var $container = $('<div/>').attr('id',cont_id).addClass('fibo_toggle');
-            var $checkbox = this.getBaseElement('checkbox','circle').attr('id',labid).prop('checked',checked);
-            var $label = $('<label/>').attr('for',labid).attr('title',title).html('&nbsp;');
-            return $container.append($checkbox).append($label);
         },
 
         getBaseElement: function(tag,suffix){

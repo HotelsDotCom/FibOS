@@ -64,8 +64,6 @@ var FibOS = (function(
                 }
             }
 
-            console.log(styleObj);
-            console.log(styleRows);
             $('head').append($styles.append(styleRows.join(' ')));
         },
         createElement: function() {

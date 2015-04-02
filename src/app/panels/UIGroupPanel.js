@@ -129,8 +129,7 @@ var UIGroupPanel = (function($,UIBasePanel){
 
     UIGroupPanel.prototype.groupsLoaded = function(info_arr){
         var $tree = $('#'+this._selectors.tree);
-        var $li = $tree.find('li');
-        var $checked = $li.find('input:checked');
+        var $checked = $tree.find('input:checked');
 
         var oldcheck = $checked.length>0 ? $checked.attr('id').replace(this._selectors.toggle,'') : false;
         if(oldcheck===this._selectors.hideall) oldcheck=false;
@@ -144,6 +143,10 @@ var UIGroupPanel = (function($,UIBasePanel){
                 $tree.append(groupItem.call(this,this._selectors.toggle+name, oldcheck===name, name));
             }
         }
+
+        $checked = $tree.find('input:checked');
+        $checked.length==0 && $('#'+this._selectors.name).val('');
+        $checked.length==0 && $('#'+this._selectors.hideall).prop('checked',true);
 
         $tree.show();
 
