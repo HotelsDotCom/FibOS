@@ -91,11 +91,13 @@ var UIBasePanel = (function($){
             this.$el.addClass('fib-panel-open');
             this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',true);
             this.$el.find('.fib-content').slideDown();
+            this.trigger('panel_open');
         },
         close: function() {
             this.$el.removeClass('fib-panel-open');
             this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',false);
             this.$el.find('.fib-content').slideUp();
+            this.trigger('panel_close');
         },
         toggle: function() {
             if(isPanelOpen(this))

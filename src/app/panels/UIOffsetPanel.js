@@ -76,6 +76,11 @@ var UIOffsetPanel = (function($,UIBasePanel){
             multiSpacerManager.toggle($(e.currentTarget).is(':checked'),this);
         });
 
+        this.on('panel_close',function(){
+            $('#'+this._selectors.multi).prop('checked',false);
+            multiSpacerManager.toggle(false,this);
+        }.bind(this));
+
         multiSpacerManager.bodyEventsToggle(false);
 
     };
