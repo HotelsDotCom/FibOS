@@ -49,10 +49,14 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     UISpriterWidget.prototype.initStyles = function(extension) {
         var bg = (this._options.image && this._options.image!=='') ? 'url("'+this._options.image+'")' : 'none';
+        this._selectorsMapping = {
+            background : '#fibo_sprites_bg'
+        };
         this.setStyles({
             main                : {position:'relative',display:this._options.visible?'block':'none'},
             obscurers_container : {position:'relative',display:'block',background:bg,top:'0',left:'0','text-align':'left',border:'1px solid '+this._options.border,visibility:this._options.visible?'visible':'hidden'},
-            sprite_obscurer     : {position:'absolute',display:'block',background:this._options.color,opacity:this._options.opacity}
+            sprite_obscurer     : {position:'absolute',display:'block',background:this._options.color,opacity:this._options.opacity},
+            background          : {position:'fixed',background:'#000',width:'100%',height:'100%',opacity:'0.5','z-index':'-1'}
         },extension);
     };
 
@@ -74,7 +78,7 @@ var UISpriterWidget = (function($,UIBaseWidget){
 
     UISpriterWidget.prototype.toggleSprite = function(sid) {
         var sprite,$cont;
-        var $sprites_bg = $('#fibo_sprites_bg');
+        var $sprites_bg = $(this._selectorsMapping.background);
 
         this.$el.hide();
         $sprites_bg.show();

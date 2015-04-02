@@ -13,10 +13,10 @@ var UIStoragePanel = (function($,UIBasePanel){
      */
     function UIStoragePanel(id,label) {
 
-        var baseID = 'fibo_storage_';
+        var baseID = 'fib_storage';
         this._selectors = {
-            restore : baseID + 'restore',
-            save    : baseID + 'save'
+            restore : baseID + '-restore',
+            save    : baseID + '-save'
         };
 
         UIBasePanel.call(this,id,label);

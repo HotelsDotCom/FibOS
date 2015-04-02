@@ -13,11 +13,11 @@ var UIInputPanel = (function($,UIBasePanel){
      */
     function UIInputPanel(id,label) {
 
-        var baseID = 'fibo_input_';
+        var baseID = 'fib_input';
         this._selectors = {
-            input : baseID + 'text',
-            load  : baseID + 'load',
-            share : baseID + 'export'
+            input : baseID + '-text',
+            load  : baseID + '-load',
+            share : baseID + '-export'
         };
 
         UIBasePanel.call(this,id,label);

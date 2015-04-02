@@ -15,15 +15,15 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
     function UISpacerPanel(id,label,list) {
         this._spacersList = list;
 
-        var baseID = 'fibo_sel_';
+        var baseID = 'fib_sel';
         this._selectors = {
-            spacer    : baseID + 'spacer',
-            left      : baseID + 'left',
-            top       : baseID + 'top',
-            remove    : baseID + 'delete',
-            duplicate : baseID + 'duplicate',
-            opacity   : baseID + 'opacity',
-            slider    : baseID + 'slider_container'
+            spacer    : baseID + '-spacer',
+            left      : baseID + '-left',
+            top       : baseID + '-top',
+            remove    : baseID + '-delete',
+            duplicate : baseID + '-duplicate',
+            opacity   : baseID + '-opacity',
+            slider    : baseID + '-slider_container'
         };
 
         UIBasePanel.call(this,id,label);
@@ -88,7 +88,13 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
     };
 
     UISpacerPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._selectors.slider] = {
+            margin:'3px 0 6px 8px'
+        };
+
+        return styles;
     };
 
     /********************

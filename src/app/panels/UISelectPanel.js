@@ -15,10 +15,11 @@ var UISelectPanel = (function($,UIExtraPanel){
         this._spacersList = list;
         this._spacersObject = spacers;
 
-        var baseID = 'fibo_clone_';
+        var baseID = 'fib_clone';
         this._selectors = {
-            choose  : baseID + 'select',
-            element : baseID + 'element'
+            base    : baseID,
+            choose  : baseID + '-select',
+            element : baseID + '-element'
         };
 
         UIExtraPanel.call(this,id);
@@ -60,7 +61,25 @@ var UISelectPanel = (function($,UIExtraPanel){
     };
 
     UISelectPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._ID] = {
+            'padding-top':'5px'
+        };
+
+        styles['#'+this._selectors.choose] = {
+            display:'block',
+            'margin':'0 auto'
+        };
+
+        styles['#'+this._selectors.element] = {
+            left:'0',
+            'margin-top':'9px',
+            padding:'8px',
+            position:'absolute'
+        };
+
+        return styles;
     };
 
     /********************

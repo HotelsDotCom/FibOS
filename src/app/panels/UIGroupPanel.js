@@ -13,14 +13,14 @@ var UIGroupPanel = (function($,UIBasePanel){
      */
     function UIGroupPanel(id,label) {
 
-        var baseID = 'fibo_group_';
+        var baseID = 'fib_group';
         this._selectors = {
-            toggle : 'toggle_group_',
-            hideall: 'hide_groups',
-            tree   : 'groups_tree',
-            name   : baseID + 'name',
-            rename : baseID + 'rename',
-            remove : baseID + 'delete'
+            toggle : baseID + '-toggle_',
+            hideall: baseID + '-hide',
+            tree   : baseID + '-tree',
+            name   : baseID + '-name',
+            rename : baseID + '-rename',
+            remove : baseID + '-delete'
         };
 
         UIBasePanel.call(this,id,label);

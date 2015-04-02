@@ -13,10 +13,10 @@ var UISpritePanel = (function($,UIBasePanel){
      */
     function UISpritePanel(id,label) {
 
-        var baseID = 'fibo_sprites_';
+        var baseID = 'fib_sprites';
         this._selectors = {
-            tree    : 'sprites_tree',
-            analyze : baseID + 'analyze'
+            tree    : baseID + '-tree',
+            analyze : baseID + '-analyze'
         };
 
         UIBasePanel.call(this,id,label);
@@ -54,7 +54,17 @@ var UISpritePanel = (function($,UIBasePanel){
     };
 
     UISpritePanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._selectors.tree+' span'] = {
+            display:'inline-block',
+            'max-width':'180px',
+            overflow:'hidden',
+            'text-overflow':'ellipsis',
+            'white-space':'nowrap'
+        };
+
+        return styles;
     };
 
     /********************

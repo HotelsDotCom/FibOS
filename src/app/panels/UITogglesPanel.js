@@ -12,13 +12,14 @@ var UITogglesPanel = (function($,UIExtraPanel){
      */
     function UITogglesPanel(id) {
 
-        var baseID = 'fibo_toggle_';
+        var baseID = 'fib_toggle';
         this._selectors = {
-            main    : baseID + 'main',
-            spacers : baseID + 'spacers',
-            overlay : baseID + 'overlay',
-            rulers  : baseID + 'rulers',
-            markers : baseID + 'markers'
+            base    : baseID,
+            main    : baseID + '-main',
+            spacers : baseID + '-spacers',
+            overlay : baseID + '-overlay',
+            rulers  : baseID + '-rulers',
+            markers : baseID + '-markers'
         };
 
         UIExtraPanel.call(this,id);
@@ -58,7 +59,48 @@ var UITogglesPanel = (function($,UIExtraPanel){
     };
 
     UITogglesPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['.'+this._selectors.base] = {
+            background:'rgba(100,100,100,.4)',
+            'border-top':'1px solid #fff',
+            height:'21px',
+            position:'absolute',
+            right:'-21px',
+            width:'21px'
+        };
+
+        styles['#'+this._selectors.main] = {
+            background:'rgba(100,100,100,0.4)',
+            cursor:'pointer',
+            height:'34px',
+            position:'absolute',
+            right:'-13px',
+            width:'13px'
+        };
+
+        styles['#'+this._selectors.main+':hover'] = {
+            background:'rgba(100,100,100,1)'
+        };
+
+        styles['#'+this._selectors.main+':after'] = {
+            color:'#fff',
+            content:'"«"',
+            left:'2px',
+            position:'absolute',
+            top:'5px'
+        };
+
+        styles['.hidden #'+this._selectors.main+':after'] = {
+            content:'"»"'
+        };
+
+        styles['#'+this._selectors.spacers] = {top:'34px'};
+        styles['#'+this._selectors.overlay] = {top:'55px'};
+        styles['#'+this._selectors.rulers]  = {top:'76px'};
+        styles['#'+this._selectors.markers] = {top:'97px'};
+
+        return styles;
     };
 
     /********************

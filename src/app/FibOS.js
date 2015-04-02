@@ -24,6 +24,7 @@ var FibOS = (function(
         this._componentsOptions = options || {};
         this._components = {};
         this._panels = {};
+        this._styles = {};
 
         this.$el         = null;
         this.$title      = null;
@@ -40,8 +41,8 @@ var FibOS = (function(
 
         init: function(jqMinVer) {
             checkJqueryVersion(jqMinVer,function(){
-                this.createStyles();
                 this.createElement();
+                this.createStyles();
                 this.initEvents();
             }.bind(this));
         },
@@ -71,10 +72,10 @@ var FibOS = (function(
 
             this.$el         = $('<div/>').attr('id',this._ID);
             this.$title      = $('<h1/>').text(this._fibosTitle).append($('<small/>').text(this._fibosVersion));
-            this.$background = $('<div/>').attr('id','fibo_bg');
-            this.$controls   = $('<div/>').attr('id','fibo_controls');
-            this.$toggles    = $('<div/>').attr('id','fibo_toggles');
-            this.$panels     = $('<div/>').attr('id','fibo_panels').append(this.$title);
+            this.$background = $('<div/>').attr('id','fib_background');
+            this.$controls   = $('<div/>').attr('id','fib_controls');
+            this.$toggles    = $('<div/>').attr('id','fib_toggles');
+            this.$panels     = $('<div/>').attr('id','fib_panels').append(this.$title);
 
             this.$el
                 .append(this.$background)
@@ -91,7 +92,7 @@ var FibOS = (function(
 
         setupComponents: function() {
             this._components.uiMarker  = this.factory.components.uiMarker.call(  this, 'fibos_marker',  this._componentsOptions['uiMarker']  );
-            this._components.uiRuler   = this.factory.components.uiRuler.call(   this, 'fibos_ruler',   this._componentsOptions['uiRuler']   );
+            this._components.uiRuler   = this.factory.components.uiRuler.call(   this, 'fibos_rulers',   this._componentsOptions['uiRuler']   );
             this._components.uiSpacer  = this.factory.components.uiSpacer.call(  this, 'fibos_spacers', this._componentsOptions['uiSpacer']  );
             this._components.uiSpriter = this.factory.components.uiSpriter.call( this, 'fibos_spriter', this._componentsOptions['uiSpriter'] );
 
@@ -230,7 +231,7 @@ var FibOS = (function(
         addPanelTo: function(panel,$elem) {
             $elem.append(panel.$el);
             panel.addTo(this);
-            //this.addStyle(panel.getStyles());
+            this.addStyle(panel.getStyles());
 
             panel.on('toggle_panel', function(data){
                 var p = data.target;
@@ -239,7 +240,9 @@ var FibOS = (function(
             }.bind(this));
         },
 
-        addStyle: function(styles) {},
+        addStyle: function(styles) {
+            $.extend(true,this._styles,styles);
+        },
 
         openPanel: function(panelOrName) {
             var panel = panelOrName instanceof UIBasePanel ? panelOrName : this._panels[panelOrName];
@@ -334,7 +337,7 @@ var FibOS = (function(
 
                 var main = {
                     main:
-                        {position:'absolute',top:'0',left:'0','font-family':'Arial','font-size':'12px','text-align':'left',color:'#222','user-select':'none'}
+                        {position:'absolute',top:'0',left:'0','font-family':'Arial','font-size':'12px','text-align':'left',color:'#222','user-select':'none','-webkit-touch-callout':'none'}
                 };
 
                 var reset = {
@@ -345,21 +348,21 @@ var FibOS = (function(
                 };
 
                 var elements = {
-                    //common input
+                    // COMMON INPUTS
                     '.fib-text,.fib-textarea':
-                        {overflow:'hidden',background:'transparent',border:'1px solid #777',padding:'3px','font-size':'10px','border-radius':'3px','box-shadow':'0 1px #eee','box-sizing':'content-box'},
+                        {color:'#222',overflow:'hidden',background:'transparent',border:'1px solid #777',padding:'3px','font-size':'10px','border-radius':'3px','box-shadow':'0 1px #eee','box-sizing':'content-box'},
 
-                    //selects
+                    // SELECTS
                     '.fib-select':
                         {'background-color':'rgba(255, 255, 255, 0.3)',border:'1px solid #666','border-radius':'3px','box-shadow':'none','box-sizing':'content-box','font-size':'12px',padding:'0 3px','text-align':'center'},
 
-                    //lists
+                    // LISTS
                     '.fib-list':
                         {'list-style':'none outside none',margin:'5px 0',padding:'0'},
                     '.fib-list label':
-                        {'font-size':'12px'},
+                        {color:'#222','font-size':'12px'},
 
-                    //inputs
+                    // INPUTS (text)
                     '.fib-text':
                         {height:'auto',margin:'0'},
                     '.fib-text-small':
@@ -367,23 +370,23 @@ var FibOS = (function(
                     '.fib-text-full':
                         {display:'block',width:'92%',margin:'2px auto'},
 
-                    //textareas
+                    // TEXTAREAS
                     '.fib-textarea':
                         {display:'block',height:'55px',margin:'2px auto 5px',resize:'none',width:'92%'},
 
-                    //buttons
+                    // BUTTONS
                     '.fib-button':
                         {background:'url("'+img_sprite+'") repeat-x scroll 0 0 transparent',border:'1px solid #777','border-radius':'3px',padding:'2px 5px 1px',margin:'2px','font-size':'9px','font-weight':'700','text-transform':'uppercase'},
                     '.fib-button:hover,.fib-button:focus':
                         {border:'1px solid #eee'},
 
-                    //radios
+                    // RADIOS
                     '.fib-radio':
                         {width:'12px',height:'12px'},
                     '.fib-radio + span':
                         {'vertical-align':'bottom'},
 
-                    //checkboxes
+                    // CHECKBOXES
                     '.fib-checkbox':
                         {border:'0 none',clip:'rect(0px, 0px, 0px, 0px)',height:'1px',margin:'-1px',overflow:'hidden',padding:'0',position:'absolute',width:'1px'},
                     '.fib-checkbox + label':
@@ -397,110 +400,69 @@ var FibOS = (function(
                     '.fib-checkbox-arrow:checked + label':
                         {'background-position':'-1px -38px'},
 
-                    //panel elements
+                    // PANELS
                     '.fib-panel':
                         {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)',margin:'0',padding:'3px'},
                     '.fib-panel-open':
                         {background:'rgb(200,200,200)'},
-                    '.fib-label-cont': {},
-                    '.fib-content': {},
                     '.fib-content p':
                         {'font-size':'12px','text-indent':'8px',margin:'3px 0'}
                 };
 
                 var styles = {
-
-                    '#fibo_panels > h1':
+                    '#fib_panels':
+                        {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px'},
+                    '#fib_panels > h1':
                         {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',color:'#222','line-height':'1em',cursor:'move'},
-                    '#fibo_panels > h1 > small':
+                    '#fib_panels > h1 > small':
                         {'font-size':'10px','font-weight':'400','margin-left':'3px'},
 
-                    // control panel
-                    '#fibo_bg':
+                    '#fib_background':
                         {background:'rgba(0,0,0,0.5)',width:'100%',height:'100%',position:'fixed'},
-                    '#fibo_controls':
+
+                    '#fib_controls':
                         {position:'fixed','min-width':'180px'},
-                    '.fibo_toggle':
-                        {background:'rgba(100,100,100,.4)','border-top':'1px solid #fff',height:'21px',position:'absolute',right:'-21px',width:'21px'},
-
-                    // showhide panel
-                    '#fibo_toggle_main':
-                        {background:'rgba(100,100,100,0.4)',height:'34px',position:'absolute',right:'-13px',width:'13px',cursor:'pointer'},
-                    '#fibo_toggle_main:hover':
-                        {background:'rgba(100,100,100,1)'},
-                    '#fibo_toggle_main:after':
-                        {content:'"«"',left:'2px',top:'5px',position:'absolute',color:'#fff'},
-                    '#fibo_controls.hidden':
-                        {display:'block',visibility:'visible'},
-                    '#fibo_controls.hidden #fibo_toggle_main:after':
-                        {content:'"»"'},
-
-                    // external checkbox containers
-                    '#fibo_toggle_spacers': {top:'34px'},
-                    '#fibo_toggle_overlay': {top:'55px'},
-                    '#fibo_toggle_rulers': {top:'76px'},
-                    '#fibo_toggle_markers': {top:'97px'},
-
-                    // fibo form
-                    '#fibo_panels':
-                        {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px'},
-                    '#fibo_extrapanel_select':
-                        {'padding-top':'5px'},
-                    '#fibo_clone_select':
-                        {display:'block','margin':'0 auto'},
-                    '#fibo_clone_element':
-                        {position:'absolute',padding:'8px','margin-top':'9px',left:'0'},
-
-                    // fibo panel - SELECTED
-                    '#fibo_sel_slider_container':
-                        {margin:'3px 0 6px 8px'},
-                    // fibo panel - OFFSET
-                    '#fibo_grp_sel_multiple':
-                        {'margin-left':'0'},
-                    '#fibo_grp_sel_multiple_box':
-                        {position:'absolute',border:'1px solid #777','background-color':'rgba(100,100,100,.5)'},
-                    // fibo panel - SPRITES
-                    '#fibo_sprites_bg':
-                        {position:'fixed',width:'100%',height:'100%','z-index':'-1',background:'#000',opacity:'0.5'},
-                    '#sprites_tree span':
-                        {'max-width':'180px'}
-
+                    '#fib_controls.hidden':
+                        {display:'block',visibility:'visible'}
                 };
 
                 var transitions = {
-                    '#fibo_panels>div': {transition: 'background-color 0.3s ease-in-out 0s'}
+                    '.fib-panel': {transition: 'background-color 0.3s ease-in-out 0s'}
                 };
 
-                var ellipsis_rule = {display:'inline-block',overflow:'hidden','text-overflow':'ellipsis','white-space':'nowrap'};
-                var ellipsis = {
-                    '#sprites_tree span': ellipsis_rule
-                };
-
+                var none_rule = {display:'none'};
                 var initialDisplay = {
-                    '#fibo_bg': {display:'none'},
-                    '#fibos_ruler': {display:'none'},
-                    '#fibos_spriter': {display:'none'},
-                    '#fibo_sel_spacer_multiple_p':{display:'none'},
-                    '.fib-content': {display:'none'}
+                    '#fib_background': none_rule,
+                    '#fibos_rulers': none_rule,
+                    '#fibos_spriter': none_rule,
+                    '.fib-content': none_rule
                 };
+                initialDisplay[this._panels.offsetPanel._selectors.multi_p] = none_rule;
 
                 var zIndexes = {
                     main: {'z-index':'9999'},
-                    '#fibo_bg': {'z-index':'0'},
-                    '#fibos_marker': {'z-index':'1'},
-                    '#fibos_spacers': {'z-index':'2'},
-                    '#fibos_ruler': {'z-index':'3'},
-                    '#fibos_spriter': {'z-index':'4'},
-                    '#fibo_grp_sel_multiple_box': {'z-index':'5'},
-                    '#fibo_controls': {'z-index':'10'}
+                    '#fib_background': {'z-index':'0'},
+                    '#fibos_marker'  : {'z-index':'1'},
+                    '#fibos_spacers' : {'z-index':'2'},
+                    '#fibos_rulers'  : {'z-index':'3'},
+                    '#fibos_spriter' : {'z-index':'4'},
+                    '#fib_controls'  : {'z-index':'10'}
                 };
+                zIndexes[this._panels.offsetPanel._selectors.multi_box] = {'z-index':'5'};
 
-                var prefixes = {
-                    main: {'-webkit-touch-callout':'none','-webkit-user-select':'none','-khtml-user-select':'none','-moz-user-select':'none','-ms-user-select':'none'},
-                    '.fibos-select': {'-webkit-border-radius':'0','-moz-border-radius':'0'}
-                };
+                var prefixes = {};
+                $.extend(true,prefixes,
+                    prefixExtend.call(main,'user-select','main'),
+                    prefixExtend.call(elements,'border-radius','.fib-button'),
+                    prefixExtend.call(elements,'border-radius','.fib-select'),
+                    prefixExtend.call(elements,'border-radius','.fib-text,.fib-textarea'),
+                    prefixExtend.call(elements,'box-sizing','.fib-select'),
+                    prefixExtend.call(elements,'box-sizing','.fib-text,.fib-textarea'),
+                    prefixExtend.call(elements,'box-shadow','.fib-select'),
+                    prefixExtend.call(elements,'box-shadow','.fib-text,.fib-textarea')
+                );
 
-                $.extend(true,result,main,reset,elements,styles,transitions,ellipsis,initialDisplay,zIndexes,prefixes);
+                $.extend(true,result,main,reset,elements,styles,transitions,initialDisplay,zIndexes,prefixes,this._styles);
 
                 return result;
             }
@@ -508,6 +470,21 @@ var FibOS = (function(
         }
 
     };
+
+    function prefixExtend(rule,from){
+        var ob = {};
+        ob[from] = css3prefix.call(this,rule,from);
+        return ob;
+    }
+    function css3prefix(rule,from){
+        var val = this[from][rule],
+            ob = {};
+        ob['-webkit-'+rule] = val;
+        //ob['-khtml-'+rule] = val;
+        ob['-moz-'+rule] = val;
+        //ob['-ms-'+rule] = val;
+        return ob;
+    }
 
     function getImage(name){
         if(images && (images[name] || images[name]===''))

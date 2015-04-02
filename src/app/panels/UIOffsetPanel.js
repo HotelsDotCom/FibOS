@@ -13,15 +13,15 @@ var UIOffsetPanel = (function($,UIBasePanel){
      */
     function UIOffsetPanel(id,label) {
 
-        var baseID = 'fibo_grp_';
-        var mainID = baseID+'sel_';
+        var baseID = 'fib_grp';
+        var mainID = baseID+'_sel';
         this._selectors = {
-            group   : mainID.substr(0,mainID.length-1),
-            top     : mainID + 'top',
-            left    : mainID + 'left',
-            multi   : mainID + 'multiple',
-            multi_p : mainID + 'multiple_p',
-            multi_box:mainID + 'multiple_box'
+            group     : mainID,
+            top       : mainID + '-top',
+            left      : mainID + '-left',
+            multi     : mainID + '-multi',
+            multi_p   : mainID + '-multi-p',
+            multi_box : mainID + '-multi-box'
         };
 
         UIBasePanel.call(this,id,label);
@@ -86,7 +86,19 @@ var UIOffsetPanel = (function($,UIBasePanel){
     };
 
     UIOffsetPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._selectors.multi] = {
+            'margin-left':'0'
+        };
+
+        styles['#'+this._selectors.multi_box] = {
+            'background-color':'rgba(100,100,100,.5)',
+            border:'1px solid #777',
+            position:'absolute'
+        };
+
+        return styles;
     };
 
     /********************
