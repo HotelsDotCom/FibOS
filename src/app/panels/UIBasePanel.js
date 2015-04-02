@@ -62,17 +62,18 @@ var UIBasePanel = (function($){
             if(!content) return false;
             var label_id = this._ID+'_checkbox';
 
-            var $module  = $('<div/>').addClass('fib-panel').attr('id',this._ID),
+            var $panel   = $('<div/>').addClass('fib-panel').attr('id',this._ID),
                 $label   = $('<div/>').addClass('fib-label-cont'),
-                $content = $('<div/>').addClass('fib-content');
+                $content = $('<div/>').addClass('fib-content'),
+                $overlay = $('<div/>').addClass('fib-overlay').append($('<span/>').text(this._message_disabled || 'disabled'));
 
             $label.append(this.getBaseElement('checkbox','arrow').attr('id',label_id));
             $label.append($('<label/>').attr('for',label_id).html(this._label));
 
-            $content.append(content);
+            $content.append($overlay.hide()).append(content);
 
-            this.$el = $module.append($label).append($content);
-            this.$el.find('.fib-checkbox-arrow').on('change',function(e){
+            this.$el = $panel.append($label).append($content);
+            this.$el.find('.fib-label-cont').find('.fib-checkbox').on('change',function(e){
                 this.trigger( 'toggle_panel', {target:this, toggle:$(e.currentTarget).is(':checked')} );
             }.bind(this));
 
@@ -84,6 +85,14 @@ var UIBasePanel = (function($){
         // add panel to FibOS GUI
         addTo: function(gui) {
             this._gui = gui;
+        },
+
+        // enable/disable panel
+        enable: function() {
+            this.$el.find('.fib-overlay').fadeOut(200);
+        },
+        disable: function() {
+            this.$el.find('.fib-overlay').fadeIn(200);
         },
 
         // open/close panel management

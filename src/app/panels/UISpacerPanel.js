@@ -26,9 +26,12 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
             slider    : baseID + '-slider_container'
         };
 
+        this._message_disabled = 'no spacers selected';
+
         UIBasePanel.call(this,id,label);
 
         this._spacerSelected = null;
+        this.disable();
     }
 
     /**

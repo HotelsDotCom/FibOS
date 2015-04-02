@@ -43,6 +43,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
             grouping      : true,
             moveCallback  : null,
             groupCallback : null,
+            selectCallback: null,
             spacersList   : fibonacciSequence(1,12),
             spacerMin     : 3,
             spacerSymbols : [{s:'•',f:2.8,l:1},{s:'★',f:1,l:1.09}],
@@ -489,6 +490,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
         this.updateGroups();
         this._dragged = null;
         this._dragging = $target;
+        this._options.selectCallback && this._options.selectCallback($target);
     }
     function doDrag(e) {
         if(this._dragging){
@@ -503,7 +505,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
     }
     function stopDrag(e) {
         this._dragged = this._dragging;
-        if (!this._dragged) return true;
+        if (!this._dragged) {
+            this._options.selectCallback && this._options.selectCallback(null,$(e.target));
+            return true;
+        }
         this._dragged.focus();
         if(this._dragging){
             this._dragging = null;

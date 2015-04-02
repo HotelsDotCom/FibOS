@@ -278,6 +278,16 @@ var FibOS = (function(
                 },
                 newGroupAdded: function(groupName){
                     this._panels.groupPanel.newGroupAdded(groupName)
+                },
+                selectCallback: function(spacer,$target){
+                    console.log(spacer,$target);
+                    if(spacer){
+                        this._panels.spacerPanel.enable();
+                    }
+                    else if($target && $target.closest('#'+this._ID).length==0){
+                        this._panels.spacerPanel.disable();
+                    }
+                    //spacer ? this._panels.spacerPanel.enable() : this._panels.spacerPanel.disable();
                 }
             },
             uiSpriter : {
@@ -317,6 +327,7 @@ var FibOS = (function(
                     opt.reference = this._reference;
                     opt.moveCallback = this.callbacks.uiSpacer.moveCallback.bind(this);
                     opt.groupCallback = this.callbacks.uiSpacer.newGroupAdded.bind(this);
+                    opt.selectCallback = this.callbacks.uiSpacer.selectCallback.bind(this);
                     return new uiSpacer( id, opt );
                 },
                 uiSpriter : function(id,opt){
@@ -405,10 +416,15 @@ var FibOS = (function(
                         {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)',margin:'0',padding:'3px'},
                     '.fib-panel-open':
                         {background:'rgb(200,200,200)'},
+                    '.fib-content':
+                        {position:'relative'},
                     '.fib-content p':
-                        {'font-size':'12px','text-indent':'8px',margin:'3px 0'}
+                        {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
+                    '.fib-overlay':
+                        {cursor:'not-allowed',background:'rgba(200, 200, 200, .55)',position:'absolute',height:'100%',width:'100%','z-index':'10'},
+                    '.fib-overlay span':
+                        {background:'rgb(200, 200, 200)',border:'1px solid #c00',color:'#c00','font-size':'14px','font-weight':'800',padding:'5px 8px',position:'relative',display:'inline-block',top:'40%',left:'50%',transform:'translate(-50%, -50%)'}
                 };
-
                 var styles = {
                     '#fib_panels':
                         {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px'},
@@ -515,6 +531,7 @@ var FibOS = (function(
         }
     }
 
+    // TODO: move this method inside uiSpacerPanel and avoid clone_spacer event
     function fiboClone(pos,spacer,$clone){
         var cpos = this.$controls.offset();
         var mzero = {top:cpos.top-pos.top, left:cpos.left-pos.left};

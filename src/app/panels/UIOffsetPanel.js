@@ -24,9 +24,12 @@ var UIOffsetPanel = (function($,UIBasePanel){
             multi_box : mainID + '-multi-box'
         };
 
+        this._message_disabled = 'no groups selected';
+
         UIBasePanel.call(this,id,label);
 
         this._groupSelected = [];
+        this.disable();
     }
 
     /**
@@ -119,6 +122,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
     };
 
     UIOffsetPanel.prototype.selectGroup = function(groupName){
+        groupName ? this.enable() : this.disable();
         groupName || (groupName='');
         var $group = $('#'+groupName);
         var amount = $group.length>0 ? $group.find('div').length : 0;
