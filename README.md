@@ -8,22 +8,19 @@ Bookmarklet UI Tool for easily check layout implementations.
 ---
 
 ## Usage
-In order to load the tool at its **latest** release, use this string as "location" for the bookmarklet:
-
-    javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
-
-To try the newest implementations load the **staging** release: will be the next _latest_ release, but still work in progress.
-
-    javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/staging/public/fibos-latest.min.js");})();
-
-For brands specific builds, like **hotels.com** or **venere.com**, please use the correct file:  
-`fibos-latest-hotels.min.js` or `fibos-latest-venere.min.js`.
-
-Alternatively, it can be loaded with a customizable loader:
+In order to load the tool, use this string as "location" for the bookmarklet:
 ```javascript
 javascript:(function(brands,tags,brand,tag){!function(a,b){function c(a,b){for(var c,d={},e=0;e<a.length;e++)if(c=[],b.forEach(function(b){d[b]||(d[b]=0),a[e]==b[e]&&d[b]++,c.push({name:b,val:d[b]})}),c.sort(function(a,b){return b.val-a.val}),c[0].val>c[1].val)return c[0].name;return null}a||(a=prompt("Choose brand\n[ "+brands.join(" | ")+" ]\n\n(leave it blank for '"+brands[0]+"')")||brands[0]),b||(b=prompt("Choose tag\n[ "+tags.join(" | ")+" ]\n\n(leave it blank for '"+tags[0]+"')")||tags[0]),-1===brands.indexOf(a)&&(a=c(a,brands)||a),-1===tags.indexOf(b)&&(b=c(b,tags)||b);var d=["VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),e="https://rawgit.com/"+d,f=document.createElement("script");f.type="text/javascript",f.src=e,document.getElementsByTagName("head")[0].appendChild(f),console.log("loaded",e)}(brand,tag);}(["hotels","venere"],["latest","staging"],null,null));
 ```
-If parameters are passed instead of `null`, first or second or both questions will be skipped.  
+It will then ask a couple of desired options:
+- _brand_ : as values it accepts `brands` object keys from [package.json](package.json)
+- _version_ : it can be any tag from git
+
+For the _version_ question however is preferable to use only the following values:
+- *latest* : to use the tool at its latest release  
+- *staging* : to try the newest implementations not yet released as _latest_
+
+If parameters are passed in the bookmarklet instead of `null`, first or second or both questions will be skipped.  
 This minified version of [`prompt.js`](src/prompt.js) can be obtained using the [`grunt prompt`](#loader-prompt-version) command.
 
 Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page. Starting from `v1.0.3+` it can also be dragged around the page clicking on the title.
