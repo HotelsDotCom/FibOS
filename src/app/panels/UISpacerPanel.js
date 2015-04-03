@@ -47,7 +47,15 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
 
     UISpacerPanel.prototype.createContent = function() {
 
-        this.uiSlider = new UISliderWidget(this._selectors.opacity,{minValue:20,stepValue:10,callback:this.setOpacity.bind(this),extension:{slider_handler:{background:'rgba(200,100,100,.6)'}}});
+        this.uiSlider = new UISliderWidget(this._selectors.opacity,{
+            maxValue  : 100,
+            minValue  : 20,
+            stepValue : 10,
+            callback  : this.setOpacity.bind(this),
+            extension : {
+                slider_handler : {background:'rgba(200,100,100,.6)'}
+            }
+        });
 
         var $content = $('<div/>')
             .append($('<p/>')

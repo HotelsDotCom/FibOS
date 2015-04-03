@@ -283,14 +283,10 @@ var FibOS = (function(
                     this._panels.groupPanel.newGroupAdded(groupName)
                 },
                 selectCallback: function(spacer,$target){
-                    console.log(spacer,$target);
-                    if(spacer){
+                    if(spacer)
                         this._panels.spacerPanel.enable();
-                    }
-                    else if($target && $target.closest('#'+this._ID).length==0){
+                    else if($target && $target.closest('#'+this._ID).length==0)
                         this._panels.spacerPanel.disable();
-                    }
-                    //spacer ? this._panels.spacerPanel.enable() : this._panels.spacerPanel.disable();
                 }
             },
             uiSpriter : {
