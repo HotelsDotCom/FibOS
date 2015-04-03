@@ -81,7 +81,7 @@ var UISelectPanel = (function($,UIExtraPanel){
 
         styles['#'+this._selectors.element] = {
             left:'0',
-            'margin-top':'9px',
+            'margin-top':'5px',
             padding:'8px',
             position:'absolute'
         };

@@ -413,7 +413,7 @@ var FibOS = (function(
 
                     // PANELS
                     '.fib-panel':
-                        {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)',margin:'0',padding:'3px'},
+                        {background:'rgba(200,200,200,.6)','border-top':'1px solid rgba(200,200,200,.8)','border-bottom':'1px solid rgba(100,100,100,.8)','border-radius':'3px',margin:'0',padding:'3px'},
                     '.fib-panel-open':
                         {background:'rgb(200,200,200)'},
                     '.fib-content':
@@ -427,7 +427,7 @@ var FibOS = (function(
                 };
                 var styles = {
                     '#fib_panels':
-                        {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px'},
+                        {color:'#222',background:'rgba(100,100,100,0.6)',padding:'5px','border-radius':'0 0 5px 5px'},
                     '#fib_panels > h1':
                         {'font-size':'18px',margin:'0 0 5px 5px',padding:'0',color:'#222','line-height':'1em',cursor:'move'},
                     '#fib_panels > h1 > small':
