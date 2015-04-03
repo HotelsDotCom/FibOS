@@ -125,7 +125,7 @@ var FibOS = (function(
 
             // extra panels
             this._panels.togglesPanel = new panelToggles( 'fibo_extrapanel_toggles' );
-            this._panels.selectPanel = new panelSelect( 'fibo_extrapanel_select', spacersList, spacersObject );
+            this._panels.selectPanel  = new panelSelect(  'fibo_extrapanel_select', spacersList, spacersObject );
 
             this.addPanelTo(this._panels.togglesPanel, this.$toggles);
             this.addPanel(this._panels.selectPanel);
@@ -465,14 +465,14 @@ var FibOS = (function(
 
                 var prefixes = {};
                 $.extend(true,prefixes,
-                    prefixExtend.call(main,'user-select','main'),
-                    prefixExtend.call(elements,'border-radius','.fib-button'),
-                    prefixExtend.call(elements,'border-radius','.fib-select'),
-                    prefixExtend.call(elements,'border-radius','.fib-text,.fib-textarea'),
-                    prefixExtend.call(elements,'box-sizing','.fib-select'),
-                    prefixExtend.call(elements,'box-sizing','.fib-text,.fib-textarea'),
-                    prefixExtend.call(elements,'box-shadow','.fib-select'),
-                    prefixExtend.call(elements,'box-shadow','.fib-text,.fib-textarea')
+                    prefixExtend.call(main     , 'user-select'   , 'main'),
+                    prefixExtend.call(elements , 'border-radius' , '.fib-button'),
+                    prefixExtend.call(elements , 'border-radius' , '.fib-select'),
+                    prefixExtend.call(elements , 'border-radius' , '.fib-text,.fib-textarea'),
+                    prefixExtend.call(elements , 'box-sizing'    , '.fib-select'),
+                    prefixExtend.call(elements , 'box-sizing'    , '.fib-text,.fib-textarea'),
+                    prefixExtend.call(elements , 'box-shadow'    , '.fib-select'),
+                    prefixExtend.call(elements , 'box-shadow'    , '.fib-text,.fib-textarea')
                 );
 
                 $.extend(true,result,main,reset,elements,styles,transitions,initialDisplay,zIndexes,prefixes,this._styles);
@@ -483,6 +483,10 @@ var FibOS = (function(
         }
 
     };
+
+    /********************
+     * PRIVATE METHODS
+     ********************/
 
     function prefixExtend(rule,from){
         var ob = {};
