@@ -4,7 +4,7 @@
 
 var FibOS = (function(
    $, images,
-   uiMarker, uiRuler, uiSlider, uiSpacer, uiSpriter,
+   uiMarker, uiRuler, uiSpacer, uiSpriter,
    panelSpacer, panelOffset, panelGroup, panelStorage, panelInput, panelSprite, panelSelect, panelToggles
 ) {
 
@@ -317,11 +317,6 @@ var FibOS = (function(
                     opt.reference = this._reference;
                     return new uiRuler( id, opt );
                 },
-                uiSlider : function(id,opt){
-                    opt || (opt={});
-                    opt.extension = {slider_handler:{background:'rgba(200,100,100,.6)'}};
-                    return new uiSlider( id, opt );
-                },
                 uiSpacer : function(id,opt){
                     opt || (opt={});
                     opt.reference = this._reference;
@@ -566,5 +561,5 @@ var FibOS = (function(
     return FibOS;
 
 }(jQuery, images,
-   UIMarkerWidget, UIRulerWidget, UISliderWidget, UISpacerWidget, UISpriterWidget,
+   UIMarkerWidget, UIRulerWidget, UISpacerWidget, UISpriterWidget,
    UISpacerPanel, UIOffsetPanel, UIGroupPanel, UIStoragePanel, UIInputPanel, UISpritePanel, UISelectPanel, UITogglesPanel));
