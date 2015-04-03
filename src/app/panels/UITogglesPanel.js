@@ -109,7 +109,7 @@ var UITogglesPanel = (function($,UIExtraPanel){
 
     UITogglesPanel.prototype.getStateOf = function(toggle) {
         if(!this._selectors[toggle]) return null;
-        return $('#'+this._selectors[toggle]).find('.fibo_checkbox').is(':checked');
+        return $('#'+this._selectors[toggle]).find('.fib-checkbox').is(':checked');
     };
 
     /********************
