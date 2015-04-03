@@ -382,7 +382,7 @@ var FibOS = (function(
 
                     // BUTTONS
                     '.fib-button':
-                        {background:'url("'+img_sprite+'") repeat-x scroll 0 0 transparent',border:'1px solid #777','border-radius':'3px',padding:'2px 5px 1px',margin:'2px','font-size':'9px','font-weight':'700','text-transform':'uppercase'},
+                        {background:'url("'+img_sprite+'") repeat-x scroll 0 0 transparent',border:'1px solid #777','border-radius':'3px',padding:'2px 5px 1px',margin:'2px 3px 2px 2px','font-size':'9px','font-weight':'700','text-transform':'uppercase'},
                     '.fib-button:hover,.fib-button:focus':
                         {border:'1px solid #eee'},
 
