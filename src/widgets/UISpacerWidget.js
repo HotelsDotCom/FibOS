@@ -161,11 +161,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
         for(var i=0;i<spacerslist.length;i++){
             var $spacer = $(spacerslist[i]);
             var zero = $spacer.offset();
-            var pos = {
-                left: zero.left + Number(offset.left),
-                top:  zero.top  + Number(offset.top)
-            };
-            $spacer.offset(pos);
+            this.moveSpacerTo($spacer, {
+                top  : zero.top  + Number(offset.top),
+                left : zero.left + Number(offset.left)
+            });
         }
     };
 
@@ -179,9 +178,11 @@ var UISpacerWidget = (function($,UIBaseWidget){
             var $spacer = $(e);
             t = Number(spacers[i][1]);
             l = Number(spacers[i][2]);
-            $spacer.css('top',t+Number(offset.top));
-            $spacer.css('left',l+Number(offset.left));
-        });
+            this.moveSpacerTo($spacer, {
+                top  : Number(offset.top) + t,
+                left : Number(offset.left) + l
+            });
+        }.bind(this));
     };
 
     UISpacerWidget.prototype.saveOffsetGroup = function(offset) {
