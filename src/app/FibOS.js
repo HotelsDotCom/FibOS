@@ -183,6 +183,7 @@ var FibOS = (function(
             this._panels.groupPanel.on('group_select', function(data){
                 this._components.uiSpacer.selectGroup(data);
                 this._panels.offsetPanel.selectGroup(data);
+                this._panels.spacerPanel.disable();
             }.bind(this));
 
             this._panels.groupPanel.on('group_list_open', function(){

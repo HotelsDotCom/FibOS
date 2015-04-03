@@ -108,6 +108,11 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
         return styles;
     };
 
+    UISpacerPanel.prototype.disabled = function() {
+        this._spacerSelected = null;
+        this.updateInfo();
+    };
+
     /********************
      * PUBLIC METHODS
      ********************/
@@ -119,7 +124,11 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
 
     UISpacerPanel.prototype.updateInfo = function(){
         var attr = this.getInfo();
-        $('#'+this._selectors.spacer).val(attr.f);
+        var $sp = $('#'+this._selectors.spacer);
+        attr.f=='' && (attr.f = $sp.find('option').eq(0).val());
+        attr.o=='' && (attr.o = this.uiSlider._options.maxValue/100);
+
+        $sp.val(attr.f);
         $('#'+this._selectors.left).val(attr.l);
         $('#'+this._selectors.top).val(attr.t);
         this.uiSlider.setSliderVal(Number(attr.o)*100);

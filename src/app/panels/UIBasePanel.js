@@ -41,6 +41,8 @@ var UIBasePanel = (function($){
          * OVERRIDABLE METHODS
          ********************/
 
+        enabled: function() {},
+        disabled: function() {},
         setEvents: function() {},
         getStyles: function() {},
         createContent: function() {},
@@ -90,9 +92,11 @@ var UIBasePanel = (function($){
         // enable/disable panel
         enable: function() {
             this.$el.find('.fib-overlay').fadeOut(200);
+            this.enabled();
         },
         disable: function() {
             this.$el.find('.fib-overlay').fadeIn(200);
+            this.disabled();
         },
 
         // open/close panel management
