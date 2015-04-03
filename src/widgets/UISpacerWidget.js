@@ -104,10 +104,26 @@ var UISpacerWidget = (function($,UIBaseWidget){
 
         if(!group) group = this._lastUsedGroup;
         var spacerStr = ('000'+num).substr(-3);
-        var $spacerObj = this.spacerObjects['f_'+spacerStr].clone();
+        var $spacer = this.spacerObjects['f_'+spacerStr].clone();
         var $parent = this._options.grouping ? getGroup.call(this,group) : this.$el;
-        if($spacerObj) $parent.append($spacerObj);
-        return $spacerObj;
+        if($spacer) $parent.append($spacer);
+        return $spacer;
+    };
+
+    UISpacerWidget.prototype.dragAddNewSpacer = function(spacer,mzero,pos) {
+        var spacernum = parseInt(this.getSpacerType(spacer));
+        var newspacer = this.addNewSpacer(spacernum);
+        if(!newspacer) return true;
+
+        this.moveSpacerTo(newspacer, {top:mzero.top+pos.top,left:mzero.left+pos.left});
+        this.setMouseZero(mzero);
+        this.dragSpacer(newspacer);
+        return false;
+    };
+
+    UISpacerWidget.prototype.moveSpacerTo = function(spacer,pos) {
+        $(spacer).offset(pos);
+        this.updateGroups();
     };
 
     UISpacerWidget.prototype.dragSpacer = function($target){
@@ -449,7 +465,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
         var offset = e.shiftKey?10:e.altKey?0.5:1;
         if(this._dragged){
             if(e.keyCode>=37 && e.keyCode<=40){
-                this._dragged.offset({
+                this.moveSpacerTo(this._dragged, {
                     top  : ( this._dragged.offset().top  + (e.keyCode===38?-offset:e.keyCode===40?offset:0) ),
                     left : ( this._dragged.offset().left + (e.keyCode===37?-offset:e.keyCode===39?offset:0) )
                 });
@@ -494,7 +510,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
     }
     function doDrag(e) {
         if(this._dragging){
-            this._dragging.offset({
+            this.moveSpacerTo(this._dragging, {
                 top  : (Number(e.pageY+this._mousezero.top)),
                 left : (Number(e.pageX+this._mousezero.left))
             });

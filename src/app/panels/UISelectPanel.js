@@ -51,9 +51,16 @@ var UISelectPanel = (function($,UIExtraPanel){
             $('#'+this._selectors.element).html(this._spacersObject['f_'+$(e.currentTarget).val()]);
         });
         this.addListener('mousedown', '#'+this._selectors.element+' .fibospacer', function(e){
+            var $c = $('#'+this._selectors.element);
+            var pos = {top:e.pageY, left:e.pageX};
+            var mzero = {
+                top  : -pos.top  + $c.position().top  + parseInt($c.css('padding-top')) + parseInt($c.css('margin-top')),
+                left : -pos.left + $c.position().left + parseInt($c.css('padding-left'))
+            };
+
             this.trigger('clone_spacer', {
-                pos    : {top:e.pageY,left:e.pageX},
-                $clone : $('#'+this._selectors.element),
+                pos    : pos,
+                mzero  : mzero,
                 spacer : e.currentTarget
             });
         });

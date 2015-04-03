@@ -118,6 +118,7 @@ var UIOffsetPanel = (function($,UIBasePanel){
             $(e.currentTarget).val('0');
         }else{
             this._gui._components.uiSpacer.offsetGroup(offset);
+            $(e.currentTarget).val('0');
         }
     };
 

@@ -173,7 +173,10 @@ var FibOS = (function(
 
             // panelSelect
             this._panels.selectPanel.on('clone_spacer', function(data){
-                fiboClone.call(this,data.pos,data.spacer,data.$clone);
+                var cpos = this.$controls.offset();
+                data.mzero.top += cpos.top;
+                data.mzero.left += cpos.left;
+                return this._components.uiSpacer.dragAddNewSpacer(data.spacer,data.mzero,data.pos);
             }.bind(this));
 
             // panelGroups
@@ -529,25 +532,6 @@ var FibOS = (function(
             }
             else callback();
         }
-    }
-
-    // TODO: move this method inside uiSpacerPanel and avoid clone_spacer event
-    function fiboClone(pos,spacer,$clone){
-        var cpos = this.$controls.offset();
-        var mzero = {top:cpos.top-pos.top, left:cpos.left-pos.left};
-        mzero.top  += $clone.position().top  + parseInt($clone.css('padding-top')) + parseInt($clone.css('margin-top'));
-        mzero.left += $clone.position().left + parseInt($clone.css('padding-left'));
-
-        var spacernum = parseInt(this._components.uiSpacer.getSpacerType(spacer));
-        var newspacer = this._components.uiSpacer.addNewSpacer(spacernum);
-        if(!newspacer) return true;
-
-        newspacer.offset({top:parseInt(pos.top+mzero.top), left:parseInt(pos.left+mzero.left)});
-        this._components.uiSpacer.setMouseZero(mzero);
-        this._components.uiSpacer.dragSpacer(newspacer);
-        this._components.uiSpacer.updateGroups();
-
-        return false;
     }
 
     function keyHandler(e){

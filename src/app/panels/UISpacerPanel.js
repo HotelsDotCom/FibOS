@@ -121,9 +121,12 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
         if(this._spacerSelected){
             $(this._spacerSelected)
                 .removeClass('fs_'+attr.f)
-                .addClass('fs_'+$('#'+this._selectors.spacer).val())
-                .css('left',$('#'+this._selectors.left).val()+'px')
-                .css('top',$('#'+this._selectors.top).val()+'px');
+                .addClass('fs_'+$('#'+this._selectors.spacer).val());
+
+            this._gui._components.uiSpacer.moveSpacerTo(this._spacerSelected,{
+                left:$('#'+this._selectors.left).val(),
+                top:$('#'+this._selectors.top).val()
+            });
         }
     };
     UISpacerPanel.prototype.getInfo = function(){
@@ -139,7 +142,7 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
 
     UISpacerPanel.prototype.setOpacity = function(perc,value){
         if(this._spacerSelected)
-            $(this._spacerSelected).css('opacity',value/100);
+            $(this._spacerSelected).css('opacity',(perc || value/100));
     };
     UISpacerPanel.prototype.deleteSpacer = function(){
         if(this._spacerSelected)
