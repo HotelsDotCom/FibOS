@@ -5,7 +5,7 @@
 var FibOS = (function(
    $, images,
    uiMarker, uiRuler, uiSpacer, uiSpriter,
-   panelSpacer, panelOffset, panelGroup, panelStorage, panelInput, panelSprite, panelSelect, panelToggles
+   panelSpacer, panelOffset, panelGroup, panelStorage, panelInput, panelSprite, panelFonts, panelSelect, panelToggles
 ) {
 
     function FibOS(reference,options){
@@ -113,6 +113,7 @@ var FibOS = (function(
             this._panels.storagePanel = new panelStorage( 'fibo_panel_storage',  'local storage'  );
             this._panels.inputPanel   = new panelInput(   'fibo_panel_input',    'input string'   );
             this._panels.spritePanel  = new panelSprite(  'fibo_panel_sprites',  'loaded sprites' );
+            this._panels.fontsPanel   = new panelFonts(   'fibo_panel_fonts',    'used fonts'     );
 
             this.addPanel(this._panels.spacerPanel);
             this.addPanel(this._panels.offsetPanel);
@@ -120,6 +121,7 @@ var FibOS = (function(
             this.addPanel(this._panels.storagePanel);
             this.addPanel(this._panels.inputPanel);
             this.addPanel(this._panels.spritePanel);
+            this.addPanel(this._panels.fontsPanel);
 
             // extra panels
             this._panels.togglesPanel = new panelToggles( 'fibo_extrapanel_toggles' );
@@ -562,4 +564,4 @@ var FibOS = (function(
 
 }(jQuery, images,
    UIMarkerWidget, UIRulerWidget, UISpacerWidget, UISpriterWidget,
-   UISpacerPanel, UIOffsetPanel, UIGroupPanel, UIStoragePanel, UIInputPanel, UISpritePanel, UISelectPanel, UITogglesPanel));
+   UISpacerPanel, UIOffsetPanel, UIGroupPanel, UIStoragePanel, UIInputPanel, UISpritePanel, UIFontsPanel, UISelectPanel, UITogglesPanel));
