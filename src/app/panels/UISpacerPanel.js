@@ -53,7 +53,10 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
             stepValue : 10,
             callback  : this.setOpacity.bind(this),
             extension : {
-                slider_handler : {background:'rgba(200,100,100,.6)'}
+                main           : {'border-radius':'3px 0 0 3px'},
+                slider_output  : {'border-radius':'0 3px 3px 0'},
+                slider_handler : {'border-radius':'3px',background:'rgba(200,100,100,.6)'},
+                slider_bar     : {height:'2px'}
             }
         });
 
