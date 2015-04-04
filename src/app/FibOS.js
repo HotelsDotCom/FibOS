@@ -226,6 +226,19 @@ var FibOS = (function(
                 this._components.uiSpriter.toggleSprite(data);
             }.bind(this));
 
+            // panelFonts
+            this._panels.fontsPanel.on('fonts_analyze', function(){
+                var fonts = this._components.uiMarker.analyzeFonts();
+                this._panels.fontsPanel.analyzed(fonts);
+            }.bind(this));
+
+            this._panels.fontsPanel.on('font_toggle', function(data){
+                /*
+                 * highlight all occurrences of specified font
+                 * choosing family and size
+                 */
+            }.bind(this));
+
         },
 
         addWidget: function(widget) {

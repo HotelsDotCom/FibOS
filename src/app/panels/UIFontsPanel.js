@@ -46,7 +46,6 @@ var UIFontsPanel = (function($,UIBasePanel){
         this.addListener('click', '#'+this._selectors.analyze, function(e){
             this.trigger('fonts_analyze');
             $(e.currentTarget).remove();
-            this.render(this.analyze());
         });
 
         this.addListener('change', '#'+this._selectors.tree+' input', function(e){
@@ -55,31 +54,13 @@ var UIFontsPanel = (function($,UIBasePanel){
 
     };
 
-    UIFontsPanel.prototype.getStyles = function() {
-        // not yet implemented
-    };
+    UIFontsPanel.prototype.getStyles = function() {};
 
     /********************
      * PUBLIC METHODS
      ********************/
 
-    UIFontsPanel.prototype.analyze = function() {
-        var fonts = {};
-        $('*').each(function(i,e){
-            var $e = $(e);
-            var fam,siz;
-            if($e.closest('#fibos').length==0 && $e.closest('body').length>0){
-                fam = $e.css('font-family');
-                siz = $e.css('font-size');
-                fonts[fam] || (fonts[fam]={});
-                fonts[fam][siz] || (fonts[fam][siz]=[]);
-                fonts[fam][siz].push($e);
-            }
-        });
-        return fonts;
-    };
-
-    UIFontsPanel.prototype.render = function(fonts) {
+    UIFontsPanel.prototype.analyzed = function(fonts) {
         var $tree = $('#'+this._selectors.tree).empty();
         $tree.append(fontsItem.call(this,'hide_fonts',true,'none'));
 

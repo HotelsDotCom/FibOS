@@ -105,6 +105,10 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         return undoHighlight.call(this,event);
     };
 
+    UIMarkerWidget.prototype.analyzeFonts = function() {
+        return analyze(this._options.excluded);
+    };
+
     /********************
      * PRIVATE METHODS
      ********************/
@@ -197,6 +201,24 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     function removeFromMarker(markerElem,dataName) {
         $($(markerElem).data('ref')).data(dataName,false);
         $(markerElem).remove();
+    }
+
+    //analyze all fonts in the page
+    function analyze(excluded) {
+        var fonts = {};
+        $('*').each(function(i,e){
+            var $e = $(e);
+            var fam,siz;
+            //don't analyze fonts if excluded and search only in body avoiding iframes
+            if($e.closest(excluded).length==0 && $e.closest('body').length>0){
+                fam = $e.css('font-family');
+                siz = $e.css('font-size');
+                fonts[fam] || (fonts[fam]={});
+                fonts[fam][siz] || (fonts[fam][siz]=[]);
+                fonts[fam][siz].push($e);
+            }
+        });
+        return fonts;
     }
 
     /*---EVENTS HANDLERS---*/
