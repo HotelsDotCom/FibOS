@@ -5,21 +5,12 @@
         tag || (tag = prompt('Choose tag\n[ '+tags.join(' | ')+' ]\n\n(leave it blank for \''+tags[0]+'\')') || tags[0]);
 
         function check(val,arr){
-            var _points,_values={};
-            for(var i=0;i<val.length;i++){
-                _points=[];
-
-                arr.forEach(function(v){
-                    _values[v] || (_values[v]=0);
-                    val[i]==v[i] && _values[v]++;
-                    _points.push({name:v,val:_values[v]});
-                });
-                _points.sort(function(a,b){return b.val-a.val;});
-
-                if(_points[0].val>_points[1].val)
-                    return _points[0].name;
-            }
-            return null;
+            var _len,_value;
+            arr.forEach(function(v) {
+                _len = val.length;
+                if(v.substr(0, _len) == val) _value = v;
+            });
+            return _value;
         }
 
         if(brands.indexOf(brand)===-1)
@@ -27,10 +18,8 @@
         if(tags.indexOf(tag)===-1)
             tag = check(tag,tags) || tag;
 
-        var ghUrl = ['VenereDotCom/FibOS/',tag,'/public/fibos-latest-',brand,'.min.js'].join(''),
-            rawUrl = 'https://rawgit.com/' + ghUrl,
+        var rawUrl = ['https://rawgit.com/VenereDotCom/FibOS/',tag,'/public/fibos-latest-',brand,'.min.js'].join(''),
             script = document.createElement('script');
-
         script.type = 'text/javascript';
         script.src = rawUrl;
 
