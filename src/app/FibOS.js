@@ -233,10 +233,7 @@ var FibOS = (function(
             }.bind(this));
 
             this._panels.fontsPanel.on('font_toggle', function(data){
-                /*
-                 * highlight all occurrences of specified font
-                 * choosing family and size
-                 */
+                this._components.uiMarker.highlightAllFonts(data.family,data.size);
             }.bind(this));
 
         },

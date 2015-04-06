@@ -34,7 +34,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             checkShowLines : true,          //if this function returns false the marker won't show xHeight lines
             checkUseFont   : true,          //if this function returns false the fontinfo won't be applied
             markerClass    : 'fiboMarker',  //common highlight element class
-            linesClass     : 'fiboLine',    //common marker lines elemet class
+            linesClass     : 'fiboLine',    //common marker lines element class
             fontClass      : 'fiboFontinfo',//common fontinfo element class
             markerData     : 'markerHL',    //data name for marker elements
             fontData       : 'markerFI',    //data name for fontinfo elements
@@ -106,7 +106,17 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     };
 
     UIMarkerWidget.prototype.analyzeFonts = function() {
-        return analyze(this._options.excluded);
+        this._analyzed = analyze(this._options.excluded);
+        return this._analyzed;
+    };
+
+    UIMarkerWidget.prototype.highlightAllFonts = function(family,size) {
+        var list = this._analyzed[family] && this._analyzed[family][size];
+        if(!list) return false;
+
+        console.log(list);
+
+        return true;
     };
 
     /********************
@@ -125,8 +135,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     //add both text highlight and font info on given element
     function addTextFontHighlight(elem) {
         var size;
-        var useMarker = checkValue(this._options.checkUseMarker);//this._options.checkUseMarker ? this._options.checkUseMarker() : true;
-        var useFont = checkValue(this._options.checkUseFont);//this._options.checkUseFont ? this._options.checkUseFont() : true;
+        var useMarker = checkValue(this._options.checkUseMarker);
+        var useFont = checkValue(this._options.checkUseFont);
         if(useMarker||useFont)
             size = markerHeight.call(this,elem);
         else

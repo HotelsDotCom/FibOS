@@ -49,12 +49,21 @@ var UIFontsPanel = (function($,UIBasePanel){
         });
 
         this.addListener('change', '#'+this._selectors.tree+' input', function(e){
-            this.trigger('fonts_toggle', $(e.currentTarget).attr('id'));
+            this.trigger('font_toggle', $(e.currentTarget).data('data'));
         });
 
     };
 
-    UIFontsPanel.prototype.getStyles = function() {};
+    UIFontsPanel.prototype.getStyles = function() {
+        var styles = {};
+
+        styles['#'+this._ID+' .fib-content'] = {
+            'max-height':'144px',
+            overflow:'auto'
+        };
+
+        return styles;
+    };
 
     /********************
      * PUBLIC METHODS
@@ -64,9 +73,16 @@ var UIFontsPanel = (function($,UIBasePanel){
         var $tree = $('#'+this._selectors.tree).empty();
         $tree.append(fontsItem.call(this,'hide_fonts',true,'none'));
 
-        for(var family in fonts){
+        var family,sizes,size,$family;
+        for(family in fonts){
             if(fonts.hasOwnProperty(family)){
-                $tree.append(fontsItem.call(this,'toggle_font_'+family,false,family));
+                $family = familyItem(family);
+                sizes = fonts[family];
+                for(size in sizes){
+                    if(sizes.hasOwnProperty(size))
+                        $family.append(fontsItem.call(this, 'toggle_font_'+family+'_'+size, false, size, {family:family,size:size}));
+                }
+                $tree.append($family);
             }
         }
 
@@ -78,13 +94,25 @@ var UIFontsPanel = (function($,UIBasePanel){
      * PRIVATE METHODS
      ********************/
 
-    function fontsItem(id, checked, spanText){
+    function familyItem(spanText){
+        var $ul    = $('<ul/>'),
+            $li    = $('<li/>'),
+            $span  = $('<span/>')
+                .attr('title',spanText)
+                .text(spanText);
+
+        $ul.append($li.append($span));
+
+        return $ul;
+    }
+    function fontsItem(id, checked, spanText, data){
         var $li    = $('<li/>'),
             $label = $('<label/>'),
             $span  = $('<span/>')
                 .attr('title',spanText)
                 .text(spanText),
             $input = this.getBaseElement('radio')
+                .data('data',data)
                 .attr('id',id)
                 .attr('name','fonts')
                 .attr('checked',checked);
