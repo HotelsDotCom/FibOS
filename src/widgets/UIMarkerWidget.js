@@ -157,13 +157,17 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             $box = $('<div/>').addClass(this._options.fontboxClass);
 
         $(elems).each(function(i,e){
-            var $box_cloned = $box.clone(),
-                $e = $(e);
+            var $e = $(e),
+                offset = $e.offset(),
+                $box_cloned = $box.clone();
+
+            offset.top += parseFloat($e.css('padding-top'));
+            offset.left += parseFloat($e.css('padding-left'));
 
             $box_cloned
                 .width($e.width())
                 .height($e.height())
-                .offset($e.offset());
+                .offset(offset);
 
             $boxes.append($box_cloned);
         });
