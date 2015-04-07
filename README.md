@@ -36,6 +36,7 @@ The 6 panels are as follows:
 - [local storage](#local-storage)
 - [input string](#input-string)
 - [loaded sprites](#loaded-sprites)
+- [used fonts](#used-fonts)
 
 The 4 toggles on the right side enable features as follows:
 - [toggle all spacers](#spacers)
@@ -119,6 +120,15 @@ Once the 'analyze' button is pressed, the tool checks for all DOM elements with 
 Checking a sprite from the list, the tool will show the selected sprite (or image) with red semi-transparent boxes representing the actual used pixels.
 
 This is useful to check for re-usable areas of a sprite, overlapping areas, wrong areas set, and so on.
+
+---
+
+### Used Fonts
+![FibOS panel used fonts](readme/fibos-panel-7.jpg)
+
+Once the 'analyze' button is pressed, the tool checks for all DOM elements with css `font-family` property set and stores them in a checkable list.
+
+Checking a font-size from the list, the tool will show the corresponding texts with a red bordered box.
 
 ---
 
