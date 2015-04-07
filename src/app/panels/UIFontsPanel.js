@@ -84,16 +84,16 @@ var UIFontsPanel = (function($,UIBasePanel){
 
     UIFontsPanel.prototype.analyzed = function(fonts) {
         var $tree = $('#'+this._selectors.tree).empty();
-        $tree.append(fontsItem.call(this,'hide_fonts',true,'none'));
+        $tree.append(fontSizeItem.call(this,'hide_fonts',true,'none',null));
 
         var family,sizes,size,$family;
         for(family in fonts){
             if(fonts.hasOwnProperty(family)){
-                $family = familyItem(family);
-                sizes = fonts[family];
-                for(size in sizes){
-                    if(sizes.hasOwnProperty(size))
-                        $family.append(fontsItem.call(this, 'toggle_font_'+family+'_'+size, false, size, {family:family,size:size}));
+                $family = fontFamilyItem(family);
+                sizes = orderedSizes(fonts[family]);
+                for(var s=0;s<sizes.length;s++){
+                    size = sizes[s];
+                    $family.append(fontSizeItem.call(this, null, false, size.key, {family:family,size:size.key}));
                 }
                 $tree.append($family);
             }
@@ -107,7 +107,7 @@ var UIFontsPanel = (function($,UIBasePanel){
      * PRIVATE METHODS
      ********************/
 
-    function familyItem(spanText){
+    function fontFamilyItem(spanText){
         var $ul    = $('<ul/>'),
             $li    = $('<li/>'),
             $span  = $('<span/>')
@@ -118,21 +118,31 @@ var UIFontsPanel = (function($,UIBasePanel){
 
         return $ul;
     }
-    function fontsItem(id, checked, spanText, data){
+    function fontSizeItem(id, checked, spanText, data){
         var $li    = $('<li/>'),
             $label = $('<label/>'),
             $span  = $('<span/>')
                 .attr('title',spanText)
                 .text(spanText),
             $input = this.getBaseElement('radio')
-                .data('data',data)
-                .attr('id',id)
                 .attr('name','fonts')
                 .attr('checked',checked);
+
+        id && $input.attr('id',id);
+        data && $input.data('data',data);
 
         $li.append($label.append($input).append($span));
 
         return $li;
+    }
+
+    function orderedSizes(fontsFamily){
+        var ordered = [];
+        for(var s in fontsFamily){
+            if(fontsFamily.hasOwnProperty(s))
+                ordered.push({key:s,val:fontsFamily[s]});
+        }
+        return ordered.sort(function(a,b){return parseFloat(a.key) - parseFloat(b.key)});
     }
 
     return UIFontsPanel;
