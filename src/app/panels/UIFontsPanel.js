@@ -62,6 +62,19 @@ var UIFontsPanel = (function($,UIBasePanel){
             overflow:'auto'
         };
 
+        styles['#'+this._selectors.tree+' li'] = {
+            color:'#222',
+            margin:'0',
+            padding:'0'
+        };
+
+        styles['#'+this._selectors.tree+' li > span'] = {
+            display:'inline-block',
+            'margin-top':'5px',
+            'font-weight':'800',
+            'word-break':'break-all'
+        };
+
         return styles;
     };
 
