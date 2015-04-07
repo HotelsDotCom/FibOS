@@ -27,9 +27,9 @@ Once the bookmarklet is loaded, the GUI will be appended to the body and it will
 
 ![FibOS closed](readme/fibos-panel-closed.jpg)
 
-The tool has a [dropdown](#select-dropdown) for chosing spacers, [6 panels](#panels) to manage them and [4 toggles](#toggles) on the right side to show/hide specific features.
+The tool has a [dropdown](#select-dropdown) for chosing spacers, [7 panels](#panels) to manage them along with other features and [4 toggles](#toggles) on the right side to show/hide specific features.
 
-The 6 panels are as follows:
+The 7 panels are as follows:
 - [spacer selected](#spacer-selected)
 - [offset group](#offset-group)
 - [spacer groups](#spacer-groups)
