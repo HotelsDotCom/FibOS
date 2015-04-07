@@ -35,6 +35,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             checkUseFont   : true,          //if this function returns false the fontinfo won't be applied
             markerClass    : 'fiboMarker',  //common highlight element class
             linesClass     : 'fiboLine',    //common marker lines element class
+            fontboxClass   : 'fiboFontBox', //common fontbox element class
             fontClass      : 'fiboFontinfo',//common fontinfo element class
             markerData     : 'markerHL',    //data name for marker elements
             fontData       : 'markerFI',    //data name for fontinfo elements
@@ -51,11 +52,13 @@ var UIMarkerWidget = (function($,UIBaseWidget){
     UIMarkerWidget.prototype.initStyles = function(extension) {
         var mclass = this._options.markerClass,
             lclass = this._options.linesClass,
+            bclass = this._options.fontboxClass,
             fclass = this._options.fontClass;
 
         this._selectorsMapping = {
             marker      : '.'+mclass,
             line        : '.'+lclass,
+            fontbox     : '.'+bclass,
             fontinfo    : '.'+fclass,
             fontinfo_p  : '.'+fclass+' p',
             fontinfo_p1 : '.'+fclass+' p.fi1',
@@ -67,6 +70,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             main        :{position:'absolute'},
             marker      :{position:'absolute !important','z-index':'1',background:'#0ff',opacity:'0.5'},
             line        :{position:'absolute !important','z-index':'2',background:'#f00',left:0,'font-size':'1px','line-height':'1px',height:'1px',width:'100%',overflow:'hidden'},
+            fontbox     :{position:'absolute !important','z-index':'4',border:'1px solid #f00'},
             fontinfo    :{position:'absolute !important','z-index':'3',background:'rgba(34, 34, 34, 0.7)',border:'1px solid #fff',padding:'3px','font-family':'Open Sans',color:'#fff'},
             fontinfo_p  :{margin:'0',cursor:'default','text-algin':'center'},
             fontinfo_p1 :{'font-size':'13px','font-weight':'700','margin-top':'-4px'},
@@ -107,14 +111,30 @@ var UIMarkerWidget = (function($,UIBaseWidget){
 
     UIMarkerWidget.prototype.analyzeFonts = function() {
         this._analyzed = analyze(this._options.excluded);
+        this._fontBoxes = {};
+        var f,s,elems;
+        for(f in this._analyzed){
+            if(this._analyzed.hasOwnProperty(f)){
+                this._fontBoxes[f] || (this._fontBoxes[f]={});
+                for(s in this._analyzed[f]){
+                    if(this._analyzed[f].hasOwnProperty(s)) {
+                        elems = this._analyzed[f][s];
+                        this._fontBoxes[f][s] = {elems: elems, boxes: getTextBoxHighlight.call(this, elems)};
+                    }
+                }
+            }
+        }
         return this._analyzed;
     };
 
     UIMarkerWidget.prototype.highlightAllFonts = function(family,size) {
-        var list = this._analyzed[family] && this._analyzed[family][size];
+        $('.fibo-boxes').hide();
+        if(!family || !size) return false;
+
+        var list = this._fontBoxes[family] && this._fontBoxes[family][size];
         if(!list) return false;
 
-        console.log(list);
+        list.boxes.show();
 
         return true;
     };
@@ -130,6 +150,27 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         if(value===null) return false;
         if(typeof(value) === 'boolean')  return value;
         if(typeof(value) === 'function') return value();
+    }
+
+    function getTextBoxHighlight(elems) {
+        var $boxes = $('<div/>').addClass('fibo-boxes'),
+            $box = $('<div/>').addClass(this._options.fontboxClass);
+
+        $(elems).each(function(i,e){
+            var $box_cloned = $box.clone(),
+                $e = $(e);
+
+            $box_cloned
+                .width($e.width())
+                .height($e.height())
+                .offset($e.offset());
+
+            $boxes.append($box_cloned);
+        });
+
+        this.$el.append($boxes.hide());
+
+        return $boxes;
     }
 
     //add both text highlight and font info on given element

@@ -233,6 +233,7 @@ var FibOS = (function(
             }.bind(this));
 
             this._panels.fontsPanel.on('font_toggle', function(data){
+                data || (data={family:null,size:null});
                 this._components.uiMarker.highlightAllFonts(data.family,data.size);
             }.bind(this));
 
