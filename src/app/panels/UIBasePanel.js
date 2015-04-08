@@ -91,11 +91,13 @@ var UIBasePanel = (function($){
 
         // enable/disable panel
         enable: function() {
-            this.$el.find('.fib-overlay').fadeOut(200);
+            var $overlay = this.$el.find('.fib-overlay');
+            $overlay.fadeOut(200,function(){$overlay.hide();});
             this.enabled();
         },
         disable: function() {
-            this.$el.find('.fib-overlay').fadeIn(200);
+            var $overlay = this.$el.find('.fib-overlay');
+            $overlay.fadeIn(200,function(){$overlay.show();});
             this.disabled();
         },
 
