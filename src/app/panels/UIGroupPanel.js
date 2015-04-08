@@ -69,7 +69,7 @@ var UIGroupPanel = (function($,UIBasePanel){
 
         var styles = {};
 
-        styles['#'+this._ID] = {
+        styles['#'+this._ID+' .fib-content'] = {
             'max-height':'unset !important'
         };
         styles['#'+this._selectors.tree] = {
