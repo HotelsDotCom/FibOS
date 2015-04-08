@@ -275,7 +275,7 @@ var FibOS = (function(
             }
         },
         closeAllPanels: function() {
-            for(var p in this._panels) if(this._panels.hasOwnProperty(p)) this._panels[p].close();
+            for(var p in this._panels) if(this._panels.hasOwnProperty(p)) this._panels[p].close(true);
         },
 
         /*---------------------------------------------- FIBOS PANELS AND COMPONENTS ---*/

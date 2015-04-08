@@ -102,17 +102,17 @@ var UIBasePanel = (function($){
         },
 
         // open/close panel management
-        open: function() {
+        open: function(silent) {
             this.$el.addClass('fib-panel-open');
             this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',true);
             this.$el.find('.fib-content').slideDown();
-            this.trigger('panel_open');
+            silent || this.trigger('panel_open');
         },
-        close: function() {
+        close: function(silent) {
             this.$el.removeClass('fib-panel-open');
             this.$el.find('.fib-label-cont').find('.fib-checkbox').prop('checked',false);
             this.$el.find('.fib-content').slideUp();
-            this.trigger('panel_close');
+            silent || this.trigger('panel_close');
         },
         toggle: function() {
             if(isPanelOpen(this))
@@ -139,7 +139,7 @@ var UIBasePanel = (function($){
             this._listeners[event] = null;
         },
         trigger: function(event,data){
-            this._gui && this._gui._logEvents && console.log('#%d : [%s] -> %s(%o)',++this._gui._logEventId,this._ID,event,data)
+            this._gui && this._gui._logEvents && console.log('#%d : [%s] -> %s(%o)',++this._gui._logEventId,this._ID,event,data);
 
             var events = this._listeners[event];
             if(!events) return;
