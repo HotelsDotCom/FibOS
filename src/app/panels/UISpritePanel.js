@@ -53,19 +53,7 @@ var UISpritePanel = (function($,UIBasePanel){
 
     };
 
-    UISpritePanel.prototype.getStyles = function() {
-        var styles = {};
-
-        styles['#'+this._selectors.tree+' span'] = {
-            display:'inline-block',
-            'max-width':'180px',
-            overflow:'hidden',
-            'text-overflow':'ellipsis',
-            'white-space':'nowrap'
-        };
-
-        return styles;
-    };
+    UISpritePanel.prototype.getStyles = function() {};
 
     /********************
      * PUBLIC METHODS

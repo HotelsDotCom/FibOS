@@ -67,6 +67,18 @@ var UIGroupPanel = (function($,UIBasePanel){
 
     UIGroupPanel.prototype.getStyles = function() {
 
+        var styles = {};
+
+        styles['#'+this._ID] = {
+            'max-height':'unset !important'
+        };
+        styles['#'+this._selectors.tree] = {
+            'max-height':'233px',
+            overflow:'auto'
+        };
+
+        return styles;
+
     };
 
     /********************
@@ -188,6 +200,7 @@ var UIGroupPanel = (function($,UIBasePanel){
         var $li    = $('<li/>'),
             $label = $('<label/>'),
             $span  = $('<span/>')
+                .attr('title',spanText)
                 .text(spanText),
             $input = this.getBaseElement('radio')
                 .attr('id',id)

@@ -377,9 +377,11 @@ var FibOS = (function(
 
                     // LISTS
                     '.fib-list':
-                        {'list-style':'none outside none',margin:'5px 0',padding:'0'},
+                        {'list-style':'none outside none',margin:'5px 0',padding:'0 5px 0 0'},
+                    '.fib-list li':
+                        {'list-style':'none outside none',margin:'0',padding:'0'},
                     '.fib-list label':
-                        {color:'#222','font-size':'12px'},
+                        {color:'#222',display:'inline-block','font-size':'12px','max-width':'100%',overflow:'hidden','text-overflow':'ellipsis','white-space':'nowrap'},
 
                     // INPUTS (text)
                     '.fib-text':
@@ -425,7 +427,7 @@ var FibOS = (function(
                     '.fib-panel-open':
                         {background:'rgb(200,200,200)'},
                     '.fib-content':
-                        {position:'relative'},
+                        {position:'relative','max-width':'233px','max-height':'233px',overflow:'auto'},
                     '.fib-content p':
                         {'font-size':'12px','text-indent':'8px',margin:'3px 0'},
                     '.fib-overlay':

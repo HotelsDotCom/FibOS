@@ -57,20 +57,8 @@ var UIFontsPanel = (function($,UIBasePanel){
     UIFontsPanel.prototype.getStyles = function() {
         var styles = {};
 
-        styles['#'+this._ID+' .fib-content'] = {
-            'max-height':'144px',
-            overflow:'auto'
-        };
-
-        styles['#'+this._selectors.tree+' li'] = {
-            color:'#222',
-            margin:'0',
-            padding:'0'
-        };
-
         styles['#'+this._selectors.tree+' li > span'] = {
             display:'inline-block',
-            'margin-top':'5px',
             'font-weight':'800',
             'word-break':'break-all'
         };
@@ -89,7 +77,7 @@ var UIFontsPanel = (function($,UIBasePanel){
         var family,sizes,size,$family;
         for(family in fonts){
             if(fonts.hasOwnProperty(family)){
-                $family = fontFamilyItem(family);
+                $family = fontFamilyItem.call(this,family);
                 sizes = orderedSizes(fonts[family]);
                 for(var s=0;s<sizes.length;s++){
                     size = sizes[s];
@@ -108,7 +96,7 @@ var UIFontsPanel = (function($,UIBasePanel){
      ********************/
 
     function fontFamilyItem(spanText){
-        var $ul    = $('<ul/>'),
+        var $ul    = this.getBaseElement('list'),
             $li    = $('<li/>'),
             $span  = $('<span/>')
                 .attr('title',spanText)
