@@ -12,11 +12,11 @@ var UIPanelExample = (function($,UIBasePanel){
      */
     function UIPanelExample(id,label){
 
-        var baseID = 'fibo_panel';
+        var baseID = 'fib_panel';
         this._selectors = {
             main : baseID,
-            name : baseID + '_name',
-            prop : baseID + '_property'
+            name : baseID + '-name',
+            prop : baseID + '-property'
         };
 
         UIBasePanel.call(this,id,label);
@@ -49,13 +49,22 @@ var UIPanelExample = (function($,UIBasePanel){
         // bind events using this.addListener method
         this.addListener('click', '#'+this._selectors.prop, function(e){
             this.trigger('panel_prop_clicked');
-            // do something else (if needed)
+            // do something else if needed
         });
 
     };
 
     UIPanelExample.prototype.getStyles = function() {
-        // not yet implemented
+
+        var styles = {};
+
+        // use css object as value for each property as selector and return it
+        styles['#'+this._selectors.name] = {position:'absolute'};
+        styles['#'+this._selectors.prop] = {position:'relative'};
+        styles['#'+this._selectors.prop+' input'] = {'font-size':'18px'};
+
+        return styles;
+
     };
 
     /********************

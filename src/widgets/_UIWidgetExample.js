@@ -56,19 +56,19 @@ var UIWidgetExample = (function($, UIBaseWidget){
             small: true
         };
 
-        // extend _styles object with extension param
+        // extend _styles object with extension param (accepts multiple Objects)
         this.setStyles({
             par: {'font-family':'Arial','font-size':'12px'},
-            small: {'font-size':'8px'},
-            big: {'font-size':'18px','font-weight':'800'}
+            big: {'font-size':'18px','font-weight':'800'},
+            small: {'font-size':'8px'}
         },extension);
 
         /*
         the above example will produce this css:
 
         #mainID .content p {font-family:Arial;font-size:12px;}
-        .content p small {font-size:8px;}
         #mainID .big {font-size:18px;font-weight:800;}
+        .content p small {font-size:8px;}
         */
 
         // extra code HERE in order to use or modify some styles
