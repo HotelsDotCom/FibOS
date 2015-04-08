@@ -7,5 +7,6 @@ var hotelsOptions = {
     uiMarker:  {taglist:{dt:true,dd:true}},
     uiSpriter: {domain:'hotels.com'}
 };
-
-var fibos = new FibOS('body', hotelsOptions);
+$(document).ready(function(){
+    var fibos = new FibOS('body', hotelsOptions);
+});
