@@ -5,4 +5,6 @@
 var defaultOptions = {
     logEvents: true
 };
-var fibos = new FibOS('body',defaultOptions);
+$(document).ready(function() {
+    var fibos = new FibOS('body', defaultOptions);
+});

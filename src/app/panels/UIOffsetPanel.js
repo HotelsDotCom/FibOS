@@ -13,20 +13,23 @@ var UIOffsetPanel = (function($,UIBasePanel){
      */
     function UIOffsetPanel(id,label) {
 
-        var baseID = 'fibo_grp_';
-        var mainID = baseID+'sel_';
+        var baseID = 'fib_grp';
+        var mainID = baseID+'_sel';
         this._selectors = {
-            group   : mainID.substr(0,mainID.length-1),
-            top     : mainID + 'top',
-            left    : mainID + 'left',
-            multi   : mainID + 'multiple',
-            multi_p : mainID + 'multiple_p',
-            multi_box:mainID + 'multiple_box'
+            group     : mainID,
+            top       : mainID + '-top',
+            left      : mainID + '-left',
+            multi     : mainID + '-multi',
+            multi_p   : mainID + '-multi-p',
+            multi_box : mainID + '-multi-box'
         };
+
+        this._message_disabled = 'no groups selected';
 
         UIBasePanel.call(this,id,label);
 
         this._groupSelected = [];
+        this.disable();
     }
 
     /**
@@ -46,18 +49,17 @@ var UIOffsetPanel = (function($,UIBasePanel){
                 .append($('<span/>').text('group: '))
                 .append($('<span/>').attr('id',this._selectors.group)))
             .append($('<p/>')
-                .append($('<span/>').text('offset top: '))
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.top)))
-            .append($('<p/>')
                 .append($('<span/>').text('offset left: '))
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.left)))
+                .append(this.getBaseElement('text','small').attr('id',this._selectors.left)))
+            .append($('<p/>')
+                .append($('<span/>').text('offset top: '))
+                .append(this.getBaseElement('text','small').attr('id',this._selectors.top)))
             .append($('<p/>')
                 .append($('<span/>').text('spacers: '))
                 .append($('<span/>').text('0').attr('id',this._selectors.multi_p)))
             .append($('<p/>')
                 .append($('<input/>').attr('type','checkbox').attr('id',this._selectors.multi))
                 .append($('<label/>').attr('for',this._selectors.multi).text('select inner group')));
-
 
         return $content.children();
     };
@@ -77,12 +79,29 @@ var UIOffsetPanel = (function($,UIBasePanel){
             multiSpacerManager.toggle($(e.currentTarget).is(':checked'),this);
         });
 
+        this.on('panel_close',function(){
+            $('#'+this._selectors.multi).prop('checked',false);
+            multiSpacerManager.toggle(false,this);
+        }.bind(this));
+
         multiSpacerManager.bodyEventsToggle(false);
 
     };
 
     UIOffsetPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._selectors.multi] = {
+            'margin-left':'0'
+        };
+
+        styles['#'+this._selectors.multi_box] = {
+            'background-color':'rgba(100,100,100,.5)',
+            border:'1px solid #777',
+            position:'absolute'
+        };
+
+        return styles;
     };
 
     /********************
@@ -99,10 +118,12 @@ var UIOffsetPanel = (function($,UIBasePanel){
             $(e.currentTarget).val('0');
         }else{
             this._gui._components.uiSpacer.offsetGroup(offset);
+            $(e.currentTarget).val('0');
         }
     };
 
     UIOffsetPanel.prototype.selectGroup = function(groupName){
+        groupName ? this.enable() : this.disable();
         groupName || (groupName='');
         var $group = $('#'+groupName);
         var amount = $group.length>0 ? $group.find('div').length : 0;

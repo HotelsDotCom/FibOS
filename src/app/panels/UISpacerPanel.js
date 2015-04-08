@@ -15,20 +15,23 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
     function UISpacerPanel(id,label,list) {
         this._spacersList = list;
 
-        var baseID = 'fibo_sel_';
+        var baseID = 'fib_sel';
         this._selectors = {
-            spacer    : baseID + 'spacer',
-            left      : baseID + 'left',
-            top       : baseID + 'top',
-            remove    : baseID + 'delete',
-            duplicate : baseID + 'duplicate',
-            opacity   : baseID + 'opacity',
-            slider    : baseID + 'slider_container'
+            spacer    : baseID + '-spacer',
+            left      : baseID + '-left',
+            top       : baseID + '-top',
+            remove    : baseID + '-delete',
+            duplicate : baseID + '-duplicate',
+            opacity   : baseID + '-opacity',
+            slider    : baseID + '-slider_container'
         };
+
+        this._message_disabled = 'no spacers selected';
 
         UIBasePanel.call(this,id,label);
 
         this._spacerSelected = null;
+        this.disable();
     }
 
     /**
@@ -44,24 +47,35 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
 
     UISpacerPanel.prototype.createContent = function() {
 
-        this.uiSlider = new UISliderWidget(this._selectors.opacity,{minValue:20,stepValue:10,callback:this.setOpacity.bind(this),extension:{slider_handler:{background:'rgba(200,100,100,.6)'}}});
+        this.uiSlider = new UISliderWidget(this._selectors.opacity,{
+            maxValue  : 100,
+            minValue  : 20,
+            stepValue : 10,
+            callback  : this.setOpacity.bind(this),
+            extension : {
+                main           : {'border-radius':'3px 0 0 3px'},
+                slider_output  : {'border-radius':'0 3px 3px 0'},
+                slider_handler : {'border-radius':'3px',background:'rgba(200,100,100,.6)'},
+                slider_bar     : {height:'2px'}
+            }
+        });
 
         var $content = $('<div/>')
             .append($('<p/>')
                 .text('spacer: ')
-                .append(this.fiboSelect(this._spacersList,this._selectors.spacer,true)))
+                .append(this.fiboSelect(this._spacersList,this._selectors.spacer)))
             .append($('<p/>')
                 .text('left: ')
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.left)))
+                .append(this.getBaseElement('text','small').attr('id',this._selectors.left)))
             .append($('<p/>')
                 .text('top: ')
-                .append($('<input/>').attr('type','text').attr('id',this._selectors.top)))
+                .append(this.getBaseElement('text','small').attr('id',this._selectors.top)))
             .append($('<p/>')
                 .text('opacity: ')
                 .append($('<div/>').attr('id',this._selectors.slider)
                     .append(this.uiSlider.$el)))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.remove).val('remove'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.duplicate).val('duplicate'));
+            .append(this.getBaseElement('button').attr('id',this._selectors.remove).val('remove'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.duplicate).val('duplicate'));
 
         return $content.children();
     };
@@ -88,7 +102,18 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
     };
 
     UISpacerPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._selectors.slider] = {
+            margin:'3px 0 6px 8px'
+        };
+
+        return styles;
+    };
+
+    UISpacerPanel.prototype.disabled = function() {
+        this._spacerSelected = null;
+        this.updateInfo();
     };
 
     /********************
@@ -102,7 +127,11 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
 
     UISpacerPanel.prototype.updateInfo = function(){
         var attr = this.getInfo();
-        $('#'+this._selectors.spacer).val(attr.f);
+        var $sp = $('#'+this._selectors.spacer);
+        attr.f=='' && (attr.f = $sp.find('option').eq(0).val());
+        attr.o=='' && (attr.o = this.uiSlider._options.maxValue/100);
+
+        $sp.val(attr.f);
         $('#'+this._selectors.left).val(attr.l);
         $('#'+this._selectors.top).val(attr.t);
         this.uiSlider.setSliderVal(Number(attr.o)*100);
@@ -112,25 +141,28 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
         if(this._spacerSelected){
             $(this._spacerSelected)
                 .removeClass('fs_'+attr.f)
-                .addClass('fs_'+$('#'+this._selectors.spacer).val())
-                .css('left',$('#'+this._selectors.left).val()+'px')
-                .css('top',$('#'+this._selectors.top).val()+'px');
+                .addClass('fs_'+$('#'+this._selectors.spacer).val());
+
+            this._gui._components.uiSpacer.moveSpacerTo(this._spacerSelected,{
+                left:$('#'+this._selectors.left).val(),
+                top:$('#'+this._selectors.top).val()
+            });
         }
     };
     UISpacerPanel.prototype.getInfo = function(){
         var attr = {f:'',t:'',l:'',o:''};
         if(this._spacerSelected){
             attr.f = (this._gui._components.uiSpacer.getSpacerType(this._spacerSelected));
-            attr.t = ($(this._spacerSelected).css('top').replace('px',''));
-            attr.l = ($(this._spacerSelected).css('left').replace('px',''));
-            attr.o = ($(this._spacerSelected).css('opacity'));
+            attr.t = parseFloat($(this._spacerSelected).css('top'));
+            attr.l = parseFloat($(this._spacerSelected).css('left'));
+            attr.o = parseFloat($(this._spacerSelected).css('opacity'));
         }
         return attr;
     };
 
     UISpacerPanel.prototype.setOpacity = function(perc,value){
         if(this._spacerSelected)
-            $(this._spacerSelected).css('opacity',value/100);
+            $(this._spacerSelected).css('opacity',(perc || value/100));
     };
     UISpacerPanel.prototype.deleteSpacer = function(){
         if(this._spacerSelected)
@@ -148,6 +180,7 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
     function changeSpacerPos(e){
         var offset = e.shiftKey ? 10 : e.altKey ? 0.5 : 1;
         var val = Number($(e.currentTarget).val());
+        if(isNaN(val)) return false;
 
         $(e.currentTarget).val(val+(e.keyCode===38?offset:e.keyCode===40?-offset:0));
         this.applyInfo();

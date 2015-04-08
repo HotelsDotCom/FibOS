@@ -6,5 +6,6 @@ var venereOptions = {
     logEvents: false,
     uiSpriter: {domain:'www.venere.com'}
 };
-
-var fibos = new FibOS('#themewrapper', venereOptions);
+$(document).ready(function() {
+    var fibos = new FibOS('#themewrapper', venereOptions);
+});

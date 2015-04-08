@@ -8,37 +8,35 @@ Bookmarklet UI Tool for easily check layout implementations.
 ---
 
 ## Usage
-In order to load the tool at its **latest** release, use this string as "location" for the bookmarklet:
-
-    javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
-
-To try the newest implementations load the **staging** release: will be the next _latest_ release, but still work in progress.
-
-    javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/staging/public/fibos-latest.min.js");})();
-
-For brands specific builds, like **hotels.com** or **venere.com**, please use the correct file:  
-`fibos-latest-hotels.min.js` or `fibos-latest-venere.min.js`.
-
-Alternatively, it can be loaded with a customizable loader:
+In order to load the tool, use this string as "location" for the bookmarklet:
 ```javascript
-javascript:(function(brands,tags,brand,tag){!function(a,b){function c(a,b){for(var c,d={},e=0;e<a.length;e++)if(c=[],b.forEach(function(b){d[b]||(d[b]=0),a[e]==b[e]&&d[b]++,c.push({name:b,val:d[b]})}),c.sort(function(a,b){return b.val-a.val}),c[0].val>c[1].val)return c[0].name;return null}a||(a=prompt("Choose brand\n[ "+brands.join(" | ")+" ]\n\n(leave it blank for '"+brands[0]+"')")||brands[0]),b||(b=prompt("Choose tag\n[ "+tags.join(" | ")+" ]\n\n(leave it blank for '"+tags[0]+"')")||tags[0]),-1===brands.indexOf(a)&&(a=c(a,brands)||a),-1===tags.indexOf(b)&&(b=c(b,tags)||b);var d=["VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),e="https://rawgit.com/"+d,f=document.createElement("script");f.type="text/javascript",f.src=e,document.getElementsByTagName("head")[0].appendChild(f),console.log("loaded",e)}(brand,tag);}(["hotels","venere"],["latest","staging"],null,null));
+javascript:(function(brands,tags,brand,tag){!function(a,b){function c(a,b){var c,d=null;return b.forEach(function(b){c=a.length,b.substr(0,c)==a&&(d=b)}),d}function d(){var a="1.7.2",b=!0;if("undefined"!=typeof jQuery){var c=parseInt(a.split(".")[0]),d=parseInt(a.split(".")[1]),f=parseInt(a.split(".")[2]),g=jQuery.fn.jquery,h=parseInt(g.split(".")[0]),i=parseInt(g.split(".")[1]),j=parseInt(g.split(".")[2]);b=c>h||d>i||f>j}if(b){var k=document.createElement("script");k.type="text/javascript",k.src=["https://code.jquery.com/jquery-",a,".min.js"].join(""),e.appendChild(k)}}var e=document.getElementsByTagName("head")[0];if(!e)throw new Error("Attempt to load FibOS on a page without head tag!");d(),a||(a=prompt("Choose brand\n[ "+brands.join(" | ")+" ]\n\n(leave it blank for '"+brands[0]+"')")||brands[0]),b||(b=prompt("Choose tag\n[ "+tags.join(" | ")+" ]\n\n(leave it blank for '"+tags[0]+"')")||tags[0]),-1===brands.indexOf(a)&&(a=c(a,brands)||a),-1===tags.indexOf(b)&&(b=c(b,tags)||b);var f=["https://rawgit.com/VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),g=document.createElement("script");g.type="text/javascript",g.src=f,e.appendChild(g),console.log("loaded",f)}(brand,tag);}(["hotels","venere"],["latest","staging"],null,null));
 ```
-If parameters are passed instead of `null`, first or second or both questions will be skipped.  
+It will then ask a couple of desired options:
+- _brand_ : as values it accepts `brands` object keys from [package.json](package.json)
+- _version_ : it can be any tag from git
+
+For the _version_ question however is preferable to use only the following values:
+- *latest* : to use the tool at its latest release  
+- *staging* : to try the newest implementations not yet released as _latest_
+
+If parameters are passed in the bookmarklet instead of `null`, first or second or both questions will be skipped.  
 This minified version of [`prompt.js`](src/prompt.js) can be obtained using the [`grunt prompt`](#loader-prompt-version) command.
 
 Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page. Starting from `v1.0.3+` it can also be dragged around the page clicking on the title.
 
 ![FibOS closed](readme/fibos-panel-closed.jpg)
 
-The tool has a [dropdown](#select-dropdown) for chosing spacers, [6 panels](#panels) to manage them and [4 toggles](#toggles) on the right side to show/hide specific features.
+The tool has a [dropdown](#select-dropdown) for chosing spacers, [7 panels](#panels) to manage them along with other features and [4 toggles](#toggles) on the right side to show/hide specific features.
 
-The 6 panels are as follows:
+The 7 panels are as follows:
 - [spacer selected](#spacer-selected)
 - [offset group](#offset-group)
 - [spacer groups](#spacer-groups)
 - [local storage](#local-storage)
 - [input string](#input-string)
 - [loaded sprites](#loaded-sprites)
+- [used fonts](#used-fonts)
 
 The 4 toggles on the right side enable features as follows:
 - [toggle all spacers](#spacers)
@@ -122,6 +120,15 @@ Once the 'analyze' button is pressed, the tool checks for all DOM elements with 
 Checking a sprite from the list, the tool will show the selected sprite (or image) with red semi-transparent boxes representing the actual used pixels.
 
 This is useful to check for re-usable areas of a sprite, overlapping areas, wrong areas set, and so on.
+
+---
+
+### Used Fonts
+![FibOS panel used fonts](readme/fibos-panel-7.jpg)
+
+Once the 'analyze' button is pressed, the tool checks for all DOM elements with css `font-family` property set and stores them in a checkable list.
+
+Checking a font-size from the list, the tool will show the corresponding texts with a red bordered box.
 
 ---
 

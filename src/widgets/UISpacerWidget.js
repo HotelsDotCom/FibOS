@@ -43,6 +43,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
             grouping      : true,
             moveCallback  : null,
             groupCallback : null,
+            selectCallback: null,
             spacersList   : fibonacciSequence(1,12),
             spacerMin     : 3,
             spacerSymbols : [{s:'•',f:2.8,l:1},{s:'★',f:1,l:1.09}],
@@ -103,10 +104,26 @@ var UISpacerWidget = (function($,UIBaseWidget){
 
         if(!group) group = this._lastUsedGroup;
         var spacerStr = ('000'+num).substr(-3);
-        var $spacerObj = this.spacerObjects['f_'+spacerStr].clone();
+        var $spacer = this.spacerObjects['f_'+spacerStr].clone();
         var $parent = this._options.grouping ? getGroup.call(this,group) : this.$el;
-        if($spacerObj) $parent.append($spacerObj);
-        return $spacerObj;
+        if($spacer) $parent.append($spacer);
+        return $spacer;
+    };
+
+    UISpacerWidget.prototype.dragAddNewSpacer = function(spacer,mzero,pos) {
+        var spacernum = parseInt(this.getSpacerType(spacer));
+        var newspacer = this.addNewSpacer(spacernum);
+        if(!newspacer) return true;
+
+        this.moveSpacerTo(newspacer, {top:mzero.top+pos.top,left:mzero.left+pos.left});
+        this.setMouseZero(mzero);
+        this.dragSpacer(newspacer);
+        return false;
+    };
+
+    UISpacerWidget.prototype.moveSpacerTo = function(spacer,pos) {
+        $(spacer).offset(pos);
+        this.updateGroups();
     };
 
     UISpacerWidget.prototype.dragSpacer = function($target){
@@ -144,11 +161,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
         for(var i=0;i<spacerslist.length;i++){
             var $spacer = $(spacerslist[i]);
             var zero = $spacer.offset();
-            var pos = {
-                left: zero.left + Number(offset.left),
-                top:  zero.top  + Number(offset.top)
-            };
-            $spacer.offset(pos);
+            this.moveSpacerTo($spacer, {
+                top  : zero.top  + Number(offset.top),
+                left : zero.left + Number(offset.left)
+            });
         }
     };
 
@@ -162,9 +178,11 @@ var UISpacerWidget = (function($,UIBaseWidget){
             var $spacer = $(e);
             t = Number(spacers[i][1]);
             l = Number(spacers[i][2]);
-            $spacer.css('top',t+Number(offset.top));
-            $spacer.css('left',l+Number(offset.left));
-        });
+            this.moveSpacerTo($spacer, {
+                top  : Number(offset.top) + t,
+                left : Number(offset.left) + l
+            });
+        }.bind(this));
     };
 
     UISpacerWidget.prototype.saveOffsetGroup = function(offset) {
@@ -448,7 +466,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
         var offset = e.shiftKey?10:e.altKey?0.5:1;
         if(this._dragged){
             if(e.keyCode>=37 && e.keyCode<=40){
-                this._dragged.offset({
+                this.moveSpacerTo(this._dragged, {
                     top  : ( this._dragged.offset().top  + (e.keyCode===38?-offset:e.keyCode===40?offset:0) ),
                     left : ( this._dragged.offset().left + (e.keyCode===37?-offset:e.keyCode===39?offset:0) )
                 });
@@ -489,10 +507,11 @@ var UISpacerWidget = (function($,UIBaseWidget){
         this.updateGroups();
         this._dragged = null;
         this._dragging = $target;
+        this._options.selectCallback && this._options.selectCallback($target);
     }
     function doDrag(e) {
         if(this._dragging){
-            this._dragging.offset({
+            this.moveSpacerTo(this._dragging, {
                 top  : (Number(e.pageY+this._mousezero.top)),
                 left : (Number(e.pageX+this._mousezero.left))
             });
@@ -503,7 +522,10 @@ var UISpacerWidget = (function($,UIBaseWidget){
     }
     function stopDrag(e) {
         this._dragged = this._dragging;
-        if (!this._dragged) return true;
+        if (!this._dragged) {
+            this._options.selectCallback && this._options.selectCallback(null,$(e.target));
+            return true;
+        }
         this._dragged.focus();
         if(this._dragging){
             this._dragging = null;

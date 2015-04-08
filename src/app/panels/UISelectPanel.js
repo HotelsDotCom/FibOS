@@ -15,10 +15,11 @@ var UISelectPanel = (function($,UIExtraPanel){
         this._spacersList = list;
         this._spacersObject = spacers;
 
-        var baseID = 'fibo_clone_';
+        var baseID = 'fib_clone';
         this._selectors = {
-            choose  : baseID + 'select',
-            element : baseID + 'element'
+            base    : baseID,
+            choose  : baseID + '-select',
+            element : baseID + '-element'
         };
 
         UIExtraPanel.call(this,id);
@@ -37,7 +38,7 @@ var UISelectPanel = (function($,UIExtraPanel){
 
     UISelectPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append(this.fiboSelect(this._spacersList,this._selectors.choose))
+            .append(this.fiboSelect(this._spacersList,this._selectors.choose,'choose'))
             .append($('<div/>').attr('id',this._selectors.element));
 
         return $content.children();
@@ -50,9 +51,16 @@ var UISelectPanel = (function($,UIExtraPanel){
             $('#'+this._selectors.element).html(this._spacersObject['f_'+$(e.currentTarget).val()]);
         });
         this.addListener('mousedown', '#'+this._selectors.element+' .fibospacer', function(e){
+            var $c = $('#'+this._selectors.element);
+            var pos = {top:e.pageY, left:e.pageX};
+            var mzero = {
+                top  : -pos.top  + $c.position().top  + parseInt($c.css('padding-top')) + parseInt($c.css('margin-top')),
+                left : -pos.left + $c.position().left + parseInt($c.css('padding-left'))
+            };
+
             this.trigger('clone_spacer', {
-                pos    : {top:e.pageY,left:e.pageX},
-                $clone : $('#'+this._selectors.element),
+                pos    : pos,
+                mzero  : mzero,
                 spacer : e.currentTarget
             });
         });
@@ -60,7 +68,25 @@ var UISelectPanel = (function($,UIExtraPanel){
     };
 
     UISelectPanel.prototype.getStyles = function() {
+        var styles = {};
 
+        styles['#'+this._ID] = {
+            'padding-top':'5px'
+        };
+
+        styles['#'+this._selectors.choose] = {
+            display:'block',
+            'margin':'0 auto'
+        };
+
+        styles['#'+this._selectors.element] = {
+            left:'0',
+            'margin-top':'5px',
+            padding:'8px',
+            position:'absolute'
+        };
+
+        return styles;
     };
 
     /********************

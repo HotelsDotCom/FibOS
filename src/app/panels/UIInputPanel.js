@@ -13,11 +13,11 @@ var UIInputPanel = (function($,UIBasePanel){
      */
     function UIInputPanel(id,label) {
 
-        var baseID = 'fibo_input_';
+        var baseID = 'fib_input';
         this._selectors = {
-            input : baseID + 'text',
-            load  : baseID + 'load',
-            share : baseID + 'export'
+            input : baseID + '-text',
+            load  : baseID + '-load',
+            share : baseID + '-export'
         };
 
         UIBasePanel.call(this,id,label);
@@ -36,9 +36,9 @@ var UIInputPanel = (function($,UIBasePanel){
 
     UIInputPanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<textarea/>').attr('id',this._selectors.input))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.load).val('import'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.share).val('export'));
+            .append(this.getBaseElement('textarea').attr('id',this._selectors.input))
+            .append(this.getBaseElement('button').attr('id',this._selectors.load).val('import'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.share).val('export'));
 
         return $content.children();
     };
@@ -62,6 +62,9 @@ var UIInputPanel = (function($,UIBasePanel){
      * PUBLIC METHODS
      ********************/
 
+    UIInputPanel.prototype.setJson = function(json) {
+        this.$el.find('#'+this._selectors.input).val(json);
+    };
 
     /********************
      * PRIVATE METHODS

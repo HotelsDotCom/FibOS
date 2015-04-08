@@ -13,10 +13,10 @@ var UIStoragePanel = (function($,UIBasePanel){
      */
     function UIStoragePanel(id,label) {
 
-        var baseID = 'fibo_storage_';
+        var baseID = 'fib_storage';
         this._selectors = {
-            restore : baseID + 'restore',
-            save    : baseID + 'save'
+            restore : baseID + '-restore',
+            save    : baseID + '-save'
         };
 
         UIBasePanel.call(this,id,label);
@@ -35,8 +35,8 @@ var UIStoragePanel = (function($,UIBasePanel){
 
     UIStoragePanel.prototype.createContent = function() {
         var $content = $('<div/>')
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.restore).val('restore'))
-            .append($('<input/>').attr('type','button').addClass('vui-btn').attr('id',this._selectors.save).val('save'));
+            .append(this.getBaseElement('button').attr('id',this._selectors.restore).val('restore'))
+            .append(this.getBaseElement('button').attr('id',this._selectors.save).val('save'));
 
         return $content.children();
     };

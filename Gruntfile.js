@@ -51,6 +51,7 @@ module.exports = function(grunt) {
                 src: [
                     'src/app/panels/UIBasePanel.js',
                     'src/app/panels/UIExtraPanel.js',
+                    'src/app/panels/UIFontsPanel.js',
                     'src/app/panels/UIGroupPanel.js',
                     'src/app/panels/UIInputPanel.js',
                     'src/app/panels/UIOffsetPanel.js',
