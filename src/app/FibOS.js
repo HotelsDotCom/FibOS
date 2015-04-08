@@ -10,8 +10,6 @@ var FibOS = (function(
 
     function FibOS(reference,options){
 
-        var jqueryMinVersion = '1.7';
-
         this._ID = 'fibos';
         this._fibosTitle = 'FibOS';
         this._fibosVersion = fibosVersion || '';
@@ -33,18 +31,16 @@ var FibOS = (function(
         this.$toggles    = null;
         this.$panels     = null;
 
-        this.init(jqueryMinVersion);
+        this.init();
 
     }
 
     FibOS.prototype = {
 
-        init: function(jqMinVer) {
-            checkJqueryVersion(jqMinVer,function(){
-                this.createElement();
-                this.createStyles();
-                this.initEvents();
-            }.bind(this));
+        init: function() {
+            this.createElement();
+            this.createStyles();
+            this.initEvents();
         },
 
         createStyles: function() {
@@ -521,28 +517,6 @@ var FibOS = (function(
             return 'data:image/png;base64,'+images[name];
         else
             return null;
-    }
-
-    function checkJqueryVersion(jqueryMinVersion,callback){
-        if (typeof jQuery != 'undefined') {
-            var current_vers = jqueryMinVersion;
-            var c_maj = Number(current_vers.split('.')[0]);
-            var c_min = Number(current_vers.split('.')[1]);
-
-            var jquery_vers = jQuery.fn.jquery;
-            var j_maj = Number(jquery_vers.split('.')[0]);
-            var j_min = Number(jquery_vers.split('.')[1]);
-
-            var shouldLoadNewstJquery = false;
-            if(j_maj<c_maj) shouldLoadNewstJquery = true;
-            else if(j_min<c_min) shouldLoadNewstJquery = true;
-
-            if(shouldLoadNewstJquery){
-                alert('FibOS needs jQuery 1.7.2\nWe will load it for you.');
-                $.getScript('http://code.jquery.com/jquery-1.7.2.min.js',callback);
-            }
-            else callback();
-        }
     }
 
     function keyHandler(e){
