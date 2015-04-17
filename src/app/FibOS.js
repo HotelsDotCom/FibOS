@@ -385,6 +385,8 @@ var FibOS = (function(
                         {'list-style':'none outside none',margin:'0',padding:'0'},
                     '.fib-list label':
                         {color:'#222',display:'inline-block','font-size':'12px','max-width':'100%',overflow:'hidden','text-overflow':'ellipsis','white-space':'nowrap'},
+                    '.fib-list label > span':
+                        {'margin-right':'21px'},
 
                     // INPUTS (text)
                     '.fib-text':
@@ -408,7 +410,7 @@ var FibOS = (function(
                     '.fib-radio':
                         {width:'12px',height:'12px'},
                     '.fib-radio + span':
-                        {'vertical-align':'bottom'},
+                        {'margin-left':'2px','vertical-align':'baseline'},
 
                     // CHECKBOXES
                     '.fib-checkbox':
