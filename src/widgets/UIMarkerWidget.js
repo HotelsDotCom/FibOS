@@ -177,8 +177,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             offset.left += parseFloat($e.css('padding-left'));
 
             $box_cloned
-                .width($e.width())
-                .height($e.height())
+                .width($e.width()-2)
+                .height($e.height()-2)
                 .offset(offset);
 
             $boxes.append($box_cloned);
