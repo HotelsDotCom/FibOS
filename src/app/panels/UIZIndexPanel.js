@@ -99,7 +99,7 @@ var UIZIndexPanel = (function($,UIBasePanel){
         for(var z=0;z<zindexes.length;z++){
             name = zindexes[z].z + ':' + zindexes[z].tag.toLowerCase();
             zindexes[z].id && (name += '#' + zindexes[z].id);
-            zindexes[z].cl && (name += '.' + zindexes[z].cl);
+            zindexes[z].cl && (name += '.' + zindexes[z].cl.split(' ').join('.'));
             $tree.append(zindexItem.call(this,null,false,name,zindexes[z]));
         }
 
@@ -144,14 +144,16 @@ var UIZIndexPanel = (function($,UIBasePanel){
                 if(_id.indexOf('.')>-1){
                     arr = _id.split('.');
                     _id = arr[0];
-                    _cl = arr[1];
+                    _cl = arr.slice(1).join('.');
                 }
 
-            }else if(_tag.indexOf('.')>-1){
+            }
+            else if(_tag.indexOf('.')>-1){
                 arr = _tag.split('.');
                 _tag = arr[0];
-                _cl = arr[1];
+                _cl = arr.slice(1).join('.');
             }
+
         }
 
         _zi && (splitted  = $('<span/>').addClass('fz_zi').text(_zi).prop('outerHTML') + _tag);
