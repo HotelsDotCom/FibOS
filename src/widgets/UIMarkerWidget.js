@@ -139,6 +139,15 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         return true;
     };
 
+    UIMarkerWidget.prototype.highlightElement = function(elem) {
+        if(elem){
+            getTextBoxHighlight.call(this,elem,'fibo-highlight-element').show();
+            console.log(elem);
+        }else{
+            $('#fibo-highlight-element').remove();
+        }
+    };
+
     /********************
      * PRIVATE METHODS
      ********************/
@@ -152,9 +161,12 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         if(typeof(value) === 'function') return value();
     }
 
-    function getTextBoxHighlight(elems) {
+    function getTextBoxHighlight(elems,uniqueId) {
         var $boxes = $('<div/>').addClass('fibo-boxes'),
             $box = $('<div/>').addClass(this._options.fontboxClass);
+
+        uniqueId && $('#'+uniqueId).remove();
+        uniqueId && $boxes.attr('id',uniqueId);
 
         $(elems).each(function(i,e){
             var $e = $(e),

@@ -237,8 +237,9 @@ var FibOS = (function(
 
             // panelZIndex
             this._panels.zindexPanel.on('zindex_toggle', function(data){
-                console.log('zindex_toggle:',data.$e);
-            });
+                data || (data={$e:null});
+                this._components.uiMarker.highlightElement(data.$e);
+            }.bind(this));
 
         },
 
