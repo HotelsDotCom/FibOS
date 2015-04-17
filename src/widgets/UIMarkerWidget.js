@@ -58,6 +58,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         this._selectorsMapping = {
             marker      : '.'+mclass,
             line        : '.'+lclass,
+            elembox     : '#fibo-highlight-element'+' .'+bclass,
             fontbox     : '.'+bclass,
             fontinfo    : '.'+fclass,
             fontinfo_p  : '.'+fclass+' p',
