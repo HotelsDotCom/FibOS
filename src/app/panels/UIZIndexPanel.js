@@ -116,7 +116,7 @@ var UIZIndexPanel = (function($,UIBasePanel){
                 .attr('title',spanText)
                 .html(html),
             $input = this.getBaseElement('radio')
-                .attr('name','fonts')
+                .attr('name','zindexes')
                 .attr('checked',checked);
 
         id && $input.attr('id',id);
