@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/overrides.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
     <!--[if lt IE 9]>
@@ -43,26 +42,41 @@
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>In order to load the tool at its <strong>latest</strong> release, use this string as "location" for the bookmarklet:</p>
+<p>In order to load the tool, use this string as "location" for the bookmarklet:</p>
 
-<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/latest/public/fibos-latest.min.js");})();
-</code></pre>
+<div class="highlight highlight-javascript"><pre>javascript:(function(brands,tags,brand,tag){!function(a,b){function c(a,b){var c,d=null;return b.forEach(function(b){c=a.length,b.substr(0,c)==a&amp;&amp;(d=b)}),d}function d(){var a="1.7.2",b=!0;if("undefined"!=typeof jQuery){var c=parseInt(a.split(".")[0]),d=parseInt(a.split(".")[1]),f=parseInt(a.split(".")[2]),g=jQuery.fn.jquery,h=parseInt(g.split(".")[0]),i=parseInt(g.split(".")[1]),j=parseInt(g.split(".")[2]);b=c&gt;h||d&gt;i||f&gt;j}if(b){var k=document.createElement("script");k.type="text/javascript",k.src=["https://code.jquery.com/jquery-",a,".min.js"].join(""),e.appendChild(k)}}var e=document.getElementsByTagName("head")[0];if(!e)throw new Error("Attempt to load FibOS on a page without head tag!");d(),a||(a=prompt("Choose brand\n[ "+brands.join(" | ")+" ]\n\n(leave it blank for '"+brands[0]+"')")||brands[0]),b||(b=prompt("Choose tag\n[ "+tags.join(" | ")+" ]\n\n(leave it blank for '"+tags[0]+"')")||tags[0]),-1===brands.indexOf(a)&amp;&amp;(a=c(a,brands)||a),-1===tags.indexOf(b)&amp;&amp;(b=c(b,tags)||b);var f=["https://rawgit.com/VenereDotCom/FibOS/",b,"/public/fibos-latest-",a,".min.js"].join(""),g=document.createElement("script");g.type="text/javascript",g.src=f,e.appendChild(g),console.log("loaded",f)}(brand,tag);}(["hotels","venere"],["latest","staging"],null,null));</pre></div>
 
-<p>To try the newest implementations load the <strong>staging</strong> release: will be the next <em>latest</em> release, but still work in progress.</p>
+<p>It will then ask a couple of desired options:</p>
 
-<pre><code>javascript:(function(){$.getScript("https://raw.githubusercontent.com/VenereDotCom/FibOS/staging/public/fibos-latest.min.js");})();
-</code></pre>
+<ul>
+<li>
+<em>brand</em> : as values it accepts <code>brands</code> object keys from <a href="package.json">package.json</a>
+</li>
+<li>
+<em>version</em> : it can be any tag from git</li>
+</ul>
 
-<p>For brands specific builds, like <strong>hotels.com</strong> or <strong>venere.com</strong>, please use the correct file:<br>
-<code>fibos-latest-hotels.min.js</code> or <code>fibos-latest-venere.min.js</code>.</p>
+<p>For the <em>version</em> question however is preferable to use only the following values:</p>
+
+<ul>
+<li>
+<em>latest</em> : to use the tool at its latest release<br>
+</li>
+<li>
+<em>staging</em> : to try the newest implementations not yet released as <em>latest</em>
+</li>
+</ul>
+
+<p>If parameters are passed in the bookmarklet instead of <code>null</code>, first or second or both questions will be skipped.<br>
+This minified version of <a href="src/prompt.js"><code>prompt.js</code></a> can be obtained using the <a href="#loader-prompt-version"><code>grunt prompt</code></a> command.</p>
 
 <p>Once the bookmarklet is loaded, the GUI will be appended to the body and it will be visible in the upper-left corner of the page. Starting from <code>v1.0.3+</code> it can also be dragged around the page clicking on the title.</p>
 
-<p><img src="images/fibos/panel-closed.jpg" alt="FibOS closed"></p>
+<p><img src="readme/fibos-panel-closed.jpg" alt="FibOS closed"></p>
 
-<p>The tool has a <a href="#select-dropdown">dropdown</a> for chosing spacers, <a href="#panels">6 panels</a> to manage them and <a href="#toggles">4 toggles</a> on the right side to show/hide specific features.</p>
+<p>The tool has a <a href="#select-dropdown">dropdown</a> for chosing spacers, <a href="#panels">7 panels</a> to manage them along with other features and <a href="#toggles">4 toggles</a> on the right side to show/hide specific features.</p>
 
-<p>The 6 panels are as follows:</p>
+<p>The 7 panels are as follows:</p>
 
 <ul>
 <li><a href="#spacer-selected">spacer selected</a></li>
@@ -71,6 +85,7 @@
 <li><a href="#local-storage">local storage</a></li>
 <li><a href="#input-string">input string</a></li>
 <li><a href="#loaded-sprites">loaded sprites</a></li>
+<li><a href="#used-fonts">used fonts</a></li>
 </ul>
 
 <p>The 4 toggles on the right side enable features as follows:</p>
@@ -106,7 +121,7 @@ Once the spacer is dropped, it still can be dragged around the page.</p>
 <h3>
 <a id="spacer-selected" class="anchor" href="#spacer-selected" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spacer Selected</h3>
 
-<p><img src="images/fibos/panel-1.jpg" alt="FibOS panel spacer selected"></p>
+<p><img src="readme/fibos-panel-1.jpg" alt="FibOS panel spacer selected"></p>
 
 <p>Here the user can modify a specific spacer (already dropped onto the page).</p>
 
@@ -124,7 +139,7 @@ Once the spacer is dropped, it still can be dragged around the page.</p>
 <h3>
 <a id="offset-group" class="anchor" href="#offset-group" aria-hidden="true"><span class="octicon octicon-link"></span></a>Offset Group</h3>
 
-<p><img src="images/fibos/panel-2.jpg" alt="FibOS panel offset group"></p>
+<p><img src="readme/fibos-panel-2.jpg" alt="FibOS panel offset group"></p>
 
 <p>Here the user can offset a full group of spacers.</p>
 
@@ -135,7 +150,7 @@ Once the spacer is dropped, it still can be dragged around the page.</p>
 <h3>
 <a id="spacer-groups" class="anchor" href="#spacer-groups" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spacer Groups</h3>
 
-<p><img src="images/fibos/panel-3.jpg" alt="FibOS panel spacer groups"></p>
+<p><img src="readme/fibos-panel-3.jpg" alt="FibOS panel spacer groups"></p>
 
 <p>From here the user can choose between groups of spacers.</p>
 
@@ -150,7 +165,7 @@ Once the spacer is dropped, it still can be dragged around the page.</p>
 <h3>
 <a id="local-storage" class="anchor" href="#local-storage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Local Storage</h3>
 
-<p><img src="images/fibos/panel-4.jpg" alt="FibOS panel local storage"></p>
+<p><img src="readme/fibos-panel-4.jpg" alt="FibOS panel local storage"></p>
 
 <p>Using <a href="http://dev.w3.org/html5/webstorage/#the-localstorage-attribute">HTML5 localStorage</a> feature, the user can save the current spacers groups or restore the previously saved ones.</p>
 
@@ -161,7 +176,7 @@ Once the spacer is dropped, it still can be dragged around the page.</p>
 <h3>
 <a id="input-string" class="anchor" href="#input-string" aria-hidden="true"><span class="octicon octicon-link"></span></a>Input String</h3>
 
-<p><img src="images/fibos/panel-5.jpg" alt="FibOS panel input string"></p>
+<p><img src="readme/fibos-panel-5.jpg" alt="FibOS panel input string"></p>
 
 <p>In this panel the user can export in json format the current spacers groups (shown in the browser's console).</p>
 
@@ -172,13 +187,24 @@ Once the spacer is dropped, it still can be dragged around the page.</p>
 <h3>
 <a id="loaded-sprites" class="anchor" href="#loaded-sprites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loaded Sprites</h3>
 
-<p><img src="images/fibos/panel-6.jpg" alt="FibOS panel loaded sprites"></p>
+<p><img src="readme/fibos-panel-6.jpg" alt="FibOS panel loaded sprites"></p>
 
 <p>Once the 'analyze' button is pressed, the tool checks for all DOM elements with a css <code>background-image</code> property set and stores sprites in a checkable list.</p>
 
 <p>Checking a sprite from the list, the tool will show the selected sprite (or image) with red semi-transparent boxes representing the actual used pixels.</p>
 
 <p>This is useful to check for re-usable areas of a sprite, overlapping areas, wrong areas set, and so on.</p>
+
+<hr>
+
+<h3>
+<a id="used-fonts" class="anchor" href="#used-fonts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Used Fonts</h3>
+
+<p><img src="readme/fibos-panel-7.jpg" alt="FibOS panel used fonts"></p>
+
+<p>Once the 'analyze' button is pressed, the tool checks for all DOM elements with css <code>font-family</code> property set and stores them in a checkable list.</p>
+
+<p>Checking a font-size from the list, the tool will show the corresponding texts with a red bordered box.</p>
 
 <hr>
 
@@ -268,6 +294,30 @@ grunt deploy
       |- uiSpriter-1.0.2-min.js
       |- uiWidgets-1.0.2-min.js
 </code></pre>
+
+<h4>
+<a id="loader-prompt-version" class="anchor" href="#loader-prompt-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loader prompt version</h4>
+
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grunt prompt</code></td>
+<td>minifies the bookmarklet with custom params (ie. <code>prompt:[brand]:[tag]</code>)</td>
+</tr>
+</tbody>
+</table>
+
+<p>eg:<br>
+<code>grunt prompt:venere</code> will have the loader to ask only for tag and assuming the brand to be <code>venere</code>.<br>
+<code>grunt prompt::latest</code> will have the loader to ask only for brand and assuming the tag to be <code>latest</code>.<br>
+<code>grunt prompt:hotels:staging</code> will have the loader to ask nothing, assuming the brand to be <code>hotels</code> and the tag <code>staging</code>.<br>
+..and so on..</p>
 
 <h4>
 <a id="folder-cleaners" class="anchor" href="#folder-cleaners" aria-hidden="true"><span class="octicon octicon-link"></span></a>Folder cleaners</h4>
@@ -435,28 +485,28 @@ grunt deploy
 
 <div class="highlight highlight-javascript"><pre><span class="pl-c">/* [1] : package.json */</span>
 <span class="pl-c">//...</span>
-<span class="pl-s1"><span class="pl-pds">"</span>brands<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
-  <span class="pl-s1"><span class="pl-pds">"</span>hotels<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">"</span>HOTELS.COM<span class="pl-pds">"</span></span>,
-  <span class="pl-s1"><span class="pl-pds">"</span>venere<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">"</span>VENERE.COM<span class="pl-pds">"</span></span>,
-  <span class="pl-s1"><span class="pl-pds">"</span>newbrand<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">"</span>MY PERSONAL COMPANY<span class="pl-pds">"</span></span>
+<span class="pl-s"><span class="pl-pds">"</span>brands<span class="pl-pds">"</span></span><span class="pl-k">:</span> {
+  <span class="pl-s"><span class="pl-pds">"</span>hotels<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>HOTELS.COM<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>venere<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>VENERE.COM<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>newbrand<span class="pl-pds">"</span></span><span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>MY PERSONAL COMPANY<span class="pl-pds">"</span></span>
 },
 <span class="pl-c">//...</span>
 
 <span class="pl-c">/* [2] : src/app/init/fibos_newbrand.js */</span>
-<span class="pl-s">var</span> myOptions <span class="pl-k">=</span> {
+<span class="pl-k">var</span> myOptions <span class="pl-k">=</span> {
     logEvents<span class="pl-k">:</span> <span class="pl-c1">true</span>,
     uiSpacer<span class="pl-k">:</span>  {spacersList<span class="pl-k">:</span>[<span class="pl-c1">5</span>,<span class="pl-c1">10</span>,<span class="pl-c1">15</span>,<span class="pl-c1">20</span>,<span class="pl-c1">25</span>,<span class="pl-c1">30</span>,<span class="pl-c1">35</span>,<span class="pl-c1">40</span>],spacerMin<span class="pl-k">:</span><span class="pl-c1">1</span>},
     uiRuler<span class="pl-k">:</span>   {rulerWidth<span class="pl-k">:</span><span class="pl-c1">8</span>},
     uiMarker<span class="pl-k">:</span>  {taglist<span class="pl-k">:</span>{a<span class="pl-k">:</span><span class="pl-c1">false</span>,input<span class="pl-k">:</span><span class="pl-c1">false</span>,dfn<span class="pl-k">:</span><span class="pl-c1">true</span>}},
-    uiSpriter<span class="pl-k">:</span> {domain<span class="pl-k">:</span><span class="pl-s1"><span class="pl-pds">'</span>img.mydomain.com<span class="pl-pds">'</span></span>}
+    uiSpriter<span class="pl-k">:</span> {domain<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>img.mydomain.com<span class="pl-pds">'</span></span>}
 };
-<span class="pl-s">var</span> fibos <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FibOS</span>(<span class="pl-s1"><span class="pl-pds">'</span>#elemId.elemClass<span class="pl-pds">'</span></span>, myOptions);
+<span class="pl-k">var</span> fibos <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FibOS</span>(<span class="pl-s"><span class="pl-pds">'</span>#elemId.elemClass<span class="pl-pds">'</span></span>, myOptions);
 
 <span class="pl-c">/* [3] : Gruntfile.js */</span>
 <span class="pl-c">// ...</span>
-grunt.registerTask(<span class="pl-s1"><span class="pl-pds">'</span>build-all<span class="pl-pds">'</span></span>, [
-    <span class="pl-s1"><span class="pl-pds">'</span>clean:build<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:hotels<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:venere<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>build:newbrand<span class="pl-pds">'</span></span>,
-    <span class="pl-s1"><span class="pl-pds">'</span>widget:marker<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:ruler<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:slider<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spacer<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widget:spriter<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>widgets-all<span class="pl-pds">'</span></span>
+grunt.registerTask(<span class="pl-s"><span class="pl-pds">'</span>build-all<span class="pl-pds">'</span></span>, [
+    <span class="pl-s"><span class="pl-pds">'</span>clean:build<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>build<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>build:hotels<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>build:venere<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>build:newbrand<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>widget:marker<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>widget:ruler<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>widget:slider<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>widget:spacer<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>widget:spriter<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>widgets-all<span class="pl-pds">'</span></span>
 ]);
 <span class="pl-c">// ...</span></pre></div>
 
@@ -490,6 +540,6 @@ grunt.registerTask(<span class="pl-s1"><span class="pl-pds">'</span>build-all<sp
       </div>
     </div>
 
-
+  
   </body>
 </html>
