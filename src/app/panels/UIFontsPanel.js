@@ -23,7 +23,7 @@ var UIFontsPanel = (function($,UIBasePanel){
     }
 
     /**
-     * UIPanelExample prototype
+     * UIFontsPanel prototype
      *
      * @type {UIBasePanel}
      */

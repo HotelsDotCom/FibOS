@@ -58,6 +58,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         this._selectorsMapping = {
             marker      : '.'+mclass,
             line        : '.'+lclass,
+            elembox     : '#fibo-highlight-element'+' .'+bclass,
             fontbox     : '.'+bclass,
             fontinfo    : '.'+fclass,
             fontinfo_p  : '.'+fclass+' p',
@@ -70,6 +71,7 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             main        :{position:'absolute'},
             marker      :{position:'absolute !important','z-index':'1',background:'#0ff',opacity:'0.5'},
             line        :{position:'absolute !important','z-index':'2',background:'#f00',left:0,'font-size':'1px','line-height':'1px',height:'1px',width:'100%',overflow:'hidden'},
+            elembox     :{background:'rgba(255,0,0,.5)'},
             fontbox     :{position:'absolute !important','z-index':'4',border:'1px solid #f00'},
             fontinfo    :{position:'absolute !important','z-index':'3',background:'rgba(34, 34, 34, 0.7)',border:'1px solid #fff',padding:'3px','font-family':'Open Sans',color:'#fff'},
             fontinfo_p  :{margin:'0',cursor:'default','text-algin':'center'},
@@ -139,6 +141,15 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         return true;
     };
 
+    UIMarkerWidget.prototype.highlightElement = function(elem) {
+        if(elem){
+            getTextBoxHighlight.call(this,elem,'fibo-highlight-element').show();
+            console.log(elem);
+        }else{
+            $('#fibo-highlight-element').remove();
+        }
+    };
+
     /********************
      * PRIVATE METHODS
      ********************/
@@ -152,9 +163,12 @@ var UIMarkerWidget = (function($,UIBaseWidget){
         if(typeof(value) === 'function') return value();
     }
 
-    function getTextBoxHighlight(elems) {
+    function getTextBoxHighlight(elems,uniqueId) {
         var $boxes = $('<div/>').addClass('fibo-boxes'),
             $box = $('<div/>').addClass(this._options.fontboxClass);
+
+        uniqueId && $('#'+uniqueId).remove();
+        uniqueId && $boxes.attr('id',uniqueId);
 
         $(elems).each(function(i,e){
             var $e = $(e),
@@ -165,8 +179,8 @@ var UIMarkerWidget = (function($,UIBaseWidget){
             offset.left += parseFloat($e.css('padding-left'));
 
             $box_cloned
-                .width($e.width())
-                .height($e.height())
+                .width($e.width()-2)
+                .height($e.height()-2)
                 .offset(offset);
 
             $boxes.append($box_cloned);
