@@ -397,7 +397,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
 
         if(fc>=fcLen) fc-=(Math.floor(fc/fcLen)*fcLen);
 
-        fibosObjs['after'] = {position:'absolute',left:'0',color:'#fff','-khtml-opacity':'.'+alpha,'-moz-opacity':'.'+alpha,'-ms-filter':'"alpha(opacity='+alpha+')"',filter:'alpha(opacity='+alpha+')',opacity:'.'+alpha};
+        fibosObjs['after'] = {position:'absolute',left:'0',color:'#fff','text-align':'center','-khtml-opacity':'.'+alpha,'-moz-opacity':'.'+alpha,'-ms-filter':'"alpha(opacity='+alpha+')"',filter:'alpha(opacity='+alpha+')',opacity:'.'+alpha};
         for(var f in fibos){
             if(fibos.hasOwnProperty(f)){
                 fibonum = fibos[f];
@@ -416,6 +416,7 @@ var UISpacerWidget = (function($,UIBaseWidget){
                 if(fiboidx>=fcLen){
                     fibosObjs[fibocls+':after'] = {
                         'content'     : '"'+d_symbols[fs].s+'"',
+                        'width'       : Number(fibonum) + 'px',
                         'font-size'   : Number(fibonum*d_symbols[fs].f) + 'px',
                         'line-height' : Number(fibonum*d_symbols[fs].l) + 'px'
                     };
