@@ -110,8 +110,8 @@ var UIOffsetPanel = (function($,UIBasePanel){
 
     UIOffsetPanel.prototype.applyInfo = function(e){
         var offset = {
-            top: $('#'+this._selectors.top).val(),
-            left: $('#'+this._selectors.left).val()
+            left: parseFloat($('#'+this._selectors.left).val()),
+            top : parseFloat($('#'+this._selectors.top).val())
         };
         if(this._groupSelected.length>0){
             this._gui._components.uiSpacer.offsetCustomGroup(this._groupSelected,offset);

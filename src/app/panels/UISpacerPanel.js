@@ -143,10 +143,12 @@ var UISpacerPanel = (function($,UIBasePanel,UISliderWidget){
                 .removeClass('fs_'+attr.f)
                 .addClass('fs_'+$('#'+this._selectors.spacer).val());
 
-            this._gui._components.uiSpacer.moveSpacerTo(this._spacerSelected,{
-                left:$('#'+this._selectors.left).val(),
-                top:$('#'+this._selectors.top).val()
-            });
+            var pos = {
+                left: parseFloat($('#'+this._selectors.left).val()),
+                top : parseFloat($('#'+this._selectors.top).val())
+            };
+            var final = this._gui._components.uiSpacer.realPosition(pos);
+            this._gui._components.uiSpacer.moveSpacerTo(this._spacerSelected,final);
         }
     };
     UISpacerPanel.prototype.getInfo = function(){
